@@ -1,0 +1,5 @@
+CREATE TABLE hewan (
+    id INT PRIMARY KEY AUTO_INCREMENT, 
+    nama VARCHAR(50) NOT NULL, 
+    umur INT NOT NULL
+);
