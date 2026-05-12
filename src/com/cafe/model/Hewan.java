@@ -1,4 +1,5 @@
 package com.cafe.model;
+
 public class Hewan {
     private int id;
     private String nama;

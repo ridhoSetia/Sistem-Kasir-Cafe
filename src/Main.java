@@ -12,7 +12,7 @@ public class Main extends Application {
 
         Scene scene = new Scene(root, 400, 300);
 
-        primaryStage.setTitle("Aplikasi Pencatat Hewan (MVC)");
+        primaryStage.setTitle("Kasir Cafe");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

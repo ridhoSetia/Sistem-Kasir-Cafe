@@ -5,7 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import java.sql.SQLException;
 
-import com.cafe.model.Hewan;
+import com.cafe.model.User;
 import com.cafe.repository.HewanRepository; // Ini akan mengarah ke file asli kamu
 
 public class HewanController {
@@ -22,7 +22,7 @@ public class HewanController {
             String nama = inputNama.getText();
             int umur = Integer.parseInt(inputUmur.getText());
 
-            Hewan hewanBaru = new Hewan(nama, umur);
+            User hewanBaru = new User(nama, umur);
 
             // Memanggil method save yang asli (yang sudah ada JDBC-nya)
             repository.save(hewanBaru);
