@@ -8,19 +8,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="15.0" xmlns="http://javafx.com/javafx/26"
-    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cafe.controller.LoginController">
+<VBox alignment="CENTER" prefHeight="309.0" prefWidth="249.0" spacing="15.0" styleClass="login-card" stylesheets="@../../../Downloads/mentahan/style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cafe.controller.LoginController">
     <children>
-        <Label text="Login">
+        <Label styleClass="title-label" text="Login">
             <font>
                 <Font name="System Bold" size="18.0" />
             </font>
         </Label>
 
-        <TextField fx:id="inputUsername" promptText="Username" />
-        <PasswordField fx:id="inputPassword" promptText="Password" />
+        <TextField fx:id="inputUsername" promptText="Username" styleClass="text-field" />
+        <PasswordField fx:id="inputPassword" promptText="Password" styleClass="text-field" />
 
-        <Button fx:id="btnLogin" maxWidth="Infinity" onAction="#handleLogin" text="Login" />
+        <Button fx:id="btnLogin" maxWidth="Infinity" onAction="#handleLogin" styleClass="login-button" stylesheets="@../../../Downloads/mentahan/style.css" text="Login" />
 
         <Label fx:id="lblPesanError" text="." textFill="#2c3e50">
             <font>

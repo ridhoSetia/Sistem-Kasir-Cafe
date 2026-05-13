@@ -1,3 +1,8 @@
 .vscode/*
 bin/*
 com/cafe/config/DBConnection.java
+.idea/
+out/
+*.class
+*.iml
+src/Launcher.java
