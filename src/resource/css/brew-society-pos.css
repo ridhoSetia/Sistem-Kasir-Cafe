@@ -1,0 +1,495 @@
+/*
+BREW SOCIETY POS - JavaFX CSS
+Palette utama:
+Cream    #F1DAAE
+Tan      #D9B9A0
+Copper   #A05135
+Caramel  #A56734
+Espresso #422718
+
+Logika warna button:
+Tambah  = hijau/biru
+Edit    = kuning/oranye
+Hapus   = merah/copper
+Simpan  = biru/hijau
+Batal   = abu netral
+Tutup   = abu netral / espresso untuk aksi utama
+*/
+
+.root {
+    -cream: #F1DAAE;
+    -surface: #FFF8ED;
+    -surface-soft: #FAF0E3;
+    -tan: #D9B9A0;
+    -tan-light: #E8CDB8;
+    -copper: #A05135;
+    -caramel: #A56734;
+    -espresso: #422718;
+    -espresso-soft: #5A3323;
+    -success: #2E7D6B;
+    -success-hover: #25695A;
+    -info: #2F6F8F;
+    -info-hover: #265C76;
+    -warning: #C9832B;
+    -warning-hover: #A96D22;
+    -danger: #B24A32;
+    -danger-hover: #963D29;
+    -neutral: #E9E6E1;
+    -neutral-hover: #DCD7CF;
+    -border: #D9B9A0;
+    -text-main: #2A160D;
+    -text-muted: #7A5A48;
+
+    -fx-background-color: -surface-soft;
+    -fx-font-family: "Segoe UI", "Inter", "Arial";
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-main;
+}
+
+/* =========================
+   PAGE / CONTAINER
+========================= */
+
+.page {
+    -fx-background-color: -surface-soft;
+    -fx-padding: 18 20 18 20;
+    -fx-spacing: 14;
+}
+
+.card {
+    -fx-background-color: -surface;
+    -fx-background-radius: 16;
+    -fx-border-color: -border;
+    -fx-border-radius: 16;
+    -fx-border-width: 1.2;
+    -fx-padding: 16;
+    -fx-effect: dropshadow(gaussian, rgba(66, 39, 24, 0.10), 10, 0.15, 0, 3);
+}
+
+.compact-card {
+    -fx-background-color: -surface;
+    -fx-background-radius: 14;
+    -fx-border-color: -border;
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-padding: 12;
+}
+
+.header-box {
+    -fx-spacing: 14;
+    -fx-alignment: center-left;
+}
+
+.logo-circle {
+    -fx-background-color: #6B5A55;
+    -fx-background-radius: 999;
+    -fx-min-width: 82;
+    -fx-min-height: 82;
+    -fx-max-width: 82;
+    -fx-max-height: 82;
+    -fx-effect: dropshadow(gaussian, rgba(66, 39, 24, 0.22), 8, 0.16, 0, 3);
+}
+
+.app-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: 800;
+    -fx-text-fill: -espresso;
+}
+
+.page-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: 800;
+    -fx-text-fill: -espresso;
+    -fx-padding: 6 0 10 0;
+}
+
+.section-title {
+    -fx-font-size: 17px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -espresso;
+}
+
+.label-main {
+    -fx-font-size: 14px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -espresso;
+}
+
+.label-muted {
+    -fx-font-size: 12.5px;
+    -fx-text-fill: -text-muted;
+}
+
+/* =========================
+   FORM INPUT
+========================= */
+
+.text-field,
+.password-field,
+.combo-box-base,
+.spinner {
+    -fx-background-color: #FFFCF7;
+    -fx-background-radius: 12;
+    -fx-border-color: -border;
+    -fx-border-radius: 12;
+    -fx-border-width: 1.4;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-main;
+    -fx-prompt-text-fill: #A77D65;
+}
+
+.text-field:focused,
+.password-field:focused,
+.combo-box-base:focused,
+.spinner:focused {
+    -fx-border-color: -caramel;
+    -fx-border-width: 1.8;
+    -fx-effect: dropshadow(gaussian, rgba(165, 103, 52, 0.20), 8, 0.12, 0, 0);
+}
+
+.search-field {
+    -fx-pref-height: 42;
+    -fx-min-height: 42;
+    -fx-max-height: 42;
+    -fx-background-radius: 13;
+    -fx-border-radius: 13;
+}
+
+.form-field {
+    -fx-pref-height: 42;
+    -fx-min-height: 42;
+    -fx-max-height: 42;
+}
+
+.text-area {
+    -fx-background-color: #FFFCF7;
+    -fx-background-radius: 10;
+    -fx-border-color: -border;
+    -fx-border-radius: 10;
+    -fx-border-width: 1.2;
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-main;
+}
+
+/* =========================
+   BUTTON BASE
+========================= */
+
+.button {
+    -fx-cursor: hand;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-padding: 9 18 9 18;
+    -fx-min-height: 40;
+    -fx-effect: dropshadow(gaussian, rgba(66, 39, 24, 0.14), 5, 0.10, 0, 2);
+}
+
+.button:hover {
+    -fx-translate-y: -1;
+}
+
+.btn-primary,
+.btn-pay {
+    -fx-background-color: -espresso;
+    -fx-text-fill: white;
+}
+
+.btn-primary:hover,
+.btn-pay:hover {
+    -fx-background-color: -espresso-soft;
+}
+
+.btn-add {
+    -fx-background-color: -success;
+    -fx-text-fill: white;
+}
+
+.btn-add:hover {
+    -fx-background-color: -success-hover;
+}
+
+.btn-info {
+    -fx-background-color: -info;
+    -fx-text-fill: white;
+}
+
+.btn-info:hover {
+    -fx-background-color: -info-hover;
+}
+
+.btn-edit {
+    -fx-background-color: #E7C18A;
+    -fx-border-color: -warning;
+    -fx-border-width: 1.2;
+    -fx-text-fill: -espresso;
+}
+
+.btn-edit:hover {
+    -fx-background-color: #D9A85F;
+}
+
+.btn-delete {
+    -fx-background-color: -danger;
+    -fx-text-fill: white;
+}
+
+.btn-delete:hover {
+    -fx-background-color: -danger-hover;
+}
+
+.btn-save {
+    -fx-background-color: -info;
+    -fx-text-fill: white;
+}
+
+.btn-save:hover {
+    -fx-background-color: -info-hover;
+}
+
+.btn-cancel,
+.btn-close {
+    -fx-background-color: -neutral;
+    -fx-border-color: #BDB7AF;
+    -fx-border-width: 1.1;
+    -fx-text-fill: #1F2933;
+}
+
+.btn-cancel:hover,
+.btn-close:hover {
+    -fx-background-color: -neutral-hover;
+}
+
+.btn-print {
+    -fx-background-color: -caramel;
+    -fx-text-fill: white;
+}
+
+.btn-print:hover {
+    -fx-background-color: #8D552B;
+}
+
+/* Ukuran button agar tidak terlalu gemuk */
+.btn-sm {
+    -fx-font-size: 13px;
+    -fx-padding: 7 14 7 14;
+    -fx-min-height: 34;
+}
+
+.btn-md {
+    -fx-font-size: 14px;
+    -fx-padding: 9 18 9 18;
+    -fx-min-height: 40;
+}
+
+.btn-lg {
+    -fx-font-size: 15px;
+    -fx-padding: 10 24 10 24;
+    -fx-min-height: 44;
+}
+
+/* =========================
+   TABLE VIEW
+========================= */
+
+.table-view {
+    -fx-background-color: -surface;
+    -fx-background-radius: 14;
+    -fx-border-color: -border;
+    -fx-border-radius: 14;
+    -fx-border-width: 1.2;
+    -fx-padding: 0;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: -tan;
+    -fx-background-radius: 14 14 0 0;
+    -fx-padding: 0;
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: transparent;
+    -fx-size: 44;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: -espresso;
+    -fx-font-weight: 800;
+    -fx-font-size: 14px;
+    -fx-alignment: center;
+}
+
+.table-view .table-cell {
+    -fx-text-fill: -text-main;
+    -fx-font-size: 13px;
+    -fx-padding: 9 10 9 10;
+    -fx-border-color: transparent transparent #EFE1D4 transparent;
+}
+
+.table-row-cell {
+    -fx-background-color: -surface;
+    -fx-cell-size: 42px;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #FFF3E6;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #EBD3BE;
+    -fx-text-background-color: -espresso;
+}
+
+.table-view .placeholder .label {
+    -fx-text-fill: -text-muted;
+    -fx-font-size: 13px;
+}
+
+/* =========================
+   PAYMENT PAGE
+========================= */
+
+.payment-summary {
+    -fx-hgap: 12;
+    -fx-vgap: 10;
+    -fx-padding: 14 0 0 0;
+}
+
+.total-label {
+    -fx-font-size: 19px;
+    -fx-font-weight: 800;
+    -fx-text-fill: -espresso;
+}
+
+.total-value {
+    -fx-font-size: 20px;
+    -fx-font-weight: 900;
+    -fx-text-fill: -espresso;
+}
+
+.checkbox {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -espresso;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-wrapper {
+    -fx-background-color: -surface;
+    -fx-background-radius: 22;
+    -fx-border-color: -tan;
+    -fx-border-width: 1.4;
+    -fx-border-radius: 22;
+    -fx-padding: 28 28 28 28;
+    -fx-spacing: 14;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(66, 39, 24, 0.18), 16, 0.18, 0, 4);
+}
+
+.login-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: 900;
+    -fx-text-fill: -espresso;
+}
+
+.login-subtitle {
+    -fx-font-size: 16px;
+    -fx-font-weight: 800;
+    -fx-text-fill: -espresso;
+}
+
+/* =========================
+   POPUP / DIALOG
+========================= */
+
+.dialog-pane {
+    -fx-background-color: -surface-soft;
+}
+
+.dialog-card {
+    -fx-background-color: -surface;
+    -fx-background-radius: 16;
+    -fx-border-color: -border;
+    -fx-border-radius: 16;
+    -fx-border-width: 1.2;
+    -fx-padding: 18;
+    -fx-spacing: 12;
+}
+
+.popup-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 800;
+    -fx-text-fill: -espresso;
+}
+
+/* =========================
+   IMAGE / MENU ITEM
+========================= */
+
+.menu-image {
+    -fx-background-color: #F6E8D7;
+    -fx-background-radius: 14;
+    -fx-border-color: -border;
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+}
+
+.item-name {
+    -fx-font-size: 16px;
+    -fx-font-weight: 800;
+    -fx-text-fill: -espresso;
+}
+
+.item-price {
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -caramel;
+}
+
+/* =========================
+   REPORT / HISTORY
+========================= */
+
+.filter-bar {
+    -fx-spacing: 12;
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 12 0;
+}
+
+.history-detail-box {
+    -fx-background-color: #F8F8F8;
+    -fx-border-color: #D8D2CC;
+    -fx-padding: 14;
+}
+
+.history-total {
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -espresso;
+}
+
+/* =========================
+   SCROLL BAR
+========================= */
+
+.scroll-bar:vertical,
+.scroll-bar:horizontal {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #C8B1A1;
+    -fx-background-radius: 10;
+}
+
+.scroll-bar .track {
+    -fx-background-color: #EFE3D8;
+    -fx-background-radius: 10;
+}
