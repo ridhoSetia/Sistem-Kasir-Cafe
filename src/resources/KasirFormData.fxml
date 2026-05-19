@@ -10,30 +10,30 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="342.0" prefWidth="240.0" styleClass="dialog-card" stylesheets="@css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="formDataKasir" prefHeight="342.0" prefWidth="240.0" styleClass="dialog-card" stylesheets="@css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label alignment="CENTER" prefHeight="39.0" prefWidth="156.0" styleClass="popup-title" stylesheets="@css/brew-society-pos.css" text="Form Data Kasir" textAlignment="CENTER">
          <VBox.margin>
             <Insets left="25.0" />
          </VBox.margin></Label>
       <Label alignment="CENTER" styleClass="label-muted" stylesheets="@css/brew-society-pos.css" text="Nama Lengkap" />
-      <TextField prefHeight="11.0" prefWidth="151.0" />
+      <TextField fx:id="txtNama" onAction="#handleNama" prefHeight="11.0" prefWidth="151.0" />
       <Label alignment="CENTER" styleClass="label-muted" stylesheets="@css/brew-society-pos.css" text="Username" />
-      <TextField prefHeight="11.0" prefWidth="151.0" />
+      <TextField fx:id="txtUsername" onAction="#handleUsername" prefHeight="11.0" prefWidth="151.0" />
       <Label alignment="CENTER" styleClass="label-muted" stylesheets="@css/brew-society-pos.css" text="Password" />
-      <PasswordField />
+      <PasswordField fx:id="txtPassword" onAction="#handlePassword" />
       <Label alignment="CENTER" styleClass="label-muted" stylesheets="@css/brew-society-pos.css" text="Konfirmasi Password" />
-      <PasswordField />
+      <PasswordField fx:id="txtKonfirPassword" onAction="#handleKonfirPassword" />
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <CheckBox mnemonicParsing="false" styleClass="label" stylesheets="@css/brew-society-pos.css" text="Aktif ">
+            <CheckBox fx:id="cbAktif" mnemonicParsing="false" onAction="#handleAktif" styleClass="label" stylesheets="@css/brew-society-pos.css" text="Aktif ">
                <HBox.margin>
                   <Insets right="20.0" top="12.0" />
                </HBox.margin>
                <font>
                   <Font name="Arial Black" size="12.0" />
                </font></CheckBox>
-            <CheckBox mnemonicParsing="false" styleClass="form-field" stylesheets="@css/brew-society-pos.css" text="Non Aktif">
+            <CheckBox fx:id="cbNonAktif" mnemonicParsing="false" onAction="#handleNonaktif" styleClass="form-field" stylesheets="@css/brew-society-pos.css" text="Non Aktif">
                <font>
                   <Font name="Arial Black" size="12.0" />
                </font></CheckBox>
@@ -41,11 +41,11 @@
       </HBox>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="btn-cancel" stylesheets="@css/brew-society-pos.css" text="Batal" textAlignment="CENTER">
+            <Button fx:id="btnBatal" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleBatal" styleClass="btn-cancel" stylesheets="@css/brew-society-pos.css" text="Batal" textAlignment="CENTER">
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin></Button>
-            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="btn-save" stylesheets="@css/brew-society-pos.css" text="Simpan">
+            <Button fx:id="btnSimpan" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleSimpan" styleClass="btn-save" stylesheets="@css/brew-society-pos.css" text="Simpan">
                <HBox.margin>
                   <Insets left="25.0" />
                </HBox.margin></Button>

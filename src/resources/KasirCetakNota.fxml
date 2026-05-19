@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="cetakNota" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ScrollPane prefHeight="302.0" prefWidth="600.0">
          <content>
@@ -24,12 +24,12 @@
       </ScrollPane>
       <HBox alignment="CENTER" layoutY="302.0" prefHeight="100.0" prefWidth="600.0">
          <children>
-            <Button alignment="CENTER" mnemonicParsing="false" stylesheets="@css/nota.css" text="Cetak">
+            <Button fx:id="btnCetak" alignment="CENTER" mnemonicParsing="false" onAction="#handleCetak" stylesheets="@css/nota.css" text="Cetak">
                <styleClass>
                   <String fx:value="btn-pdf" />
                   <String fx:value="btn-sedang" />
                </styleClass></Button>
-            <Button alignment="CENTER" mnemonicParsing="false" stylesheets="@css/nota.css" text="Tutup" />
+            <Button fx:id="btnTutup" alignment="CENTER" mnemonicParsing="false" onAction="#handleTutup" stylesheets="@css/nota.css" text="Tutup" />
          </children>
       </HBox>
    </children>

@@ -10,8 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="TambahItemKeranjang" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER" prefHeight="28.0" prefWidth="600.0">
          <children>
@@ -37,7 +36,7 @@
             </Label>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <TextField prefHeight="37.0" prefWidth="359.0">
+                  <TextField fx:id="txtCariMenu" onAction="#handleCariMenu" prefHeight="37.0" prefWidth="359.0">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>
@@ -51,7 +50,7 @@
       </VBox>
       <SplitPane dividerPositions="0.5" prefHeight="243.0" prefWidth="600.0">
          <items>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="172.0" prefWidth="295.0" styleClass="page-title" stylesheets="@css/brew-society-pos.css">
+            <AnchorPane fx:id="txtHasilPencarian" minHeight="0.0" minWidth="0.0" prefHeight="172.0" prefWidth="295.0" styleClass="page-title" stylesheets="@css/brew-society-pos.css">
                <padding>
                   <Insets top="5.0" />
                </padding>
@@ -62,7 +61,7 @@
                   <Label layoutX="15.0" layoutY="113.0" styleClass="label-muted" stylesheets="@css/brew-society-pos.css" text="Aren Latte" />
                </children>
             </AnchorPane>
-            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="66.0" prefWidth="322.0" styleClass="page-title" stylesheets="@css/brew-society-pos.css">
+            <AnchorPane fx:id="txtPreviewMenu" minHeight="0.0" minWidth="0.0" prefHeight="66.0" prefWidth="322.0" styleClass="page-title" stylesheets="@css/brew-society-pos.css">
                <children>
                   <Label layoutX="84.0" layoutY="14.0" styleClass="label-muted" stylesheets="@css/brew-society-pos.css" text="Preview Menu Terpilih" />
                   <Label layoutY="59.0" prefHeight="17.0" prefWidth="137.0" styleClass="label-muted" stylesheets="@css/brew-society-pos.css" text="Nama Menu               :">
@@ -80,7 +79,7 @@
                         <Insets left="5.0" />
                      </padding>
                   </Label>
-                  <Spinner layoutX="141.0" layoutY="117.0" prefHeight="17.0" prefWidth="152.0">
+                  <Spinner fx:id="spJumlah" layoutX="141.0" layoutY="117.0" prefHeight="17.0" prefWidth="152.0">
                      <padding>
                         <Insets left="5.0" />
                      </padding>
@@ -103,7 +102,7 @@
          <children>
             <HBox prefHeight="50.0" prefWidth="301.0">
                <children>
-                  <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" prefHeight="40.0" prefWidth="79.0" styleClass="btn-edit" stylesheets="@css/nota.css" text="Edit" textAlignment="JUSTIFY">
+                  <Button fx:id="btnEdit" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleEdit" prefHeight="40.0" prefWidth="79.0" styleClass="btn-edit" stylesheets="@css/nota.css" text="Edit" textAlignment="JUSTIFY">
                      <HBox.margin>
                         <Insets left="220.0" />
                      </HBox.margin>
@@ -115,7 +114,7 @@
             </HBox>
             <HBox prefHeight="89.0" prefWidth="90.0">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="41.0" prefWidth="89.0" styleClass="btn-add" stylesheets="@css/nota.css" text="Tambah" />
+                  <Button fx:id="btnTambah" mnemonicParsing="false" onAction="#handleTambah" prefHeight="41.0" prefWidth="89.0" styleClass="btn-add" stylesheets="@css/nota.css" text="Tambah" />
                </children>
             </HBox>
          </children>
