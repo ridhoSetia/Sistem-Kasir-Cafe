@@ -17,23 +17,23 @@
             <Insets left="25.0" />
          </VBox.margin></Label>
       <Label alignment="CENTER" styleClass="label-muted" stylesheets="@css/brew-society-pos.css" text="Nama Lengkap" />
-      <TextField fx:id="txtNama" onAction="#handleNama" prefHeight="11.0" prefWidth="151.0" />
+      <TextField fx:id="txtNamaFormDataKasir" onAction="#handleNamaFormDataKasir" prefHeight="11.0" prefWidth="151.0" />
       <Label alignment="CENTER" styleClass="label-muted" stylesheets="@css/brew-society-pos.css" text="Username" />
-      <TextField fx:id="txtUsername" onAction="#handleUsername" prefHeight="11.0" prefWidth="151.0" />
+      <TextField fx:id="txtUsernameFormDataKasir" onAction="#handleUsernameFormDataKasir" prefHeight="11.0" prefWidth="151.0" />
       <Label alignment="CENTER" styleClass="label-muted" stylesheets="@css/brew-society-pos.css" text="Password" />
-      <PasswordField fx:id="txtPassword" onAction="#handlePassword" />
+      <PasswordField fx:id="txtPasswordFormDataKasir" onAction="#handlePasswordFormDataKasir" />
       <Label alignment="CENTER" styleClass="label-muted" stylesheets="@css/brew-society-pos.css" text="Konfirmasi Password" />
-      <PasswordField fx:id="txtKonfirPassword" onAction="#handleKonfirPassword" />
+      <PasswordField fx:id="txtKonfirPasswordFormDataKasir" onAction="#handleKonfirPasswordFormDataKasir" />
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <CheckBox fx:id="cbAktif" mnemonicParsing="false" onAction="#handleAktif" styleClass="label" stylesheets="@css/brew-society-pos.css" text="Aktif ">
+            <CheckBox fx:id="cbAktifFormDataKasir" mnemonicParsing="false" onAction="#handleAktifFormDataKasir" styleClass="label" stylesheets="@css/brew-society-pos.css" text="Aktif ">
                <HBox.margin>
                   <Insets right="20.0" top="12.0" />
                </HBox.margin>
                <font>
                   <Font name="Arial Black" size="12.0" />
                </font></CheckBox>
-            <CheckBox fx:id="cbNonAktif" mnemonicParsing="false" onAction="#handleNonaktif" styleClass="form-field" stylesheets="@css/brew-society-pos.css" text="Non Aktif">
+            <CheckBox fx:id="cbNonAktifFormDataKasir" mnemonicParsing="false" onAction="#handleNonaktifFormDataKasir" styleClass="form-field" stylesheets="@css/brew-society-pos.css" text="Non Aktif">
                <font>
                   <Font name="Arial Black" size="12.0" />
                </font></CheckBox>
@@ -41,11 +41,11 @@
       </HBox>
       <HBox prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button fx:id="btnBatal" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleBatal" styleClass="btn-cancel" stylesheets="@css/brew-society-pos.css" text="Batal" textAlignment="CENTER">
+            <Button fx:id="btnBatalFormDataKasir" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleBatalFormDataKasir" styleClass="btn-cancel" stylesheets="@css/brew-society-pos.css" text="Batal" textAlignment="CENTER">
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin></Button>
-            <Button fx:id="btnSimpan" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleSimpan" styleClass="btn-save" stylesheets="@css/brew-society-pos.css" text="Simpan">
+            <Button fx:id="btnSimpanFormDataKasir" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleSimpanFormDataKasir" styleClass="btn-save" stylesheets="@css/brew-society-pos.css" text="Simpan">
                <HBox.margin>
                   <Insets left="25.0" />
                </HBox.margin></Button>

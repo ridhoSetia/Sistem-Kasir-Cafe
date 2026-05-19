@@ -44,7 +44,7 @@
          <children>
             <VBox prefHeight="57.0" prefWidth="173.0">
                <children>
-                  <TextField fx:id="txtJumlah" onAction="#handleJumlah" prefHeight="44.0" prefWidth="167.0" styleClass="search-field" stylesheets="@css/brew-society-pos.css">
+                  <TextField fx:id="txtJumlahKelolaPembayaran" onAction="#handleJumlahKelolaPembayaran" prefHeight="44.0" prefWidth="167.0" styleClass="search-field" stylesheets="@css/brew-society-pos.css">
                      <VBox.margin>
                         <Insets left="5.0" />
                      </VBox.margin>
@@ -53,7 +53,7 @@
             </VBox>
             <VBox prefHeight="43.0" prefWidth="295.0">
                <children>
-                  <TextField fx:id="txtMenu" onAction="#handleMenu" prefHeight="43.0" prefWidth="290.0" styleClass="form-field" stylesheets="@css/brew-society-pos.css">
+                  <TextField fx:id="txtMenuKelolaPembayaran" onAction="#handleMenuKelolaPembayaran" prefHeight="43.0" prefWidth="290.0" styleClass="form-field" stylesheets="@css/brew-society-pos.css">
                      <VBox.margin>
                         <Insets left="5.0" />
                      </VBox.margin>
@@ -62,7 +62,7 @@
             </VBox>
             <VBox prefHeight="65.0" prefWidth="127.0">
                <children>
-                  <Button fx:id="btnTambah" alignment="CENTER" minHeight="38.0" mnemonicParsing="false" onAction="#handleTambah" prefHeight="38.0" prefWidth="95.0" styleClass="btn-add" stylesheets="@css/brew-society-pos.css" text="Tambah">
+                  <Button fx:id="btnTambahKelolaPembayaran" alignment="CENTER" minHeight="38.0" mnemonicParsing="false" onAction="#handleTambahKelolaPembayaran" prefHeight="38.0" prefWidth="95.0" styleClass="btn-add" stylesheets="@css/brew-society-pos.css" text="Tambah">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
@@ -79,11 +79,11 @@
       </HBox>
       <TableView fx:id="tbKelolaPembayaran" prefHeight="97.0" prefWidth="589.0">
         <columns>
-            <TableColumn fx:id="tbCGambar" prefWidth="75.0" text="Gambar" />
-          <TableColumn fx:id="tbCNamaMenu" prefWidth="104.6666259765625" text="Nama Menu" />
-          <TableColumn fx:id="tbCHargaSatuan" prefWidth="103.33331298828125" text="Harga Satuan" />
-            <TableColumn fx:id="tbCJumlah" prefWidth="92.666748046875" text="Jumlah" />
-            <TableColumn fx:id="tbCSubtotal" minWidth="0.0" prefWidth="87.33331298828125" text="Subtotal" />
+            <TableColumn fx:id="tbCGambarKelolaPembayaran" prefWidth="75.0" text="Gambar" />
+          <TableColumn fx:id="tbCNamaMenuKelolaPembayaran" prefWidth="104.6666259765625" text="Nama Menu" />
+          <TableColumn fx:id="tbCHargaSatuanKelolaPembayaran" prefWidth="103.33331298828125" text="Harga Satuan" />
+            <TableColumn fx:id="tbCJumlahKelolaPembayaran" prefWidth="92.666748046875" text="Jumlah" />
+            <TableColumn fx:id="tbCSubtotalKelolaPembayaran" minWidth="0.0" prefWidth="87.33331298828125" text="Subtotal" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -120,22 +120,22 @@
             </VBox>
             <VBox prefHeight="104.0" prefWidth="289.0">
                <children>
-                  <Label fx:id="lblTotal" prefHeight="37.0" prefWidth="325.0" styleClass="total-label" stylesheets="@css/brew-society-pos.css" text="Rp.-">
+                  <Label fx:id="lblTotalKelolaPembayaran" prefHeight="37.0" prefWidth="325.0" styleClass="total-label" stylesheets="@css/brew-society-pos.css" text="Rp.-">
                      <VBox.margin>
                         <Insets left="5.0" top="8.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="txtNominalBayar" onAction="#handleNominalBayar" prefHeight="37.0" prefWidth="269.0" stylesheets="@style.css">
+                  <TextField fx:id="txtNominalBayarKelolaPembayaran" onAction="#handleNominalBayarKelolaPembayaran" prefHeight="37.0" prefWidth="269.0" stylesheets="@style.css">
                      <VBox.margin>
                         <Insets right="5.0" top="10.0" />
                      </VBox.margin>
                   </TextField>
-                  <Label fx:id="lblKembalian" prefHeight="37.0" prefWidth="325.0" styleClass="total-label" text="Rp.-">
+                  <Label fx:id="lblKembalianKelolaPembayaran" prefHeight="37.0" prefWidth="325.0" styleClass="total-label" text="Rp.-">
                      <VBox.margin>
                         <Insets left="5.0" top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <Button fx:id="btnBayar" mnemonicParsing="false" onAction="#handleBayar" prefHeight="38.0" prefWidth="101.0" stylesheets="@css/brew-society-pos.css" text="Bayar">
+                  <Button fx:id="btnBayarKelolaPembayaran" mnemonicParsing="false" onAction="#handleBayar" prefHeight="38.0" prefWidth="101.0" stylesheets="@css/brew-society-pos.css" text="Bayar">
                      <VBox.margin>
                         <Insets top="5.0" />
                      </VBox.margin>

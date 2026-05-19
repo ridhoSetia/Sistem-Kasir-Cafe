@@ -24,27 +24,27 @@
             </AnchorPane>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <TextField fx:id="txtCariNamaKasir" floatText="Cari Nama Kasir" opacity="0.56" prefHeight="62.0" prefWidth="258.0">
+                  <TextField fx:id="txtCariNamaAkunKasir" floatText="Cari Nama Kasir" opacity="0.56" prefHeight="62.0" prefWidth="258.0">
                      <HBox.margin>
                         <Insets left="5.0" />
                      </HBox.margin>
                   </TextField>
-                  <Button fx:id="btnCari" mnemonicParsing="false" onAction="#handleCari" styleClass="btn-info" stylesheets="@css/brew-society-pos.css" text="Cari">
+                  <Button fx:id="btnCariAkunKasir" mnemonicParsing="false" onAction="#handleCari" styleClass="btn-info" stylesheets="@css/brew-society-pos.css" text="Cari">
                      <HBox.margin>
                         <Insets left="15.0" top="9.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="btnTambah" mnemonicParsing="false" onAction="#handleTambah" styleClass="btn-add" stylesheets="@css/brew-society-pos.css" text="Tambah">
+                  <Button fx:id="btnTambahAkunKasir" mnemonicParsing="false" onAction="#handleTambahAkunKasir" styleClass="btn-add" stylesheets="@css/brew-society-pos.css" text="Tambah">
                      <HBox.margin>
                         <Insets left="2.0" top="9.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="btnEdit" mnemonicParsing="false" onAction="#handleEdit" styleClass="btn-edit" stylesheets="@css/brew-society-pos.css" text="Edit">
+                  <Button fx:id="btnEditAkunKasir" mnemonicParsing="false" onAction="#handleEditAkunKasir" styleClass="btn-edit" stylesheets="@css/brew-society-pos.css" text="Edit">
                      <HBox.margin>
                         <Insets left="2.0" top="9.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="btnHapus" mnemonicParsing="false" onAction="#handleHapus" styleClass="btn-delete" stylesheets="@css/brew-society-pos.css" text="Hapus">
+                  <Button fx:id="btnHapusAkunKasir" mnemonicParsing="false" onAction="#handleHapusAkunKasir" styleClass="btn-delete" stylesheets="@css/brew-society-pos.css" text="Hapus">
                      <HBox.margin>
                         <Insets left="2.0" top="9.0" />
                      </HBox.margin>
@@ -57,10 +57,10 @@
    <center>
       <TableView fx:id="tbAkunKasir" prefHeight="267.0" prefWidth="275.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="tbCID" prefWidth="52.666656494140625" text="ID" />
-          <TableColumn fx:id="tbCNamaLengkap" prefWidth="116.0" text="Nama Lengkap" />
-            <TableColumn fx:id="tbCUsername" prefWidth="75.0" text="Username" />
-            <TableColumn fx:id="tbCStatus" prefWidth="75.0" text="Status" />
+          <TableColumn fx:id="tbCIDAkunKasir" prefWidth="52.666656494140625" text="ID" />
+          <TableColumn fx:id="tbCNamaAkunKasir" prefWidth="116.0" text="Nama Lengkap" />
+            <TableColumn fx:id="tbCUsernameAkunKasir" prefWidth="75.0" text="Username" />
+            <TableColumn fx:id="tbCStatusAkunKasir" prefWidth="75.0" text="Status" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

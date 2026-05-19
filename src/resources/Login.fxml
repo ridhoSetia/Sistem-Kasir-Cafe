@@ -28,8 +28,8 @@
          </VBox.margin>
         </Label>
 
-        <TextField fx:id="txtUsername" onAction="#handleUsername" promptText="Username" styleClass="text-field" />
-        <PasswordField fx:id="txtPassword" onAction="#handlePassword" promptText="Password" styleClass="text-field" />
+        <TextField fx:id="txtUsernameLogin" onAction="#handleUsername" promptText="Username" styleClass="text-field" />
+        <PasswordField fx:id="txtPasswordLogin" onAction="#handlePassword" promptText="Password" styleClass="text-field" />
 
         <Button fx:id="btnLogin" maxWidth="Infinity" onAction="#handleLogin" stylesheets="@css/brew-society-pos.css" text="Login">
          <styleClass>

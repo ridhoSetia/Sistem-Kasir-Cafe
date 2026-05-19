@@ -24,12 +24,12 @@
       </ScrollPane>
       <HBox alignment="CENTER" layoutY="302.0" prefHeight="100.0" prefWidth="600.0">
          <children>
-            <Button fx:id="btnCetak" alignment="CENTER" mnemonicParsing="false" onAction="#handleCetak" stylesheets="@css/nota.css" text="Cetak">
+            <Button fx:id="btnCetakNota" alignment="CENTER" mnemonicParsing="false" onAction="#handleCetakNota" stylesheets="@css/nota.css" text="Cetak">
                <styleClass>
                   <String fx:value="btn-pdf" />
                   <String fx:value="btn-sedang" />
                </styleClass></Button>
-            <Button fx:id="btnTutup" alignment="CENTER" mnemonicParsing="false" onAction="#handleTutup" stylesheets="@css/nota.css" text="Tutup" />
+            <Button fx:id="btnTutupCetakNota" alignment="CENTER" mnemonicParsing="false" onAction="#handleTutupCetakNota" stylesheets="@css/nota.css" text="Tutup" />
          </children>
       </HBox>
    </children>

@@ -20,14 +20,14 @@
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" styleClass="login-subtitle" stylesheets="@css/brew-society-pos.css" text="Laporan Penjualan" />
                   <Region prefHeight="54.0" prefWidth="93.0" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="btnUnduh" minHeight="30.0" mnemonicParsing="false" onAction="#handleUnduh" prefHeight="30.0" prefWidth="121.0" styleClass="btn-primary" stylesheets="@css/brew-society-pos.css" text="Unduh Excel">
+                  <Button fx:id="btnUnduhLaporanPenjualan" minHeight="30.0" mnemonicParsing="false" onAction="#handleUnduhLaporanPenjualan" prefHeight="30.0" prefWidth="121.0" styleClass="btn-primary" stylesheets="@css/brew-society-pos.css" text="Unduh Excel">
                      <font>
                         <Font size="10.0" />
                      </font>
                      <HBox.margin>
                         <Insets right="5.0" top="5.0" />
                      </HBox.margin></Button>
-                  <Button fx:id="btnCetak" mnemonicParsing="false" onAction="#handleCetak" styleClass="btn-print" stylesheets="@css/brew-society-pos.css" text="Cetak PDF">
+                  <Button fx:id="btnCetakLaporanPenjualan" mnemonicParsing="false" onAction="#handleCetak" styleClass="btn-print" stylesheets="@css/brew-society-pos.css" text="Cetak PDF">
                      <HBox.margin>
                         <Insets right="5.0" top="5.0" />
                      </HBox.margin></Button>
@@ -39,13 +39,13 @@
                      <HBox.margin>
                         <Insets top="18.0" />
                      </HBox.margin></Label>
-                  <DatePicker fx:id="dtPeriodeSebelum" onAction="#handlePeriodeSebelum" prefHeight="55.0" prefWidth="154.0" />
+                  <DatePicker fx:id="dtPeriodeSebelumLaporanPenjualan" onAction="#handlePeriodeSebelumLaporanPenjualan" prefHeight="55.0" prefWidth="154.0" />
                   <Label styleClass="label-muted" stylesheets="@css/brew-society-pos.css" text=" s/d ">
                      <HBox.margin>
                         <Insets top="18.0" />
                      </HBox.margin></Label>
                   <DatePicker fx:id="dtPeriodeSesudah" onAction="#dtPeriodeSesudah" prefHeight="55.0" prefWidth="167.0" />
-                  <Button fx:id="btnTampilkanData" mnemonicParsing="false" onAction="#handleTampilkanData" styleClass="btn-info" stylesheets="@css/brew-society-pos.css" text="Tampilkan Data">
+                  <Button fx:id="btnTampilkanDataLaporanPenjualan" mnemonicParsing="false" onAction="#handleTampilkanDataLaporanPenjualan" styleClass="btn-info" stylesheets="@css/brew-society-pos.css" text="Tampilkan Data">
                      <HBox.margin>
                         <Insets left="10.0" top="7.0" />
                      </HBox.margin></Button>
@@ -62,10 +62,10 @@
          <children>
             <TableView fx:id="tbLaporanPenjualan" prefHeight="257.0" prefWidth="600.0" HBox.hgrow="ALWAYS">
               <columns>
-                <TableColumn fx:id="tbCTanggal" prefWidth="75.0" text="Tanggal" />
-                <TableColumn fx:id="tbCID" prefWidth="75.0" text="ID Transaksi" />
-                  <TableColumn fx:id="tbCTotalItem" prefWidth="75.0" text="Total Item" />
-                  <TableColumn fx:id="tbCTotalPendapatan" prefWidth="75.0" text="Total Pendapatan" />
+                <TableColumn fx:id="tbCTanggalLaporanPenjualan" prefWidth="75.0" text="Tanggal" />
+                <TableColumn fx:id="tbCIDLaporanPenjualan" prefWidth="75.0" text="ID Transaksi" />
+                  <TableColumn fx:id="tbCTotalItemLaporanPenjualan" prefWidth="75.0" text="Total Item" />
+                  <TableColumn fx:id="tbCTotalPendapatanLaporanPenjualan" prefWidth="75.0" text="Total Pendapatan" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
