@@ -36,6 +36,7 @@
             <String fx:value="btn-primary" />
             <String fx:value="btn-lg" />
          </styleClass></Button>
+      <Label fx:id="lblPesan" />
     </children>
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

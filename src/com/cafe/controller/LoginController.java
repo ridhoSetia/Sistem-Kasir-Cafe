@@ -12,18 +12,18 @@ import javafx.scene.control.Label;
 public class LoginController {
     @FXML private TextField inputUsername;
     @FXML private PasswordField inputPassword;
-    @FXML private Label lblPesanError;
+    @FXML private Label lblPesan;
 
     private UserRepository userRepository = new UserRepository();
 
     // Method Validasi Data
     private boolean validasiData(String username, String password) {
         if (username.isEmpty() || password.isEmpty()) {
-            lblPesanError.setText("Username/Password tidak boleh kosong!");
+            lblPesan.setText("Username/Password tidak boleh kosong!");
             return false;
         }
         if (password.length() < 5) {
-            lblPesanError.setText("Password minimal 5 karakter!");
+            lblPesan.setText("Password minimal 5 karakter!");
             return false;
         }
         return true;
@@ -40,10 +40,10 @@ public class LoginController {
             String role = userRepository.login(user, pass);
             
             if (role != null) {
-                lblPesanError.setText("Login Berhasil sebagai " + role);
+                lblPesan.setText("Login Berhasil sebagai " + role);
                 // Lanjutkan ke Dashboard sesuai role...
             } else {
-                lblPesanError.setText("Username atau Password salah!");
+                lblPesan.setText("Username atau Password salah!");
             }
         }
     }
