@@ -42,11 +42,10 @@ public class UserRepository {
                 ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                User kasir = new User(
+                Kasir kasir = new Kasir(
                         rs.getInt("id_user"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        rs.getString("role"),
                         rs.getString("nama_lengkap") // Ambil dari database
                 );
                 listKasir.add(kasir);

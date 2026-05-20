@@ -21,9 +21,25 @@ public class Transaksi {
 
     public void tambahItem(DetailTransaksi detail) {
         this.items.add(detail);
-        this.totalHarga += detail.getSubtotal();
     }
 
-    public double getTotalHarga() { return totalHarga; }
-    public List<DetailTransaksi> getItems() { return items; }
+    public double getTotalHarga() {
+        double total = 0.0;
+        for (DetailTransaksi item : items) {
+            total += item.getSubtotal();
+        }
+        return total;
+    }
+
+    public List<DetailTransaksi> getItems() {
+        return items;
+    }
+
+    public int getIdTransaksi() {
+        return idTransaksi;
+    }
+
+    public Date getTanggal() {
+        return tanggal;
+    }
 }

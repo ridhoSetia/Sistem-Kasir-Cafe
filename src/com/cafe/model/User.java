@@ -2,7 +2,7 @@
 
 package com.cafe.model;
 
-public class User {
+public abstract class User {
     private int idUser;
     private String namaLengkap;
     private String username;

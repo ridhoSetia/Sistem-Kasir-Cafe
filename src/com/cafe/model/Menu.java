@@ -26,9 +26,9 @@ public class Menu {
         return false;
     }
 
-    // Getter & Setter
     public int getIdMenu() { return idMenu; }
     public String getNamaMenu() { return namaMenu; }
     public double getHarga() { return harga; }
+    public String getKategori() { return kategori; }
     public int getStok() { return stok; }
 }
