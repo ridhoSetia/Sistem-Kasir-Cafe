@@ -1,7 +1,7 @@
 // Menangani logika "Kelola Pembayaran", "Input Menu", dan "Cetak Nota".
 
-package com.cafe.controller;
+package com.cafe.controller.Kasir;
 
-public class KasirController {
+public class TambahItemKeranjangController {
     
 }

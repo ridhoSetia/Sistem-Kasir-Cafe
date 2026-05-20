@@ -13,27 +13,30 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="RiwayatTransaksiKasir" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="bg-riwayat" stylesheets="@css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="RiwayatTransaksiKasir" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="bg-riwayat" stylesheets="@../css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cafe.controller.Kasir.LihatRiwayatController">
    <children>
       <BorderPane prefHeight="39.0" prefWidth="569.0" styleClass="bg-riwayat" stylesheets="@style.css">
          <center>
-            <Label alignment="CENTER" prefHeight="0.0" prefWidth="220.0" styleClass="login-subtitle" stylesheets="@css/brew-society-pos.css" text="Riwayat Transaksi Kasir" BorderPane.alignment="CENTER">
+            <Label alignment="CENTER" prefHeight="0.0" prefWidth="220.0" styleClass="login-subtitle" stylesheets="@../css/brew-society-pos.css" text="Riwayat Transaksi Kasir" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets bottom="15.0" />
-               </BorderPane.margin></Label>
+               </BorderPane.margin>
+            </Label>
          </center>
          <bottom>
             <HBox alignment="TOP_CENTER" prefHeight="26.0" prefWidth="600.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextField fx:id="txtCariIDRiwayatTransaksi" onAction="#handleCariID" prefHeight="55.0" prefWidth="181.0" promptText="Cari ID Transaksi">
+                  <TextField fx:id="txtCariIDRiwayatTransaksi" onAction="#handleCariID" prefHeight="54.0" prefWidth="169.0" promptText="Cari ID Transaksi">
                      <HBox.margin>
                         <Insets left="-30.0" right="10.0" />
-                     </HBox.margin></TextField>
-                  <DatePicker fx:id="dtTanggalRiwayatTransaksi" onAction="#handleTanggalTransaksi" prefHeight="55.0" prefWidth="236.0" styleClass="date-picker" stylesheets="@css/riwayat-transaksi.css" />
-                  <Button fx:id="btnCariDataRiwayatTransaksi" alignment="CENTER_RIGHT" mnemonicParsing="false" onAction="#handleCariData" prefHeight="38.0" prefWidth="99.0" styleClass="btn-primary" stylesheets="@css/riwayat-transaksi.css" text="Cari Data">
+                     </HBox.margin>
+                  </TextField>
+                  <DatePicker fx:id="dtTanggalRiwayatTransaksi" onAction="#handleTanggalTransaksi" prefHeight="54.0" prefWidth="210.0" styleClass="date-picker" stylesheets="@../css/riwayat-transaksi.css" />
+                  <Button fx:id="btnCariDataRiwayatTransaksi" alignment="CENTER_RIGHT" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleCariData" prefHeight="40.0" prefWidth="114.0" styleClass="btn-primary" stylesheets="@../css/riwayat-transaksi.css" text="Cari Data">
                      <HBox.margin>
                         <Insets left="25.0" top="7.0" />
-                     </HBox.margin></Button>
+                     </HBox.margin>
+                  </Button>
                </children>
                <padding>
                   <Insets bottom="10.0" />
@@ -42,11 +45,11 @@
          </bottom>
       </BorderPane>
       <TableView fx:id="tbDetailRiwayatTransaksi" prefHeight="68.0" prefWidth="600.0">
-        <columns>
-          <TableColumn fx:id="tbCIDRiwayatTransaksi" prefWidth="75.0" text="ID Transaksi" />
-          <TableColumn fx:id="tbCWaktuRiwayatTransaksi" prefWidth="75.0" text="Tanggal/Waktu" />
+         <columns>
+            <TableColumn fx:id="tbCIDRiwayatTransaksi" prefWidth="75.0" text="ID Transaksi" />
+            <TableColumn fx:id="tbCWaktuRiwayatTransaksi" prefWidth="75.0" text="Tanggal/Waktu" />
             <TableColumn fx:id="tbCTotalPembayaranRiwayatTransaksi" prefWidth="75.0" text="Total Pembayaran" />
-        </columns>
+         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
@@ -57,28 +60,28 @@
       <VBox prefHeight="110.0" prefWidth="600.0">
          <children>
             <SplitPane dividerPositions="0.5" prefHeight="160.0" prefWidth="200.0">
-              <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <items>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                      <children>
-                        <Label fx:id="lblDetailTransaksiRiwayatTransaksi" alignment="CENTER" layoutX="3.0" layoutY="-1.0" prefHeight="26.0" prefWidth="296.0" styleClass="panel-detail" stylesheets="@css/brew-society-pos.css" text="Detail Transaksi #ID..." />
+                        <Label fx:id="lblDetailTransaksiRiwayatTransaksi" alignment="CENTER" layoutX="3.0" layoutY="-1.0" prefHeight="26.0" prefWidth="296.0" styleClass="panel-detail" stylesheets="@../css/brew-society-pos.css" text="Detail Transaksi #ID..." />
                      </children>
                   </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="33.0" prefWidth="315.0" stylesheets="@style.css">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="33.0" prefWidth="315.0" stylesheets="@style.css">
                      <children>
                         <Label fx:id="lblInformasiWaktuRiwayatTransaksi" alignment="CENTER" layoutY="-1.0" prefHeight="26.0" prefWidth="296.0" text="Informasi waktu transaksi dilakukan." />
                      </children>
                   </AnchorPane>
-              </items>
+               </items>
                <VBox.margin>
                   <Insets left="5.0" right="5.0" />
                </VBox.margin>
             </SplitPane>
             <TableView fx:id="tbTransaksiMenuRiwayatTransaksi" prefHeight="81.0" prefWidth="600.0">
-              <columns>
-                <TableColumn fx:id="tbCNamaMenuRiwayatTransaksi" prefWidth="75.0" text="Nama Menu" />
-                <TableColumn fx:id="tbCQTYRiwayatTransaksi" prefWidth="75.0" text="QTY" />
+               <columns>
+                  <TableColumn fx:id="tbCNamaMenuRiwayatTransaksi" prefWidth="75.0" text="Nama Menu" />
+                  <TableColumn fx:id="tbCQTYRiwayatTransaksi" prefWidth="75.0" text="QTY" />
                   <TableColumn fx:id="tbCSubTotalRiwayatTransaksi" prefWidth="75.0" text="SubTotal" />
-              </columns>
+               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
@@ -91,18 +94,18 @@
       <VBox prefHeight="74.0" prefWidth="600.0">
          <children>
             <SplitPane dividerPositions="0.5017647058823529" prefHeight="160.0" prefWidth="569.0">
-              <items>
-                <AnchorPane fx:id="lblTotalAkhir" minHeight="0.0" minWidth="0.0" prefHeight="62.0" prefWidth="281.0" stylesheets="@css/brew-society-pos.css">
+               <items>
+                  <AnchorPane fx:id="lblTotalAkhir" minHeight="0.0" minWidth="0.0" prefHeight="62.0" prefWidth="281.0" stylesheets="@../css/brew-society-pos.css">
                      <children>
                         <Label fx:id="lblTotalAkhirRiwayatTransaksi" alignment="CENTER" layoutX="95.0" layoutY="24.0" text="Total Akhir : Rp 0" textAlignment="CENTER" />
                      </children>
                   </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="39.0" prefWidth="394.0" stylesheets="@css/brew-society-pos.css">
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="39.0" prefWidth="394.0" stylesheets="@../css/brew-society-pos.css">
                      <children>
-                        <Button fx:id="btnTutupRincianRiwayatTransaksi" layoutX="80.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleTutupRincianRiwayatTransaksi" styleClass="btn-close" stylesheets="@css/brew-society-pos.css" text="Tutup Rincian" />
+                        <Button fx:id="btnTutupRincianRiwayatTransaksi" layoutX="80.0" layoutY="10.0" mnemonicParsing="false" onAction="#handleTutupRincianRiwayatTransaksi" styleClass="btn-close" stylesheets="@../css/brew-society-pos.css" text="Tutup Rincian" />
                      </children>
                   </AnchorPane>
-              </items>
+               </items>
                <VBox.margin>
                   <Insets left="5.0" right="5.0" top="10.0" />
                </VBox.margin>

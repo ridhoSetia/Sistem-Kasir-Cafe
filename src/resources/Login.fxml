@@ -28,15 +28,15 @@
          </VBox.margin>
         </Label>
 
-        <TextField fx:id="txtUsernameLogin" onAction="#handleUsername" promptText="Username" styleClass="text-field" />
-        <PasswordField fx:id="txtPasswordLogin" onAction="#handlePassword" promptText="Password" styleClass="text-field" />
+        <TextField fx:id="txtUsernameLogin" promptText="Username" styleClass="text-field" />
+        <PasswordField fx:id="txtPasswordLogin" promptText="Password" styleClass="text-field" />
 
         <Button fx:id="btnLogin" maxWidth="Infinity" onAction="#handleLogin" stylesheets="@css/brew-society-pos.css" text="Login">
          <styleClass>
             <String fx:value="btn-primary" />
             <String fx:value="btn-lg" />
          </styleClass></Button>
-      <Label fx:id="lblPesan" />
+      <Label fx:id="lblStatus" />
     </children>
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

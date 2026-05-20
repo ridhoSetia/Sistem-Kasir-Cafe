@@ -12,22 +12,22 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="LaporanPenjualan" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="bg-riwayat" stylesheets="@css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="LaporanPenjualan" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="bg-riwayat" stylesheets="@../css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
    <top>
       <VBox prefHeight="113.0" prefWidth="570.0" BorderPane.alignment="CENTER">
          <children>
             <HBox prefHeight="84.0" prefWidth="570.0">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" styleClass="login-subtitle" stylesheets="@css/brew-society-pos.css" text="Laporan Penjualan" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" styleClass="login-subtitle" stylesheets="@../css/brew-society-pos.css" text="Laporan Penjualan" />
                   <Region prefHeight="54.0" prefWidth="93.0" HBox.hgrow="ALWAYS" />
-                  <Button fx:id="btnUnduhLaporanPenjualan" minHeight="30.0" mnemonicParsing="false" onAction="#handleUnduhLaporanPenjualan" prefHeight="30.0" prefWidth="121.0" styleClass="btn-primary" stylesheets="@css/brew-society-pos.css" text="Unduh Excel">
+                  <Button fx:id="btnUnduhLaporanPenjualan" minHeight="30.0" mnemonicParsing="false" onAction="#handleUnduhLaporanPenjualan" prefHeight="30.0" prefWidth="121.0" styleClass="btn-primary" stylesheets="@../css/brew-society-pos.css" text="Unduh Excel">
                      <font>
                         <Font size="10.0" />
                      </font>
                      <HBox.margin>
                         <Insets right="5.0" top="5.0" />
                      </HBox.margin></Button>
-                  <Button fx:id="btnCetakLaporanPenjualan" mnemonicParsing="false" onAction="#handleCetak" styleClass="btn-print" stylesheets="@css/brew-society-pos.css" text="Cetak PDF">
+                  <Button fx:id="btnCetakLaporanPenjualan" mnemonicParsing="false" onAction="#handleCetak" styleClass="btn-print" stylesheets="@../css/brew-society-pos.css" text="Cetak PDF">
                      <HBox.margin>
                         <Insets right="5.0" top="5.0" />
                      </HBox.margin></Button>
@@ -35,17 +35,17 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label prefHeight="19.0" prefWidth="45.0" styleClass="label-muted" stylesheets="@css/brew-society-pos.css" text="Periode">
+                  <Label prefHeight="19.0" prefWidth="45.0" styleClass="label-muted" stylesheets="@../css/brew-society-pos.css" text="Periode">
                      <HBox.margin>
                         <Insets top="18.0" />
                      </HBox.margin></Label>
                   <DatePicker fx:id="dtPeriodeSebelumLaporanPenjualan" onAction="#handlePeriodeSebelumLaporanPenjualan" prefHeight="55.0" prefWidth="154.0" />
-                  <Label styleClass="label-muted" stylesheets="@css/brew-society-pos.css" text=" s/d ">
+                  <Label styleClass="label-muted" stylesheets="@../css/brew-society-pos.css" text=" s/d ">
                      <HBox.margin>
                         <Insets top="18.0" />
                      </HBox.margin></Label>
                   <DatePicker fx:id="dtPeriodeSesudah" onAction="#dtPeriodeSesudah" prefHeight="55.0" prefWidth="167.0" />
-                  <Button fx:id="btnTampilkanDataLaporanPenjualan" mnemonicParsing="false" onAction="#handleTampilkanDataLaporanPenjualan" styleClass="btn-info" stylesheets="@css/brew-society-pos.css" text="Tampilkan Data">
+                  <Button fx:id="btnTampilkanDataLaporanPenjualan" mnemonicParsing="false" onAction="#handleTampilkanDataLaporanPenjualan" styleClass="btn-info" stylesheets="@../css/brew-society-pos.css" text="Tampilkan Data">
                      <HBox.margin>
                         <Insets left="10.0" top="7.0" />
                      </HBox.margin></Button>

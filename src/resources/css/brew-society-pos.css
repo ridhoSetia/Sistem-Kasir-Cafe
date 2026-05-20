@@ -44,6 +44,7 @@ Tutup   = abu netral / espresso untuk aksi utama
     -fx-font-family: "Segoe UI", "Inter", "Arial";
     -fx-font-size: 13px;
     -fx-text-fill: -text-main;
+    -fx-padding: 16;
 }
 
 /* =========================
@@ -58,6 +59,7 @@ Tutup   = abu netral / espresso untuk aksi utama
 
 .card {
     -fx-background-color: -surface;
+    -fx-height: 10;
     -fx-background-radius: 16;
     -fx-border-color: -border;
     -fx-border-radius: 16;
@@ -273,8 +275,8 @@ Tutup   = abu netral / espresso untuk aksi utama
 
 /* Ukuran button agar tidak terlalu gemuk */
 .btn-sm {
-    -fx-font-size: 13px;
-    -fx-padding: 7 14 7 14;
+    -fx-font-size: 12px;
+    -fx-padding: 6 12 6 12;
     -fx-min-height: 34;
 }
 
@@ -360,13 +362,13 @@ Tutup   = abu netral / espresso untuk aksi utama
 }
 
 .total-label {
-    -fx-font-size: 19px;
+    -fx-font-size: 14px;
     -fx-font-weight: 800;
     -fx-text-fill: -espresso;
 }
 
 .total-value {
-    -fx-font-size: 20px;
+    -fx-font-size: 14px;
     -fx-font-weight: 900;
     -fx-text-fill: -espresso;
 }

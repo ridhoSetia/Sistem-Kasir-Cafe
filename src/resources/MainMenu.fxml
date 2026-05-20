@@ -1,0 +1,74 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml" alignment="CENTER" prefHeight="500.0" prefWidth="680.0"
+    spacing="0" stylesheets="@../css/brew-society-pos.css"
+    fx:controller="com.cafe.controller.MainMenuController">
+    <padding>
+        <Insets top="0" bottom="0" left="0" right="0" />
+    </padding>
+    <children>
+        <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="680.0" styleClass="header-bar">
+            <padding>
+                <Insets top="14.0" bottom="14.0" left="24.0" right="24.0" />
+            </padding>
+            <children>
+                <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true"
+                    styleClass="logo-circle">
+                    <image>
+                        <Image url="@image/iava.png" />
+                    </image>
+                </ImageView>
+                <VBox alignment="CENTER_LEFT">
+                    <HBox.margin>
+                        <Insets left="14.0" />
+                    </HBox.margin>
+                    <children>
+                        <Label text="Brew Society Cafe" styleClass="page-title" />
+                        <Label fx:id="lblWelcome" text="User: - (Role: -)"
+                            styleClass="subtitle-label" />
+                    </children>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <Button fx:id="btnLogout" text="Log Out" mnemonicParsing="false"
+                    onAction="#handleLogout" styleClass="btn-logout" prefHeight="36.0"
+                    prefWidth="90.0" />
+            </children>
+        </HBox>
+        <Separator />
+        <VBox alignment="CENTER" spacing="6.0" prefWidth="680.0">
+            <padding>
+                <Insets top="36.0" bottom="28.0" />
+            </padding>
+            <children>
+                <Label text="Selamat Datang!" styleClass="welcome-title" />
+                <Label text="Pilih menu di bawah untuk melanjutkan." styleClass="welcome-sub" />
+            </children>
+        </VBox>
+        <HBox alignment="CENTER" spacing="16.0" prefWidth="680.0">
+            <padding>
+                <Insets bottom="40.0" left="24.0" right="24.0" />
+            </padding>
+            <children>
+                <Button fx:id="btnMenuKasir" text="Menu Kasir" mnemonicParsing="false"
+                    onAction="#handleBukaKasir" styleClass="menu-card-btn" prefHeight="100.0"
+                    prefWidth="148.0" />
+                <Button fx:id="btnKelolaKasir" text="Kelola Akun Kasir" mnemonicParsing="false"
+                    onAction="#handleBukaKelolaKasir" styleClass="menu-card-btn" prefHeight="100.0"
+                    prefWidth="148.0" />
+                <Button fx:id="btnLaporanPenjualan" text="Laporan Penjualan" mnemonicParsing="false"
+                    onAction="#handleBukaLaporan" styleClass="menu-card-btn" prefHeight="100.0"
+                    prefWidth="148.0" />
+                <Button fx:id="btnRiwayatPenjualan" text="Riwayat Penjualan" mnemonicParsing="false"
+                    onAction="#handleBukaRiwayat" styleClass="menu-card-btn" prefHeight="100.0"
+                    prefWidth="148.0" />
+            </children>
+        </HBox>
+    </children>
+</VBox>
