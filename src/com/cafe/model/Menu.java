@@ -3,15 +3,15 @@
 package com.cafe.model;
 
 public class Menu {
-    private int id_menu;
-    private String nama_menu;
+    private int idMenu;
+    private String namaMenu;
     private double harga;
     private String kategori;
     private int stok;
 
-    public Menu(int id_menu, String nama_menu, double harga, String kategori, int stok) {
-        this.id_menu = id_menu;
-        this.nama_menu = nama_menu;
+    public Menu(int idMenu, String namaMenu, double harga, String kategori, int stok) {
+        this.idMenu = idMenu;
+        this.namaMenu = namaMenu;
         this.harga = harga;
         this.kategori = kategori;
         this.stok = stok;
@@ -27,8 +27,8 @@ public class Menu {
     }
 
     // Getter & Setter
-    public int getIdMenu() { return id_menu; }
-    public String getNama_menu() { return nama_menu; }
+    public int getIdMenu() { return idMenu; }
+    public String getNamaMenu() { return namaMenu; }
     public double getHarga() { return harga; }
     public int getStok() { return stok; }
 }

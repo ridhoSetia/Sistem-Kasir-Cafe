@@ -7,13 +7,13 @@ import java.util.Date;
 import java.util.List;
 
 public class Transaksi {
-    private int id_transaksi;
+    private int idTransaksi;
     private Date tanggal;
     private double totalHarga;
     private List<DetailTransaksi> items;
 
-    public Transaksi(int id_transaksi) {
-        this.id_transaksi = id_transaksi;
+    public Transaksi(int idTransaksi) {
+        this.idTransaksi = idTransaksi;
         this.tanggal = new Date();
         this.items = new ArrayList<>();
         this.totalHarga = 0.0;

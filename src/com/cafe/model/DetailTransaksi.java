@@ -1,13 +1,13 @@
 package com.cafe.model;
 
 public class DetailTransaksi {
-    private int id_detail;
+    private int idDetail;
     private Menu menu;
     private int jumlah;
     private double subtotal;
 
-    public DetailTransaksi(int id_detail, Menu menu, int jumlah) {
-        this.id_detail = id_detail;
+    public DetailTransaksi(int idDetail, Menu menu, int jumlah) {
+        this.idDetail = idDetail;
         this.menu = menu;
         this.jumlah = jumlah;
         this.subtotal = menu.getHarga() * jumlah;
