@@ -45,9 +45,7 @@ public class MenuRepository {
         return list;
     }
 
-    /**
-     * Ambil satu menu berdasarkan ID.
-     */
+    // Ambil satu menu berdasarkan ID.
     public Menu getMenuById(int idMenu) {
         String sql = "SELECT * FROM menu WHERE id_menu = ?";
 

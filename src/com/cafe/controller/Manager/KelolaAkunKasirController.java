@@ -33,7 +33,7 @@ public class KelolaAkunKasirController implements FormTambahKasirController.Pare
     public void initialize() {
         // Pemetaan data model dengan kolom FXML secara presisi
         tbCIDAkunKasir.setCellValueFactory(new PropertyValueFactory<>("idUser"));
-        tbCNamaAkunKasir.setCellValueFactory(new PropertyValueFactory<>("namaLengkap")); // SEKARANG MEMANGGIL getNamaLengkap()
+        tbCNamaAkunKasir.setCellValueFactory(new PropertyValueFactory<>("namaLengkap"));
         tbCUsernameAkunKasir.setCellValueFactory(new PropertyValueFactory<>("username"));
 
         tampilkanDataTabel();

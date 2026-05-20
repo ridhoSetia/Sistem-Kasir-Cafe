@@ -15,14 +15,22 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class TambahItemKeranjangController {
-    @FXML private TextField   txtCariMenuTambahItem;
-    @FXML private AnchorPane  txtHasilPencarianTambahItem;   // panel kiri: list hasil
-    @FXML private AnchorPane  txtPreviewMenuTambahItem;       // panel kanan: preview
-    @FXML private Label       lblNamaMenuTambahItem;
-    @FXML private Label       lblHargaSatuanTambahItem;
-    @FXML private Spinner<Integer> spJumlahTambahItem;
-    @FXML private Button      btnTambahItemKeKeranjang;
-    @FXML private Button      btnEditTambahItemKeKeranjang;
+    @FXML
+    private TextField txtCariMenuTambahItem;
+    @FXML
+    private AnchorPane txtHasilPencarianTambahItem; // panel kiri: list hasil
+    @FXML
+    private AnchorPane txtPreviewMenuTambahItem; // panel kanan: preview
+    @FXML
+    private Label lblNamaMenuTambahItem;
+    @FXML
+    private Label lblHargaSatuanTambahItem;
+    @FXML
+    private Spinner<Integer> spJumlahTambahItem;
+    @FXML
+    private Button btnTambahItemKeKeranjang;
+    @FXML
+    private Button btnEditTambahItemKeKeranjang;
 
     private final MenuRepository menuRepository = new MenuRepository();
     private KelolaPembayaranController parentController;
@@ -31,16 +39,17 @@ public class TambahItemKeranjangController {
     @FXML
     public void initialize() {
         // Setup Spinner: nilai awal 1, minimum 1, maksimum 99
-        SpinnerValueFactory<Integer> valueFactory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 99, 1);
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 99, 1);
         spJumlahTambahItem.setValueFactory(valueFactory);
 
         // Tampilkan semua menu tersedia saat popup dibuka
         tampilkanHasilPencarian(menuRepository.getMenuTersedia());
     }
+
     public void setParentController(KelolaPembayaranController parent) {
         this.parentController = parent;
     }
+
     @FXML
     private void handleCariMenu() {
         String keyword = txtCariMenuTambahItem.getText().trim().toLowerCase();
@@ -87,6 +96,7 @@ public class TambahItemKeranjangController {
         lblJudul.setLayoutY(14);
         txtHasilPencarianTambahItem.getChildren().addAll(lblJudul, listContainer);
     }
+
     private void pilihMenu(Menu menu) {
         this.menuTerpilih = menu;
 
@@ -98,6 +108,7 @@ public class TambahItemKeranjangController {
         // Reset spinner ke 1
         spJumlahTambahItem.getValueFactory().setValue(1);
     }
+
     @FXML
     private void handleEditTambahItemKeKeranjang() {
         menuTerpilih = null;
@@ -107,6 +118,7 @@ public class TambahItemKeranjangController {
         txtCariMenuTambahItem.clear();
         tampilkanHasilPencarian(menuRepository.getMenuTersedia());
     }
+
     @FXML
     private void handleTambahItemKeKeranjang() {
         // Validasi: harus ada menu yang dipilih
@@ -127,13 +139,14 @@ public class TambahItemKeranjangController {
             return;
         }
         // Buat DetailTransaksi dan kirim ke parent controller
-        DetailTransaksi detail = new DetailTransaksi(0, menuTerpilih, jumlah);
+        DetailTransaksi detail = new DetailTransaksi(0, 0, menuTerpilih, jumlah);
         parentController.tambahItemKeKeranjang(detail);
 
         // Tutup popup
         Stage stage = (Stage) btnTambahItemKeKeranjang.getScene().getWindow();
         stage.close();
     }
+
     private void tampilkanAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

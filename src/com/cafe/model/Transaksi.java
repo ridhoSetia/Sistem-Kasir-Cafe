@@ -1,5 +1,3 @@
-// Untuk menampung data pesanan
-
 package com.cafe.model;
 
 import java.util.ArrayList;
@@ -8,38 +6,53 @@ import java.util.List;
 
 public class Transaksi {
     private int idTransaksi;
+    private int idUser;
     private Date tanggal;
-    private double totalHarga;
-    private List<DetailTransaksi> items;
+    private List<DetailTransaksi> listDetail; // Bersihkan nama variabel agar seragam
 
-    public Transaksi(int idTransaksi) {
-        this.idTransaksi = idTransaksi;
+    // Konstruktor utama kassa kasir aktif
+    public Transaksi(int idUser) {
+        this.idTransaksi = 0;
+        this.idUser = idUser;
         this.tanggal = new Date();
-        this.items = new ArrayList<>();
-        this.totalHarga = 0.0;
+        this.listDetail = new ArrayList<>();
     }
 
     public void tambahItem(DetailTransaksi detail) {
-        this.items.add(detail);
+        this.listDetail.add(detail);
     }
 
+    // Menggunakan objek listDetail yang seragam 
+    // untuk mencegah kembalian nilai Rp0,00 di RAM
     public double getTotalHarga() {
         double total = 0.0;
-        for (DetailTransaksi item : items) {
+        for (DetailTransaksi item : listDetail) {
             total += item.getSubtotal();
         }
         return total;
     }
 
-    public List<DetailTransaksi> getItems() {
-        return items;
+    public List<DetailTransaksi> getlistDetail() {
+        return listDetail;
     }
 
     public int getIdTransaksi() {
         return idTransaksi;
     }
 
+    public int getIdUser() {
+        return idUser;
+    }
+
     public Date getTanggal() {
         return tanggal;
+    }
+
+    public void setIdTransaksi(int idTransaksi) {
+        this.idTransaksi = idTransaksi;
+    }
+
+    public void setIdUser(int idUser) {
+        this.idUser = idUser;
     }
 }

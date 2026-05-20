@@ -1,6 +1,8 @@
 package com.cafe.controller;
 
+import com.cafe.config.UserSession;
 import com.cafe.repository.UserRepository;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -44,10 +46,17 @@ public class LoginController {
             return;
         }
 
-        String role = userRepository.login(username, password);
+        var user = userRepository.login(username, password);
 
-        if (role != null) {
+        if (user != null) {
             lblStatus.setText("Login Sukses!");
+
+            // SIMPAN SESI SECARA DINAMIS DI SINI SEBELUM PINDAH HALAMAN
+            UserSession.getInstance().login(user);
+
+            // Ambil role dari objek user
+            String role = user.getRole();
+            
             pindahKeMenuUtama(role);
         } else {
             lblStatus.setText("Error: Username atau Password salah!");

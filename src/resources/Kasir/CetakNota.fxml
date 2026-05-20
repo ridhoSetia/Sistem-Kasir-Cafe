@@ -13,9 +13,10 @@
    stylesheets="@../css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26"
    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cafe.controller.Kasir.CetakNotaController">
    <children>
-      <ScrollPane prefHeight="302.0" prefWidth="600.0">
+      <ScrollPane fx:id="scrollPane" prefHeight="302.0" prefWidth="600.0">
          <content>
-            <VBox prefHeight="310.0" prefWidth="597.0" styleClass="kertas-struk">
+            <VBox fx:id="vboxKertasStruk" prefHeight="310.0" prefWidth="597.0"
+               styleClass="kertas-struk">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nama Toko" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alamat" />

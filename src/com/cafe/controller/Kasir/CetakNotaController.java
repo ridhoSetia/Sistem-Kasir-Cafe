@@ -1,4 +1,5 @@
 package com.cafe.controller.Kasir;
+
 import com.cafe.model.DetailTransaksi;
 import com.cafe.model.Transaksi;
 import javafx.fxml.FXML;
@@ -15,46 +16,59 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 public class CetakNotaController {
-    @FXML private ScrollPane scrollPane;
-    @FXML private VBox       vboxKertasStruk;
-    @FXML private Button     btnCetakNota;
-    @FXML private Button     btnTutupCetakNota;
+    @FXML
+    private ScrollPane scrollPane;
+    @FXML
+    private VBox vboxKertasStruk;
+    @FXML
+    private Button btnCetakNota;
+    @FXML
+    private Button btnTutupCetakNota;
 
     private Transaksi transaksi;
 
-    private final NumberFormat rupiahFmt =
-            NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
-    private final SimpleDateFormat dateFmt =
-            new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    // PERBAIKAN: Menggunakan Locale.forLanguageTag untuk standardisasi Java 19+ (Bebas Deprecation Warning)
+    private final NumberFormat rupiahFmt = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID"));
+    private final SimpleDateFormat dateFmt = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
     public void setDataTransaksi(Transaksi transaksi) {
         this.transaksi = transaksi;
         renderNota();
     }
+
     private void renderNota() {
+        // Validasi defensif untuk mencegah NullPointerException
+        if (transaksi == null) {
+            System.err.println("Error: Objek Transaksi yang dilempar ke CetakNota bernilai NULL!");
+            return;
+        }
+
         vboxKertasStruk.getChildren().clear();
         vboxKertasStruk.getChildren().addAll(
-                buatTeks("================================"),
-                buatTeks("         CAFE KITA             "),
-                buatTeks("================================"),
+                buatTeks("=================================="),
+                buatTeks("        BREW SOCIETY CAFE        "),
+                buatTeks("=================================="),
+                buatTeks("Nota ID : #TRX-" + transaksi.getIdTransaksi()), // Sekarang menampilkan ID Riil DB
                 buatTeks("Tanggal : " + dateFmt.format(transaksi.getTanggal())),
-                buatTeks("--------------------------------")
-        );
-        for (DetailTransaksi d : transaksi.getItems()) {
+                buatTeks("----------------------------------"));
+
+        // Mengiterasi list detail belanja yang tersimpan aman di memori objek
+        for (DetailTransaksi d : transaksi.getlistDetail()) {
             vboxKertasStruk.getChildren().addAll(
                     buatTeks(d.getMenu().getNamaMenu() + "  x" + d.getJumlah()),
                     buatTeks(String.format("  @%s  = %s",
                             rupiahFmt.format(d.getMenu().getHarga()),
-                            rupiahFmt.format(d.getSubtotal())))
-            );
+                            rupiahFmt.format(d.getSubtotal()))));
         }
+
         vboxKertasStruk.getChildren().addAll(
-                buatTeks("--------------------------------"),
-                buatTeks("Total     : " + rupiahFmt.format(transaksi.getTotalHarga())),
-                buatTeks("================================"),
-                buatTeks("      Terima Kasih! :)         "),
-                buatTeks("================================")
-        );
+                buatTeks("----------------------------------"),
+                buatTeks("Total Belanja : " + rupiahFmt.format(transaksi.getTotalHarga())),
+                buatTeks("=================================="),
+                buatTeks("     Terima Kasih atas Kunjungan Anda! :)    "),
+                buatTeks("=================================="));
     }
+
     private Text buatTeks(String isi) {
         Text t = new Text(isi);
         t.getStyleClass().add("struk-text");
@@ -63,7 +77,6 @@ public class CetakNotaController {
 
     @FXML
     private void handleCetakNota() {
-        // PrinterJob: API bawaan JavaFX untuk mencetak Node ke printer
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job == null) {
             tampilkanAlert(Alert.AlertType.ERROR,
@@ -74,7 +87,6 @@ public class CetakNotaController {
         boolean konfirmasi = job.showPrintDialog(btnCetakNota.getScene().getWindow());
 
         if (konfirmasi) {
-            // cetak node vboxKertasStruk (tampilan nota)
             Node nodeCetak = scrollPane.getContent();
             boolean berhasil = job.printPage(nodeCetak);
 
@@ -89,14 +101,17 @@ public class CetakNotaController {
             }
         }
     }
+
     @FXML
     private void handleTutupCetakNota() {
         tutupWindow();
     }
+
     private void tutupWindow() {
         Stage stage = (Stage) btnTutupCetakNota.getScene().getWindow();
         stage.close();
     }
+
     private void tampilkanAlert(Alert.AlertType type, String title, String content) {
         Alert alert = new Alert(type);
         alert.setTitle(title);

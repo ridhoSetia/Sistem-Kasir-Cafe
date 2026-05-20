@@ -9,13 +9,20 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import java.io.IOException;
 
+import com.cafe.controller.Kasir.KelolaPembayaranController;
+
 public class MainMenuController {
 
-    @FXML private Label lblWelcome;
-    @FXML private Button btnMenuKasir;
-    @FXML private Button btnKelolaKasir;
-    @FXML private Button btnLaporanPenjualan;
-    @FXML private Button btnLogout;
+    @FXML
+    private Label lblWelcome;
+    @FXML
+    private Button btnMenuKasir;
+    @FXML
+    private Button btnKelolaKasir;
+    @FXML
+    private Button btnLaporanPenjualan;
+    @FXML
+    private Button btnLogout;
 
     private String currentRole;
 
@@ -29,7 +36,7 @@ public class MainMenuController {
             // Sembunyikan fitur Kelola Kasir
             btnKelolaKasir.setVisible(false);
             btnKelolaKasir.setManaged(false);
-            
+
             // Sembunyikan fitur Laporan Penjualan
             btnLaporanPenjualan.setVisible(false);
             btnLaporanPenjualan.setManaged(false);
@@ -38,7 +45,27 @@ public class MainMenuController {
 
     @FXML
     private void handleBukaKasir() {
-        pindahHalaman("/resources/Kasir/KelolaPembayaran.fxml", "Menu Kasir - Kelola Pembayaran");
+        try {
+            // Membuka muatan berkas secara manual agar bisa mengakses Controllernya
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Kasir/KelolaPembayaran.fxml"));
+            Parent root = loader.load();
+
+            // Mengirim data id_user milik kasir aktif saat ini (misal bernilai 1) ke
+            // controller kasir
+            KelolaPembayaranController kasirCtrl = loader.getController();
+            kasirCtrl.setIdKasirAktif(1); // Sementara di-hardcode 1 atau kembangkan sistem User Session terpusat
+
+            Stage stage = (Stage) btnLogout.getScene().getWindow();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Menu Kasir - Kelola Pembayaran");
+            stage.centerOnScreen();
+            stage.show();
+
+        } catch (IOException e) {
+            System.err.println("Infrastruktur Error: Gagal memuat fitur pembayaran.");
+            e.printStackTrace();
+        }
     }
 
     @FXML

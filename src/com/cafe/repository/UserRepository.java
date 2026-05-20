@@ -5,6 +5,7 @@ package com.cafe.repository;
 
 import com.cafe.config.DBConnection;
 import com.cafe.model.Kasir;
+import com.cafe.model.Manager;
 import com.cafe.model.User;
 
 import javafx.collections.FXCollections;
@@ -14,18 +15,29 @@ import java.sql.*;
 
 public class UserRepository {
 
-    public String login(String username, String password) {
-        String query = "SELECT role FROM users WHERE username = ? AND password = ?";
+    public User login(String inputUsername, String inputPassword) {
+        String query = "SELECT id_user, username, password, nama_lengkap, role FROM users WHERE username = ? AND password = ?";
 
         try (Connection conn = DBConnection.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(query)) {
+                PreparedStatement ps = conn.prepareStatement(query)) {
 
-            stmt.setString(1, username);
-            stmt.setString(2, password);
+            ps.setString(1, inputUsername);
+            ps.setString(2, inputPassword);
+            ResultSet rs = ps.executeQuery();
 
-            ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return rs.getString("role"); // Mengembalikan 'Kasir' atau 'Manager'
+                int idUser = rs.getInt("id_user");
+                String username = rs.getString("username");
+                String password = rs.getString("password");
+                String nama = rs.getString("nama_lengkap");
+                String role = rs.getString("role");
+
+                // Polimorfisme: Mengembalikan objek konkret ke dalam tipe data abstract User
+                if (role.equalsIgnoreCase("Kasir")) {
+                    return new Kasir(idUser, username, password, nama);
+                } else if (role.equalsIgnoreCase("Manager")) {
+                    return new Manager(idUser, username, password, nama);
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

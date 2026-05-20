@@ -104,12 +104,6 @@
                   <Label text="Total" styleClass="summary-key" />
                   <Label text="Nominal Bayar" styleClass="summary-key" />
                   <Label text="Kembalian" styleClass="summary-key" />
-                  <CheckBox fx:id="cbCetakNota"
-                            text="Cetak Nota Fisik"
-                            mnemonicParsing="false"
-                            onAction="#handleCetakNota"
-                            styleClass="checkbox"
-                            prefHeight="32.0" />
                </children>
             </VBox>
 

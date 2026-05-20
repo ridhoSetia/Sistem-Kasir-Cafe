@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS users (
     role ENUM('Kasir', 'Manager') NOT NULL
 );
 
-ALTER TABLE menu ADD COLUMN nama_lengkap VARCHAR(99) NOT NULL;
+ALTER TABLE users ADD COLUMN nama_lengkap VARCHAR(99) NOT NULL;
 
 -- Tabel Menu (Mendukung Stok dan Kategori)
 CREATE TABLE IF NOT EXISTS menu (
@@ -22,9 +22,10 @@ ALTER TABLE menu MODIFY COLUMN kategori ENUM('Makanan', 'Minuman') NOT NULL;
 -- Tabel Transaksi (Utama)
 CREATE TABLE IF NOT EXISTS transaksi (
     id_transaksi INT PRIMARY KEY AUTO_INCREMENT,
+    id_user INT NOT NULL,
     tanggal DATETIME DEFAULT CURRENT_TIMESTAMP,
     total_harga DOUBLE NOT NULL,
-    status_pembayaran ENUM('Pending', 'Lunas', 'Batal') DEFAULT 'Pending'
+    FOREIGN KEY (id_user) REFERENCES users(id_user)
 );
 
 -- Tabel Detail Transaksi (Rincian Item per Transaksi)
