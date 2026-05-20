@@ -12,7 +12,7 @@ public class DetailTransaksi {
         this.jumlah = jumlah;
         this.subtotal = menu.getHarga() * jumlah;
     }
-
+    public int    getIdDetail()  { return idDetail; }
     public double getSubtotal() { return subtotal; }
     public Menu getMenu() { return menu; }
     public int getJumlah() { return jumlah; }
