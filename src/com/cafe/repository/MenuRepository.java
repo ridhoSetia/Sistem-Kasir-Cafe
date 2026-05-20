@@ -1,73 +1,127 @@
-// Berisi operasi CRUD (Create, Read, Update, Delete) untuk menu cafe.
-
 package com.cafe.repository;
+
 import com.cafe.config.DBConnection;
 import com.cafe.model.Menu;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MenuRepository {
+
+    // 1. Ambil semua data menu dari database (Milik Manager)
+    public List<Menu> getAllMenu() {
+        List<Menu> listMenu = new ArrayList<>();
+        String sql = "SELECT * FROM menu";
+
+        try (Connection conn = DBConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                Menu menu = new Menu(
+                        rs.getInt("id_menu"),
+                        rs.getString("nama_menu"),
+                        rs.getDouble("harga"),
+                        rs.getString("kategori"),
+                        rs.getInt("stok")
+                );
+                listMenu.add(menu);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listMenu;
+    }
+
+    // 2. Tambah data menu baru (Milik Manager)
+    public boolean addMenu(String nama, double harga, String kategori, int stok) {
+        String sql = "INSERT INTO menu (nama_menu, harga, kategori, stok) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, nama);
+            pstmt.setDouble(2, harga);
+            pstmt.setString(3, kategori);
+            pstmt.setInt(4, stok);
+
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // 3. Hapus data menu (Milik Manager)
+    public boolean deleteMenu(int idMenu) {
+        String sql = "DELETE FROM menu WHERE id_menu = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, idMenu);
+            return pstmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // =========================================================================
+    // TAMBAHAN UNTUK FIX ERROR BAGIAN KASIR (TambahItemKeranjangController)
+    // =========================================================================
+
+    /**
+     * Mengambil data menu yang stoknya masih di atas 0 (Tersedia)
+     */
     public List<Menu> getMenuTersedia() {
-        List<Menu> list = new ArrayList<>();
-        String sql = "SELECT * FROM menu WHERE stok > 0 ORDER BY kategori, nama_menu";
+        List<Menu> listMenu = new ArrayList<>();
+        String sql = "SELECT * FROM menu WHERE stok > 0";
 
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                list.add(mapRow(rs));
+                Menu menu = new Menu(
+                        rs.getInt("id_menu"),
+                        rs.getString("nama_menu"),
+                        rs.getDouble("harga"),
+                        rs.getString("kategori"),
+                        rs.getInt("stok")
+                );
+                listMenu.add(menu);
             }
-
         } catch (SQLException e) {
-            System.err.println("[MenuRepository] getMenuTersedia: " + e.getMessage());
+            e.printStackTrace();
         }
-        return list;
+        return listMenu;
     }
-    public List<Menu> cariMenuByNama(String keyword) {
-        List<Menu> list = new ArrayList<>();
-        String sql = "SELECT * FROM menu WHERE LOWER(nama_menu) LIKE ? AND stok > 0";
+
+    /**
+     * Mencari menu berdasarkan kemiripan nama (Fitur Search Kasir)
+     */
+    public List<Menu> cariMenuByNama(String namaCari) {
+        List<Menu> listMenu = new ArrayList<>();
+        String sql = "SELECT * FROM menu WHERE nama_menu LIKE ? AND stok > 0";
 
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, "%" + keyword + "%");
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                list.add(mapRow(rs));
+            pstmt.setString(1, "%" + namaCari + "%");
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Menu menu = new Menu(
+                            rs.getInt("id_menu"),
+                            rs.getString("nama_menu"),
+                            rs.getDouble("harga"),
+                            rs.getString("kategori"),
+                            rs.getInt("stok")
+                    );
+                    listMenu.add(menu);
+                }
             }
-
         } catch (SQLException e) {
-            System.err.println("[MenuRepository] cariMenuByNama: " + e.getMessage());
+            e.printStackTrace();
         }
-        return list;
-    }
-
-    // Ambil satu menu berdasarkan ID.
-    public Menu getMenuById(int idMenu) {
-        String sql = "SELECT * FROM menu WHERE id_menu = ?";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, idMenu);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) return mapRow(rs);
-
-        } catch (SQLException e) {
-            System.err.println("[MenuRepository] getMenuById: " + e.getMessage());
-        }
-        return null;
-    }
-    private Menu mapRow(ResultSet rs) throws SQLException {
-        return new Menu(
-                rs.getInt("id_menu"),
-                rs.getString("nama_menu"),
-                rs.getDouble("harga"),
-                rs.getString("kategori"),
-                rs.getInt("stok")
-        );
+        return listMenu;
     }
 }

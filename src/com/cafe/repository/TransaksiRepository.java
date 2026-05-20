@@ -9,8 +9,8 @@ import java.util.List;
 
 public class TransaksiRepository {
 
-public boolean simpanTransaksi(Transaksi transaksi) {
-String sqlHeader = "INSERT INTO transaksi (id_user, tanggal, total_harga) VALUES (?, ?, ?)";
+    public boolean simpanTransaksi(Transaksi transaksi) {
+        String sqlHeader = "INSERT INTO transaksi (id_user, tanggal, total_harga) VALUES (?, ?, ?)";
         String sqlDetail = "INSERT INTO detail_transaksi (id_transaksi, id_menu, jumlah, subtotal) VALUES (?, ?, ?, ?)";
         String sqlUpdateStok = "UPDATE menu SET stok = stok - ? WHERE id_menu = ?";
 
@@ -18,7 +18,7 @@ String sqlHeader = "INSERT INTO transaksi (id_user, tanggal, total_harga) VALUES
         try {
             conn = DBConnection.getConnection();
             if (conn == null) return false;
-            
+
             conn.setAutoCommit(false); // Mengaktifkan Unit Transaksi ACID
 
             // 1. Eksekusi Penyimpanan Header Transaksi dengan membawa flags Generated Keys
@@ -39,7 +39,7 @@ String sqlHeader = "INSERT INTO transaksi (id_user, tanggal, total_harga) VALUES
             // 2. Eksekusi Batch Simpan Detail Rincian dan Batch Pengurangan Stok
             try (PreparedStatement stmtD = conn.prepareStatement(sqlDetail);
                  PreparedStatement stmtS = conn.prepareStatement(sqlUpdateStok)) {
-                
+
                 for (DetailTransaksi d : transaksi.getlistDetail()) {
                     // Ikat data detail ke ID Transaksi induk asli yang baru saja terbit
                     stmtD.setInt(1, idGenerated);
@@ -49,13 +49,13 @@ String sqlHeader = "INSERT INTO transaksi (id_user, tanggal, total_harga) VALUES
                     stmtD.addBatch();
 
                     // Pengurangan stok menu operasional cafe
-                    stmtS.setInt(1, d.getJumlah()); 
-                    stmtS.setInt(2, d.getMenu().getIdMenu()); 
+                    stmtS.setInt(1, d.getJumlah());
+                    stmtS.setInt(2, d.getMenu().getIdMenu());
                     stmtS.addBatch();
                 }
-                
-                stmtD.executeBatch(); 
-                stmtS.executeBatch(); 
+
+                stmtD.executeBatch();
+                stmtS.executeBatch();
             }
 
             conn.commit(); // Eksekusi berhasil total, simpan permanen ke MySQL disk
@@ -74,7 +74,6 @@ String sqlHeader = "INSERT INTO transaksi (id_user, tanggal, total_harga) VALUES
         }
     }
 
-    // Fungsi getSemuaTransaksi() dan isiDetailTransaksi() tetap di bawah seperti semula...
     public List<Transaksi> getSemuaTransaksi() {
         List<Transaksi> list = new ArrayList<>();
         String sql = "SELECT * FROM transaksi ORDER BY tanggal DESC";
@@ -109,8 +108,48 @@ String sqlHeader = "INSERT INTO transaksi (id_user, tanggal, total_harga) VALUES
                         rs.getInt("stok")
                 );
                 DetailTransaksi detail = new DetailTransaksi(rs.getInt("id_detail"), rs.getInt("id_transaksi"), menu, rs.getInt("jumlah"));
-                transaksi.tambahItem(detail);            
+                transaksi.tambahItem(detail);
             }
         }
+    }
+
+    // =========================================================================
+    // FITUR TAMBAHAN: LAPORAN PENJUALAN MANAGER (AMBIL OMSET & TOTAL TRANSAKSI)
+    // =========================================================================
+
+    /**
+     * Menghitung total seluruh pendapatan (omset) dari tabel transaksi
+     */
+    public double getTotalPendapatan() {
+        double total = 0;
+        String sql = "SELECT SUM(total_harga) AS total_omset FROM transaksi";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                total = rs.getDouble("total_omset");
+            }
+        } catch (SQLException e) {
+            System.err.println("[TransaksiRepository] getTotalPendapatan Error: " + e.getMessage());
+        }
+        return total;
+    }
+
+    /**
+     * Menghitung berapa banyak transaksi/nota belanja yang sudah terjadi
+     */
+    public int getTotalTransaksiCount() {
+        int count = 0;
+        String sql = "SELECT COUNT(*) AS total_nota FROM transaksi";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                count = rs.getInt("total_nota");
+            }
+        } catch (SQLException e) {
+            System.err.println("[TransaksiRepository] getTotalTransaksiCount Error: " + e.getMessage());
+        }
+        return count;
     }
 }
