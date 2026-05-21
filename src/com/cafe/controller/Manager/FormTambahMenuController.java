@@ -33,7 +33,7 @@ public class FormTambahMenuController {
         String kategori = cmbKategoriMenuForm.getValue();
 
         if (nama.isEmpty() || txtHargaMenuForm.getText().isEmpty() || txtStokMenuForm.getText().isEmpty() || kategori == null) {
-            Modal.tampilkanModal("Peringatan", "Semua kolom data harus diisi!");
+            Alerts.tampilkanModal("Peringatan", "Semua kolom data harus diisi!");
             return;
         }
 
@@ -42,7 +42,7 @@ public class FormTambahMenuController {
             int stok = Integer.parseInt(txtStokMenuForm.getText());
 
             if (menuRepository.addMenu(nama, harga, kategori, stok)) {
-                Modal.tampilkanModal("Sukses", "Menu baru berhasil ditambahkan!");
+                Alerts.tampilkanModal("Sukses", "Menu baru berhasil ditambahkan!");
 
                 if (mainController != null) {
                     mainController.loadMenuData(); // Memicu refresh tabel utama
@@ -51,11 +51,11 @@ public class FormTambahMenuController {
                 Stage stage = (Stage) txtNamaMenuForm.getScene().getWindow();
                 stage.close();
             } else {
-                Modal.tampilkanModal("Gagal", "Gagal menyimpan menu ke database.");
+                Alerts.tampilkanModal("Gagal", "Gagal menyimpan menu ke database.");
             }
 
         } catch (NumberFormatException e) {
-            Modal.tampilkanModal("Error", "Harga dan Stok harus berupa angka valid!");
+            Alerts.tampilkanModal("Error", "Harga dan Stok harus berupa angka valid!");
         }
     }
 

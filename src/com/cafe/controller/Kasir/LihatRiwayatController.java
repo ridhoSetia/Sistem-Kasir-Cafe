@@ -2,6 +2,8 @@ package com.cafe.controller.Kasir;
 
 import com.cafe.model.DetailTransaksi;
 import com.cafe.model.Transaksi;
+import com.cafe.utils.*;
+
 import com.cafe.repository.TransaksiRepository;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,6 +35,8 @@ public class LihatRiwayatController {
     private TableColumn<Transaksi, Double> tbCTotalPembayaranRiwayatTransaksi;
     @FXML
     private Label lblDetailTransaksiRiwayatTransaksi;
+    @FXML
+    private Label lblKasirTransaksi;
     @FXML
     private Label lblInformasiWaktuRiwayatTransaksi;
     @FXML
@@ -67,7 +71,7 @@ public class LihatRiwayatController {
         sembunyikanPanelDetail(); // Sembunyikan secara total saat awal
         muatSemuaRiwayat();
 
-        // Jembatan Event: saat baris di tabel atas diklik akan tampilkan detail secara dinamis
+        // saat baris di tabel atas diklik akan tampilkan detail secara dinamis
         tbDetailRiwayatTransaksi.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((obs, oldVal, newVal) -> {
@@ -120,6 +124,45 @@ public class LihatRiwayatController {
         tbDetailRiwayatTransaksi.setItems(FXCollections.observableArrayList(semuaTransaksi));
     }
 
+    private void tampilkanDetailTransaksi(Transaksi transaksi) {
+        lblDetailTransaksiRiwayatTransaksi.setText("Detail Transaksi #" + transaksi.getIdTransaksi());
+        lblInformasiWaktuRiwayatTransaksi.setText("Waktu: " + dateFmt.format(transaksi.getTanggal()));
+        lblTotalAkhirRiwayatTransaksi.setText("Total Akhir : " + rupiahFmt.format(transaksi.getTotalHarga()));
+
+        // Ambil properti namaKasir dari model dan tampilkan ke komponen Label
+        if (transaksi.getNamaKasir() != null && !transaksi.getNamaKasir().trim().isEmpty()) {
+            lblKasirTransaksi.setText("Kasir yang bertugas: " + transaksi.getNamaKasir());
+        } else {
+            lblKasirTransaksi.setText("Kasir yang bertugas: Tidak Terdeteksi");
+        }
+
+        ObservableList<DetailTransaksi> detailItems = FXCollections.observableArrayList(transaksi.getlistDetail());
+        tbTransaksiMenuRiwayatTransaksi.setItems(detailItems);
+
+        tampilkanPanelDetail(); // Membuka panel detail ke layar
+    }
+
+    private void sembunyikanPanelDetail() {
+        // Melakukan penutupan total struktural layout agar halaman terlihat bersih
+        panelDetailBox.setVisible(false);
+        panelDetailBox.setManaged(false);
+
+        lblDetailTransaksiRiwayatTransaksi.setText("Detail Transaksi #ID...");
+        lblInformasiWaktuRiwayatTransaksi.setText("Informasi waktu transaksi dilakukan.");
+        lblTotalAkhirRiwayatTransaksi.setText("Total Akhir : Rp 0");
+
+        // Reset label kasir menjadi strip (-) kembali saat panel detail ditutup
+        lblKasirTransaksi.setText("Kasir yang bertugas: -");
+
+        tbTransaksiMenuRiwayatTransaksi.setItems(FXCollections.observableArrayList());
+    }
+
+    @FXML
+    private void handleTutupRincianRiwayatTransaksi() {
+        sembunyikanPanelDetail();
+        tbDetailRiwayatTransaksi.getSelectionModel().clearSelection();
+    }
+
     @FXML
     private void handleCariData() {
         String inputID = txtCariIDRiwayatTransaksi.getText().trim();
@@ -135,7 +178,7 @@ public class LihatRiwayatController {
                         .filter(t -> t.getIdTransaksi() == idCari)
                         .collect(Collectors.toList());
             } catch (NumberFormatException e) {
-                tampilkanAlert(Alert.AlertType.WARNING, "Format Salah", "ID Transaksi harus berupa angka murni.");
+                Alerts.tampilkanModal("Format Salah", "ID Transaksi harus berupa angka murni.");
                 return;
             }
         }
@@ -163,46 +206,11 @@ public class LihatRiwayatController {
         handleCariData();
     }
 
-    private void tampilkanDetailTransaksi(Transaksi transaksi) {
-        lblDetailTransaksiRiwayatTransaksi.setText("Detail Transaksi #" + transaksi.getIdTransaksi());
-        lblInformasiWaktuRiwayatTransaksi.setText("Waktu: " + dateFmt.format(transaksi.getTanggal()));
-        lblTotalAkhirRiwayatTransaksi.setText("Total Akhir : " + rupiahFmt.format(transaksi.getTotalHarga()));
-
-        ObservableList<DetailTransaksi> detailItems = FXCollections.observableArrayList(transaksi.getlistDetail());
-        tbTransaksiMenuRiwayatTransaksi.setItems(detailItems);
-
-        tampilkanPanelDetail(); // Membuka panel detail ke layar
-    }
-
-    @FXML
-    private void handleTutupRincianRiwayatTransaksi() {
-        sembunyikanPanelDetail();
-        tbDetailRiwayatTransaksi.getSelectionModel().clearSelection();
-    }
-
     private void tampilkanPanelDetail() {
-        // Memaksa kontainer layout VBox bawah muncul dan memakan porsi ruang di scene JavaFX
+        // Memaksa kontainer layout VBox bawah muncul dan memakan porsi ruang di scene
+        // JavaFX
         panelDetailBox.setVisible(true);
         panelDetailBox.setManaged(true);
-    }
-
-    private void sembunyikanPanelDetail() {
-        // Melakukan penutupan total struktural layout agar halaman terlihat bersih
-        panelDetailBox.setVisible(false);
-        panelDetailBox.setManaged(false);
-
-        lblDetailTransaksiRiwayatTransaksi.setText("Detail Transaksi #ID...");
-        lblInformasiWaktuRiwayatTransaksi.setText("Informasi waktu transaksi dilakukan.");
-        lblTotalAkhirRiwayatTransaksi.setText("Total Akhir : Rp 0");
-        tbTransaksiMenuRiwayatTransaksi.setItems(FXCollections.observableArrayList());
-    }
-
-    private void tampilkanAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 
     @FXML

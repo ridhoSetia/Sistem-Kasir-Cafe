@@ -17,7 +17,8 @@ public class TransaksiRepository {
         Connection conn = null;
         try {
             conn = DBConnection.getConnection();
-            if (conn == null) return false;
+            if (conn == null)
+                return false;
 
             conn.setAutoCommit(false); // Mengaktifkan Unit Transaksi ACID
 
@@ -38,7 +39,7 @@ public class TransaksiRepository {
 
             // 2. Eksekusi Batch Simpan Detail Rincian dan Batch Pengurangan Stok
             try (PreparedStatement stmtD = conn.prepareStatement(sqlDetail);
-                 PreparedStatement stmtS = conn.prepareStatement(sqlUpdateStok)) {
+                    PreparedStatement stmtS = conn.prepareStatement(sqlUpdateStok)) {
 
                 for (DetailTransaksi d : transaksi.getlistDetail()) {
                     // Ikat data detail ke ID Transaksi induk asli yang baru saja terbit
@@ -64,25 +65,52 @@ public class TransaksiRepository {
         } catch (SQLException e) {
             System.err.println("[TransaksiRepository] Rollback system aktif akibat error: " + e.getMessage());
             if (conn != null) {
-                try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
             return false;
         } finally {
             if (conn != null) {
-                try { conn.setAutoCommit(true); } catch (SQLException ex) { ex.printStackTrace(); }
+                try {
+                    conn.setAutoCommit(true);
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
     }
 
     public List<Transaksi> getSemuaTransaksi() {
         List<Transaksi> list = new ArrayList<>();
-        String sql = "SELECT * FROM transaksi ORDER BY tanggal DESC";
+        // Menggunakan INNER JOIN untuk menarik kolom nama_lengkap milik kasir
+        String sql = "SELECT t.*, u.nama_lengkap FROM transaksi t "
+                + "INNER JOIN users u ON t.id_user = u.id_user "
+                + "ORDER BY t.tanggal DESC";
+
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
+
             while (rs.next()) {
-                Transaksi transaksi = new Transaksi(rs.getInt("id_user"));
-                transaksi.setIdTransaksi(rs.getInt("id_transaksi"));
+                int idTransaksi = rs.getInt("id_transaksi");
+                int idUser = rs.getInt("id_user");
+                String namaLengkapKasir = rs.getString("nama_lengkap"); // Mengambil hasil JOIN
+
+                Transaksi transaksi = new Transaksi(idUser);
+                transaksi.setIdTransaksi(idTransaksi);
+
+                // Masukkan data nama kasir ke dalam model objek Transaksi
+                transaksi.setNamaKasir(namaLengkapKasir);
+
+                // Pertahankan presisi data tanggal historis database
+                java.sql.Timestamp databaseTimestamp = rs.getTimestamp("tanggal");
+                if (databaseTimestamp != null) {
+                    transaksi.setTanggal(new java.util.Date(databaseTimestamp.getTime()));
+                }
+
                 isiDetailTransaksi(transaksi, conn);
                 list.add(transaksi);
             }
@@ -103,11 +131,11 @@ public class TransaksiRepository {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 com.cafe.model.Menu menu = new com.cafe.model.Menu(
-                        rs.getInt("id_menu"),   rs.getString("nama_menu"),
-                        rs.getDouble("harga"),  rs.getString("kategori"),
-                        rs.getInt("stok")
-                );
-                DetailTransaksi detail = new DetailTransaksi(rs.getInt("id_detail"), rs.getInt("id_transaksi"), menu, rs.getInt("jumlah"));
+                        rs.getInt("id_menu"), rs.getString("nama_menu"),
+                        rs.getDouble("harga"), rs.getString("kategori"),
+                        rs.getInt("stok"));
+                DetailTransaksi detail = new DetailTransaksi(rs.getInt("id_detail"), rs.getInt("id_transaksi"), menu,
+                        rs.getInt("jumlah"));
                 transaksi.tambahItem(detail);
             }
         }

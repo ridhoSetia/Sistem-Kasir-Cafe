@@ -10,6 +10,8 @@ public class Transaksi {
     private Date tanggal;
     private List<DetailTransaksi> listDetail; // Bersihkan nama variabel agar seragam
 
+    private String namaKasir;
+
     // Konstruktor utama kassa kasir aktif
     public Transaksi(int idUser) {
         this.idTransaksi = 0;
@@ -22,7 +24,7 @@ public class Transaksi {
         this.listDetail.add(detail);
     }
 
-    // Menggunakan objek listDetail yang seragam 
+    // Menggunakan objek listDetail yang seragam
     // untuk mencegah kembalian nilai Rp0,00 di RAM
     public double getTotalHarga() {
         double total = 0.0;
@@ -48,11 +50,23 @@ public class Transaksi {
         return tanggal;
     }
 
+    public String getNamaKasir() {
+        return namaKasir;
+    }
+
     public void setIdTransaksi(int idTransaksi) {
         this.idTransaksi = idTransaksi;
     }
 
     public void setIdUser(int idUser) {
         this.idUser = idUser;
+    }
+
+    public void setTanggal(Date tanggal) {
+        this.tanggal = tanggal;
+    }
+
+    public void setNamaKasir(String namaKasir) {
+        this.namaKasir = namaKasir;
     }
 }

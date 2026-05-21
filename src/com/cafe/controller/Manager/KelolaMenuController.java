@@ -3,7 +3,7 @@ package com.cafe.controller.Manager;
 import com.cafe.model.Menu;
 import com.cafe.repository.MenuRepository;
 import com.cafe.utils.PindahHalaman;
-import com.cafe.utils.Modal;
+import com.cafe.utils.Alerts;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -93,7 +93,7 @@ public class KelolaMenuController {
         } catch (IOException e) {
             System.err.println("[KelolaMenuController] Gagal memuat FormTambahMenu FXML: " + e.getMessage());
             e.printStackTrace();
-            Modal.tampilkanModal("Error System", "Gagal memuat komponen form.");
+            Alerts.tampilkanModal("Error System", "Gagal memuat komponen form.");
         }
     }
 
@@ -102,13 +102,13 @@ public class KelolaMenuController {
         Menu selectedMenu = tbKelolaMenu.getSelectionModel().getSelectedItem();
         if (selectedMenu != null) {
             if (menuRepository.deleteMenu(selectedMenu.getIdMenu())) {
-                Modal.tampilkanModal("Sukses", "Menu berhasil dihapus!");
+                Alerts.tampilkanModal("Sukses", "Menu berhasil dihapus!");
                 loadMenuData(); // Otomatis refresh data tabel setelah menghapus
             } else {
-                Modal.tampilkanModal("Gagal", "Gagal menghapus menu dari database.");
+                Alerts.tampilkanModal("Gagal", "Gagal menghapus menu dari database.");
             }
         } else {
-            Modal.tampilkanModal("Peringatan", "Pilih baris menu di tabel terlebih dahulu!");
+            Alerts.tampilkanModal("Peringatan", "Pilih baris menu di tabel terlebih dahulu!");
         }
     }
 
