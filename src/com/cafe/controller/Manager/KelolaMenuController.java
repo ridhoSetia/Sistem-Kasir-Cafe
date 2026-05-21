@@ -2,48 +2,66 @@ package com.cafe.controller.Manager;
 
 import com.cafe.model.Menu;
 import com.cafe.repository.MenuRepository;
+import com.cafe.utils.PindahHalaman;
+import com.cafe.utils.Modal;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class KelolaMenuController {
 
     @FXML
-    private TableView<Menu> tableMenu;
+    private TableView<Menu> tbKelolaMenu;
     @FXML
-    private TableColumn<Menu, Integer> colId;
+    private TableColumn<Menu, Integer> colIdMenu;
     @FXML
-    private TableColumn<Menu, String> colNama;
+    private TableColumn<Menu, String> colNamaMenu;
     @FXML
-    private TableColumn<Menu, Double> colHarga;
+    private TableColumn<Menu, Double> colHargaMenu;
     @FXML
-    private TableColumn<Menu, String> colKategori;
+    private TableColumn<Menu, String> colKategoriMenu;
     @FXML
-    private TableColumn<Menu, Integer> colStok;
+    private TableColumn<Menu, Integer> colStokMenu;
     @FXML
     private Button btnKembaliMenu;
+    @FXML
+    private Button btnTambahMenu;
 
     private final MenuRepository menuRepository = new MenuRepository();
-    private ObservableList<Menu> masterData = FXCollections.observableArrayList();
+    private final ObservableList<Menu> masterData = FXCollections.observableArrayList();
+
+    private final NumberFormat rupiahFmt = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID"));
 
     @FXML
     public void initialize() {
-        colId.setCellValueFactory(new PropertyValueFactory<>("idMenu"));
-        colNama.setCellValueFactory(new PropertyValueFactory<>("namaMenu"));
-        colHarga.setCellValueFactory(new PropertyValueFactory<>("harga"));
-        colKategori.setCellValueFactory(new PropertyValueFactory<>("kategori"));
-        colStok.setCellValueFactory(new PropertyValueFactory<>("stok"));
+        // Sinkronisasi properti kolom dengan atribut yang ada pada model Menu.java
+        colIdMenu.setCellValueFactory(new PropertyValueFactory<>("idMenu"));
+        colNamaMenu.setCellValueFactory(new PropertyValueFactory<>("namaMenu"));
+        colHargaMenu.setCellValueFactory(new PropertyValueFactory<>("harga"));
+        colKategoriMenu.setCellValueFactory(new PropertyValueFactory<>("kategori"));
+        colStokMenu.setCellValueFactory(new PropertyValueFactory<>("stok"));
+
+        // Mengubah deretan angka harga mentah menjadi format mata uang Rupiah di tabel
+        colHargaMenu.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(Double val, boolean empty) {
+                super.updateItem(val, empty);
+                setText(empty || val == null ? null : rupiahFmt.format(val));
+            }
+        });
 
         loadMenuData();
     }
@@ -51,57 +69,61 @@ public class KelolaMenuController {
     public void loadMenuData() {
         masterData.clear();
         masterData.addAll(menuRepository.getAllMenu());
-        tableMenu.setItems(masterData);
+        tbKelolaMenu.setItems(masterData);
     }
 
     @FXML
     private void handleTambahMenu() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/cafe/resources/FormTambahMenu.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Manager/FormTambahMenu.fxml"));
             Parent root = loader.load();
 
-            // Menghubungkan langsung sesama controller di folder Manager
+            // Hubungkan relasi callback antar sesama kontroler Manager
             FormTambahMenuController popupController = loader.getController();
             popupController.setMenuController(this);
 
             Stage stage = new Stage();
-            stage.setTitle("Tambah Menu Baru");
-            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Tambah Menu Baru - Brew Society");
+            stage.initModality(Modality.APPLICATION_MODAL); // Mengunci halaman utama di belakangnya
+            stage.initOwner(btnTambahMenu.getScene().getWindow());
             stage.setScene(new Scene(root));
-            stage.show();
+            stage.setResizable(false);
+            stage.showAndWait(); // Menggunakan showAndWait agar sinkron saat pop-up ditutup
 
         } catch (IOException e) {
+            System.err.println("[KelolaMenuController] Gagal memuat FormTambahMenu FXML: " + e.getMessage());
             e.printStackTrace();
-            showAlert("Error", "Gagal membuka Form Tambah Menu: " + e.getMessage());
+            Modal.tampilkanModal("Error System", "Gagal memuat komponen form.");
         }
     }
 
     @FXML
     private void handleHapusMenu() {
-        Menu selectedMenu = tableMenu.getSelectionModel().getSelectedItem();
+        Menu selectedMenu = tbKelolaMenu.getSelectionModel().getSelectedItem();
         if (selectedMenu != null) {
             if (menuRepository.deleteMenu(selectedMenu.getIdMenu())) {
-                showAlert("Sukses", "Menu berhasil dihapus!");
-                loadMenuData();
+                Modal.tampilkanModal("Sukses", "Menu berhasil dihapus!");
+                loadMenuData(); // Otomatis refresh data tabel setelah menghapus
             } else {
-                showAlert("Gagal", "Gagal menghapus menu.");
+                Modal.tampilkanModal("Gagal", "Gagal menghapus menu dari database.");
             }
         } else {
-            showAlert("Peringatan", "Pilih menu di tabel terlebih dahulu!");
+            Modal.tampilkanModal("Peringatan", "Pilih baris menu di tabel terlebih dahulu!");
         }
     }
 
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+    @FXML
+    private void handleEditMenu() {
+        System.out.println("Fitur Edit Menu Terpilih");
+    }
+
+    @FXML
+    private void handleCariMenu() {
+        System.out.println("Fitur Pencarian Dinamis");
     }
 
     @FXML
     private void handleKembaliMenu() {
-        // Memanggil fungsi utilitas statis tanpa instansiasi objek baru
-        com.cafe.utils.KembaliMenu.kembaliKe(btnKembaliMenu, "/resources/MainMenu.fxml", "Cafe System - Main Menu");
+        PindahHalaman.pindah(btnKembaliMenu, "/resources/MainMenu.fxml", "Cafe System - Main Menu");
     }
 }

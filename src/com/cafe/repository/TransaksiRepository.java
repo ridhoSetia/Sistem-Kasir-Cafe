@@ -112,44 +112,4 @@ public class TransaksiRepository {
             }
         }
     }
-
-    // =========================================================================
-    // FITUR TAMBAHAN: LAPORAN PENJUALAN MANAGER (AMBIL OMSET & TOTAL TRANSAKSI)
-    // =========================================================================
-
-    /**
-     * Menghitung total seluruh pendapatan (omset) dari tabel transaksi
-     */
-    public double getTotalPendapatan() {
-        double total = 0;
-        String sql = "SELECT SUM(total_harga) AS total_omset FROM transaksi";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                total = rs.getDouble("total_omset");
-            }
-        } catch (SQLException e) {
-            System.err.println("[TransaksiRepository] getTotalPendapatan Error: " + e.getMessage());
-        }
-        return total;
-    }
-
-    /**
-     * Menghitung berapa banyak transaksi/nota belanja yang sudah terjadi
-     */
-    public int getTotalTransaksiCount() {
-        int count = 0;
-        String sql = "SELECT COUNT(*) AS total_nota FROM transaksi";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            if (rs.next()) {
-                count = rs.getInt("total_nota");
-            }
-        } catch (SQLException e) {
-            System.err.println("[TransaksiRepository] getTotalTransaksiCount Error: " + e.getMessage());
-        }
-        return count;
-    }
 }

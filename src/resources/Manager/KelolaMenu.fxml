@@ -11,36 +11,38 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="ManajemenMenu" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="750.0" styleClass="bg-kasir" stylesheets="@../css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cafe.controller.Manager.KelolaMenuController">
+<BorderPane fx:id="ManajemenMenu" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="750.0" styleClass="page" stylesheets="@../css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cafe.controller.Manager.KelolaMenuController">
    
    <top>
-      <VBox spacing="10.0" BorderPane.alignment="CENTER">
+      <VBox spacing="10.0" BorderPane.alignment="CENTER" styleClass="header-box">
          <children>
-            <Label text="Manajemen Data Menu Cafe" textFill="#610000">
-               <font>
-                  <Font name="System Bold" size="22.0" />
-               </font>
-            </Label>
-            <HBox alignment="CENTER_LEFT" spacing="15.0">
+            <VBox spacing="4.0">
                <children>
-                  <TextField fx:id="txtCariMenu" prefHeight="30.0" prefWidth="250.0" promptText="Cari nama menu atau kategori..." styleClass="search-bar" />
-                  <Button fx:id="btnCariMenu" mnemonicParsing="false" onAction="#handleCariMenu" prefHeight="30.0" styleClass="btn-save" text="Cari" />
+                  <Label text="Manajemen Data Menu Cafe" styleClass="page-title" />
+                  <Label text="Kelola variasi menu, penyesuaian harga, dan pantau stok gudang" styleClass="label-muted" />
+               </children>
+            </VBox>
+            <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="compact-card">
+               <children>
+                  <TextField fx:id="txtCariMenu" onAction="#handleCariMenu" prefHeight="38.0" prefWidth="280.0" promptText="Cari nama menu atau kategori..." styleClass="text-field" />
+                  <Button fx:id="btnCariMenu" mnemonicParsing="false" onAction="#handleCariMenu" prefHeight="38.0" styleClass="btn-save" text="Cari Menu" />
                </children>
             </HBox>
          </children>
          <BorderPane.margin>
-            <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+            <Insets bottom="10.0" left="15.0" right="15.0" top="15.0" />
          </BorderPane.margin>
       </VBox>
    </top>
 
    <center>
-      <TableView fx:id="tbMenu" prefHeight="400.0" prefWidth="500.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tbKelolaMenu" prefHeight="400.0" prefWidth="530.0" BorderPane.alignment="CENTER" styleClass="table-view">
         <columns>
-          <TableColumn fx:id="tbCIDMenu" prefWidth="60.0" text="ID Menu" />
-          <TableColumn fx:id="tbCNamaMenu" prefWidth="200.0" text="Nama Menu" />
-          <TableColumn fx:id="tbCHargaMenu" prefWidth="120.0" text="Harga (Rp)" />
-          <TableColumn fx:id="tbCKategoriMenu" prefWidth="120.0" text="Kategori" />
+          <TableColumn fx:id="colIdMenu" prefWidth="70.0" text="ID Menu" />
+          <TableColumn fx:id="colNamaMenu" prefWidth="200.0" text="Nama Menu" />
+          <TableColumn fx:id="colHargaMenu" prefWidth="120.0" text="Harga (Rp)" />
+          <TableColumn fx:id="colKategoriMenu" prefWidth="110.0" text="Kategori" />
+          <TableColumn fx:id="colStokMenu" prefWidth="80.0" text="Stok" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -52,22 +54,26 @@
    </center>
 
    <right>
-      <VBox alignment="TOP_CENTER" prefWidth="160.0" spacing="12.0" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" prefWidth="170.0" spacing="12.0" BorderPane.alignment="CENTER" styleClass="card">
          <children>
-            <Button fx:id="btnTambahMenu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleTambahMenu" styleClass="btn-save" text="Tambah Menu" />
+            <Label text="Aksi Kontrol" styleClass="section-title">
+               <VBox.margin>
+                  <Insets bottom="6.0" />
+               </VBox.margin>
+            </Label>
+            <Button fx:id="btnTambahMenu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleTambahMenu" styleClass="btn-add" text="Tambah Menu" />
             <Button fx:id="btnEditMenu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleEditMenu" styleClass="btn-edit" text="Edit Menu" />
             <Button fx:id="btnHapusMenu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleHapusMenu" styleClass="btn-delete" text="Hapus Menu" />
-            <Button fx:id="btnKembaliMenu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleKembaliMenu" styleClass="btn-close" text="Kembali">
-               <VBox.margin>
-                  <Insets top="185.0" />
-               </VBox.margin>
-            </Button>
+            
+            <VBox VBox.vgrow="ALWAYS" />
+            
+            <Button fx:id="btnKembaliMenu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleKembaliMenu" styleClass="btn-close" text="Kembali" />
          </children>
          <BorderPane.margin>
             <Insets bottom="15.0" left="5.0" right="15.0" top="5.0" />
          </BorderPane.margin>
          <padding>
-            <Insets top="10.0" />
+            <Insets bottom="16.0" left="14.0" right="14.0" top="16.0" />
          </padding>
       </VBox>
    </right>

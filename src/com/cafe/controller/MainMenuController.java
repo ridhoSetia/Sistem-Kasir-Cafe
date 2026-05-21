@@ -1,15 +1,10 @@
 package com.cafe.controller;
 
+import com.cafe.utils.*;
+
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
-import java.io.IOException;
-
-import com.cafe.controller.Kasir.KelolaPembayaranController;
 
 public class MainMenuController {
 
@@ -18,9 +13,11 @@ public class MainMenuController {
     @FXML
     private Button btnMenuKasir;
     @FXML
+    private Button btnRiwayatPenjualan;
+    @FXML
     private Button btnKelolaKasir;
     @FXML
-    private Button btnLaporanPenjualan;
+    private Button btnKelolaMenu;
     @FXML
     private Button btnLogout;
 
@@ -31,62 +28,36 @@ public class MainMenuController {
         this.currentRole = role;
         lblWelcome.setText("User: " + username + " (Role: " + role + ")");
 
-        // Penerapan Aturan Hak Akses
-        if (!role.equalsIgnoreCase("Manager")) {
-            // Sembunyikan fitur Kelola Kasir
-            btnKelolaKasir.setVisible(false);
-            btnKelolaKasir.setManaged(false);
-
-            // Sembunyikan fitur Laporan Penjualan
-            btnLaporanPenjualan.setVisible(false);
-            btnLaporanPenjualan.setManaged(false);
+        // Mengambil objek user aktif yang sesungguhnya dari memori RAM (bisa berupa Kasir / Manager)
+        com.cafe.model.User userAktif = com.cafe.config.UserSession.getInstance().getUserAktif();
+        if (userAktif != null) {
+            // Jika objeknya adalah Kasir, tombol otomatis sembunyi. Jika Manager, tombol tetap muncul.
+            userAktif.konfigurasiHakAkses(btnKelolaKasir, btnKelolaMenu);
         }
     }
 
     @FXML
     private void handleBukaKasir() {
-        pindahHalaman("/resources/Kasir/KelolaPembayaran.fxml", "Menu Kasir - Kelola Pembayaran");
+        PindahHalaman.pindah(btnMenuKasir, "/resources/Kasir/KelolaPembayaran.fxml", "Menu Kasir - Kelola Pembayaran");
     }
 
     @FXML
     private void handleBukaRiwayat() {
-        pindahHalaman("/resources/Kasir/LihatRiwayat.fxml", "Menu Kasir - Riwayat Penjualan");
+        PindahHalaman.pindah(btnRiwayatPenjualan, "/resources/Kasir/LihatRiwayat.fxml", "Menu Kasir - Riwayat Penjualan");
     }
 
     @FXML
     private void handleBukaKelolaKasir() {
-        pindahHalaman("/resources/Manager/KelolaAkunKasir.fxml", "Menu Manager - Kelola Akun Kasir");
-    }
-
-    @FXML
-    private void handleBukaLaporan() {
-        pindahHalaman("/resources/Manager/LaporanPenjualan.fxml", "Menu Manager - Laporan Penjualan");
+        PindahHalaman.pindah(btnKelolaKasir, "/resources/Manager/KelolaAkunKasir.fxml", "Menu Manager - Kelola Akun Kasir");
     }
 
     @FXML
     private void handleBukaKelolaMenu() {
-        pindahHalaman("/resources/Manager/LaporanPenjualan.fxml", "Menu Manager - Laporan Penjualan");
+        PindahHalaman.pindah(btnKelolaMenu, "/resources/Manager/KelolaMenu.fxml", "Menu Manager - Kelola Menu Cafe");
     }
 
     @FXML
     private void handleLogout() {
-        pindahHalaman("/resources/Login.fxml", "Aplikasi Kasir - Login");
-    }
-
-    private void pindahHalaman(String fxmlPath, String title) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
-            Parent root = loader.load();
-
-            Stage stage = (Stage) btnLogout.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle(title);
-            stage.centerOnScreen();
-            stage.show();
-        } catch (IOException e) {
-            System.err.println("Infrastruktur Error: Gagal memuat file FXML di " + fxmlPath);
-            e.printStackTrace();
-        }
+        PindahHalaman.pindah(btnLogout, "/resources/Login.fxml", "Aplikasi Kasir - Login");
     }
 }

@@ -59,14 +59,11 @@
                 <Button fx:id="btnMenuKasir" text="Menu Kasir" mnemonicParsing="false"
                     onAction="#handleBukaKasir" styleClass="menu-card-btn" prefHeight="100.0"
                     prefWidth="148.0" />
-                <Button fx:id="btnKelolaKasir" text="Kelola Akun Kasir" mnemonicParsing="false"
-                    onAction="#handleBukaKelolaKasir" styleClass="menu-card-btn" prefHeight="100.0"
-                    prefWidth="148.0" />
-                <Button fx:id="btnLaporanPenjualan" text="Laporan Penjualan" mnemonicParsing="false"
-                    onAction="#handleBukaLaporan" styleClass="menu-card-btn" prefHeight="100.0"
-                    prefWidth="148.0" />
                 <Button fx:id="btnRiwayatPenjualan" text="Riwayat Penjualan" mnemonicParsing="false"
                     onAction="#handleBukaRiwayat" styleClass="menu-card-btn" prefHeight="100.0"
+                    prefWidth="148.0" />
+                <Button fx:id="btnKelolaKasir" text="Kelola Akun Kasir" mnemonicParsing="false"
+                    onAction="#handleBukaKelolaKasir" styleClass="menu-card-btn" prefHeight="100.0"
                     prefWidth="148.0" />
                 <Button fx:id="btnKelolaMenu" text="Kelola Menu" mnemonicParsing="false"
                     onAction="#handleBukaKelolaMenu" styleClass="menu-card-btn" prefHeight="100.0"

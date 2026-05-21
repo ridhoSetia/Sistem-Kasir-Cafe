@@ -1,6 +1,7 @@
 // Digunakan untuk autentikasi login.
 
 package com.cafe.model;
+import javafx.scene.control.Button;
 
 public abstract class User {
     private int idUser;
@@ -16,6 +17,8 @@ public abstract class User {
         this.password = password;
         this.role = role;
     }
+
+    public abstract void konfigurasiHakAkses(Button btnKelolaKasir, Button btnKelolaMenu);
 
     // JavaFX TableView bakal mencari method ini otomatis (Reflection)
     public int getIdUser() { return idUser; }

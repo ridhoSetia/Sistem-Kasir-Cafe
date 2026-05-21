@@ -2,6 +2,8 @@ package com.cafe.controller.Manager;
 
 import com.cafe.model.User;
 import com.cafe.repository.UserRepository;
+import com.cafe.utils.PindahHalaman;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -135,6 +137,6 @@ public class KelolaAkunKasirController implements FormTambahKasirController.Pare
     @FXML
     private void handleKembaliMenu() {
         // Memanggil fungsi utilitas statis tanpa instansiasi objek baru
-        com.cafe.utils.KembaliMenu.kembaliKe(btnKembaliMenu, "/resources/MainMenu.fxml", "Cafe System - Main Menu");
+        PindahHalaman.pindah(btnKembaliMenu, "/resources/MainMenu.fxml", "Cafe System - Main Menu");
     }
 }

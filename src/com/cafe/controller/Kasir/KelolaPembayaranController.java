@@ -47,7 +47,7 @@ public class KelolaPembayaranController {
     private final TransaksiRepository transaksiRepository = new TransaksiRepository();
 
     private int idKasirAktif;
-    private final NumberFormat rupiahFmt = NumberFormat.getCurrencyInstance(new Locale("id", "ID"));
+    private final NumberFormat rupiahFmt = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID"));
 
     @FXML
     public void initialize() {
@@ -272,6 +272,6 @@ public class KelolaPembayaranController {
     @FXML
     private void handleKembaliMenu() {
         // Memanggil fungsi utilitas statis tanpa instansiasi objek baru
-        com.cafe.utils.KembaliMenu.kembaliKe(btnKembaliMenu, "/resources/MainMenu.fxml", "Cafe System - Main Menu");
+        com.cafe.utils.PindahHalaman.pindah(btnKembaliMenu, "/resources/MainMenu.fxml", "Cafe System - Main Menu");
     }
 }

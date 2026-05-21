@@ -7,17 +7,10 @@ import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-public class KembaliMenu {
-
-    /**
-     * FUNGSI KEMBALI GLOBAL: Memindahkan halaman secara dinamis berdasarkan path FXML.
-     * @param btnTrigger Tombol FXML yang memicu aksi (digunakan untuk mendapatkan Stage saat ini)
-     * @param fxmlPath Jalur file FXML tujuan (misal: "/resources/MainMenu.fxml")
-     * @param title Judul window baru
-     */
-    public static void kembaliKe(Button btnTrigger, String fxmlPath, String title) {
+public class PindahHalaman {
+    public static void pindah(Button btnTrigger, String fxmlPath, String title) {
         try {
-            FXMLLoader loader = new FXMLLoader(KembaliMenu.class.getResource(fxmlPath));
+            FXMLLoader loader = new FXMLLoader(PindahHalaman.class.getResource(fxmlPath));
             Parent root = loader.load();
 
             // Mendapatkan stage/window aktif saat ini melalui node button
@@ -25,8 +18,8 @@ public class KembaliMenu {
             Scene scene = new Scene(root);
 
             // Pasang stylesheet global Brew Society
-            if (KembaliMenu.class.getResource("/resources/css/brew-society-pos.css") != null) {
-                scene.getStylesheets().add(KembaliMenu.class.getResource("/resources/css/brew-society-pos.css").toExternalForm());
+            if (PindahHalaman.class.getResource("/resources/css/brew-society-pos.css") != null) {
+                scene.getStylesheets().add(PindahHalaman.class.getResource("/resources/css/brew-society-pos.css").toExternalForm());
             }
 
             stage.setScene(scene);

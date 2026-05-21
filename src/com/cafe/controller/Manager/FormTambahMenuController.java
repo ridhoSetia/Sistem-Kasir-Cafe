@@ -1,25 +1,26 @@
 package com.cafe.controller.Manager;
 
 import com.cafe.repository.MenuRepository;
+import com.cafe.utils.*;
+
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class FormTambahMenuController {
-    @FXML private TextField txtNamaMenu;
-    @FXML private TextField txtHarga;
-    @FXML private TextField txtStok;
-    @FXML private ComboBox<String> cbKategori;
+    @FXML private TextField txtNamaMenuForm;
+    @FXML private TextField txtHargaMenuForm;
+    @FXML private TextField txtStokMenuForm;
+    @FXML private ComboBox<String> cmbKategoriMenuForm;
 
     // Menghubungkan ke KelolaMenuController karena berada di package yang sama
-    private KelolaMenuController mainController;
+    protected KelolaMenuController mainController;
     private final MenuRepository menuRepository = new MenuRepository();
 
     @FXML
     public void initialize() {
-        cbKategori.getItems().addAll("Makanan", "Minuman");
+        cmbKategoriMenuForm.getItems().addAll("Makanan", "Minuman");
     }
 
     public void setMenuController(KelolaMenuController controller) {
@@ -27,48 +28,40 @@ public class FormTambahMenuController {
     }
 
     @FXML
-    private void handleSimpan() {
-        String nama = txtNamaMenu.getText();
-        String kategori = cbKategori.getValue();
+    private void handleSimpanFormMenu() {
+        String nama = txtNamaMenuForm.getText();
+        String kategori = cmbKategoriMenuForm.getValue();
 
-        if (nama.isEmpty() || txtHarga.getText().isEmpty() || txtStok.getText().isEmpty() || kategori == null) {
-            showAlert("Peringatan", "Semua kolom data harus diisi!");
+        if (nama.isEmpty() || txtHargaMenuForm.getText().isEmpty() || txtStokMenuForm.getText().isEmpty() || kategori == null) {
+            Modal.tampilkanModal("Peringatan", "Semua kolom data harus diisi!");
             return;
         }
 
         try {
-            double harga = Double.parseDouble(txtHarga.getText());
-            int stok = Integer.parseInt(txtStok.getText());
+            double harga = Double.parseDouble(txtHargaMenuForm.getText());
+            int stok = Integer.parseInt(txtStokMenuForm.getText());
 
             if (menuRepository.addMenu(nama, harga, kategori, stok)) {
-                showAlert("Sukses", "Menu baru berhasil ditambahkan!");
+                Modal.tampilkanModal("Sukses", "Menu baru berhasil ditambahkan!");
 
                 if (mainController != null) {
                     mainController.loadMenuData(); // Memicu refresh tabel utama
                 }
 
-                Stage stage = (Stage) txtNamaMenu.getScene().getWindow();
+                Stage stage = (Stage) txtNamaMenuForm.getScene().getWindow();
                 stage.close();
             } else {
-                showAlert("Gagal", "Gagal menyimpan menu ke database.");
+                Modal.tampilkanModal("Gagal", "Gagal menyimpan menu ke database.");
             }
 
         } catch (NumberFormatException e) {
-            showAlert("Error", "Harga dan Stok harus berupa angka valid!");
+            Modal.tampilkanModal("Error", "Harga dan Stok harus berupa angka valid!");
         }
     }
 
     @FXML
-    private void handleBatal() {
-        Stage stage = (Stage) txtNamaMenu.getScene().getWindow();
+    private void handleBatalFormMenu() {
+        Stage stage = (Stage) txtNamaMenuForm.getScene().getWindow();
         stage.close();
-    }
-
-    private void showAlert(String title, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
     }
 }

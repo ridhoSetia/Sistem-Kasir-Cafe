@@ -3,8 +3,6 @@ package com.cafe.controller.Kasir;
 import com.cafe.model.DetailTransaksi;
 import com.cafe.model.Transaksi;
 import javafx.fxml.FXML;
-import javafx.print.PrinterJob;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;

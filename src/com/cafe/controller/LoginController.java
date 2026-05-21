@@ -1,95 +1,55 @@
 package com.cafe.controller;
 
+import com.cafe.auth.Auth;
+import com.cafe.auth.DatabaseAuth;
 import com.cafe.config.UserSession;
-import com.cafe.repository.UserRepository;
+import com.cafe.model.User;
+import com.cafe.utils.*;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-import java.io.IOException;
 
 public class LoginController {
+    @FXML
+    private TextField txtUsernameLogin;
+    @FXML
+    private PasswordField txtPasswordLogin;
+    @FXML
+    private Button btnLogin;
+    @FXML
 
-    @FXML private TextField txtUsernameLogin;
-    @FXML private PasswordField txtPasswordLogin;
-    @FXML private Label lblStatus;
-    @FXML private Button btnLogin;
+    // Deklarasi tipe induk Auth, diisi bentuk konkret DatabaseAuth
+    private final Auth authSystem = new DatabaseAuth();
 
-    private final UserRepository userRepository = new UserRepository();
-
-    // Method Validasi Data (Sesuai include di Use Case Diagram)
-    private boolean validasiData(String username, String password) {
-        if (username == null || username.trim().isEmpty()) {
-            lblStatus.setText("Error: Username tidak boleh kosong!");
-            return false;
-        }
-        if (password == null || password.isEmpty()) {
-            lblStatus.setText("Error: Password tidak boleh kosong!");
-            return false;
-        }
-        return true;
-    }
-
-    // Jalankan proses login ketika tombol diklik
     @FXML
     private void handleLogin() {
-        String username = txtUsernameLogin.getText();
-        String password = txtPasswordLogin.getText();
+        String username = txtUsernameLogin.getText().trim();
+        String password = txtPasswordLogin.getText().trim();
 
-        if (!validasiData(username, password)) {
+        // filter UI
+        if (username.isEmpty() || password.isEmpty()) {
+            Modal.tampilkanModal("Input Kosong", "Username dan Password wajib diisi!");
             return;
         }
 
-        var user = userRepository.login(username, password);
+        // Memanggil metod parent, otomatis menjalankan logika child (DatabaseAuth)
+        User userLogOn = authSystem.login(username, password);
 
-        if (user != null) {
-            lblStatus.setText("Login Sukses!");
+        if (userLogOn != null) {
+            UserSession.getInstance().login(userLogOn);
 
-            // SIMPAN SESI SECARA DINAMIS DI SINI SEBELUM PINDAH HALAMAN
-            UserSession.getInstance().login(user);
-
-            // Ambil role dari objek user
-            String role = user.getRole();
-            
-            pindahKeMenuUtama(role);
-        } else {
-            lblStatus.setText("Error: Username atau Password salah!");
-        }
-    }
-
-    // Memindahkan scene ke Menu Utama dan mengirimkan data hak akses (role)
-    private void pindahKeMenuUtama(String role) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/MainMenu.fxml"));
-            Parent root = loader.load();
-
-            // Mengirim data role ke controller tujuan
-            MainMenuController mainMenuController = loader.getController();
-            mainMenuController.setSessionData(txtUsernameLogin.getText(), role);
-
-            // Ganti kontainer Stage utama
-            Stage stage = (Stage) btnLogin.getScene().getWindow();
-            Scene scene = new Scene(root);
-            
-            // Hubungkan file CSS jika ada
-            if (getClass().getResource("/resources/css/brew-society-pos.css") != null) {
-                scene.getStylesheets().add(getClass().getResource("/resources/css/brew-society-pos.css").toExternalForm());
+            // Pengkondisian Navigasi Dinamis Berdasarkan Cetakan Role
+            if (userLogOn.getRole().equalsIgnoreCase("Manager")) {
+                Modal.tampilkanModal("Login Sukses", "Selamat datang Manager: " + userLogOn.getNamaLengkap());
+            } else {
+                Modal.tampilkanModal("Login Sukses", "Selamat datang Kasir: " + userLogOn.getNamaLengkap());
             }
+            PindahHalaman.pindah(btnLogin, "/resources/MainMenu.fxml", "Brew Society - Menu Manager");
 
-            stage.setScene(scene);
-            stage.setTitle("Cafe System - Main Menu");
-            stage.centerOnScreen();
-            stage.show();
-
-        } catch (IOException e) {
-            lblStatus.setText("Error: Gagal memuat Menu Utama!");
-            e.printStackTrace();
+        } else {
+            Modal.tampilkanModal("Gagal Autentikasi", "Kredensial salah atau tidak terdaftar di server.");
         }
     }
 }

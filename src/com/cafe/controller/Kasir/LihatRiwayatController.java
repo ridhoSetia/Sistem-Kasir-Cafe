@@ -208,6 +208,6 @@ public class LihatRiwayatController {
     @FXML
     private void handleKembaliMenu() {
         // Memanggil fungsi utilitas statis tanpa instansiasi objek baru
-        com.cafe.utils.KembaliMenu.kembaliKe(btnKembaliMenu, "/resources/MainMenu.fxml", "Cafe System - Main Menu");
+        com.cafe.utils.PindahHalaman.pindah(btnKembaliMenu, "/resources/MainMenu.fxml", "Cafe System - Main Menu");
     }
 }

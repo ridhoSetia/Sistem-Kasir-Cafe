@@ -54,7 +54,7 @@ public class UserRepository {
                 ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                Kasir kasir = new Kasir(
+                User kasir = new Kasir(
                         rs.getInt("id_user"),
                         rs.getString("username"),
                         rs.getString("password"),
