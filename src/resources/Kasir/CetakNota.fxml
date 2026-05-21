@@ -8,15 +8,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="cetakNota" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-   minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0"
-   stylesheets="@../css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26"
-   xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cafe.controller.Kasir.CetakNotaController">
+<AnchorPane fx:id="cetakNota" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cafe.controller.Kasir.CetakNotaController">
    <children>
       <ScrollPane fx:id="scrollPane" prefHeight="302.0" prefWidth="600.0">
          <content>
-            <VBox fx:id="vboxKertasStruk" prefHeight="310.0" prefWidth="597.0"
-               styleClass="kertas-struk">
+            <VBox fx:id="vboxKertasStruk" prefHeight="310.0" prefWidth="597.0" styleClass="kertas-struk">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Nama Toko" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Alamat" />
@@ -26,17 +22,15 @@
             </VBox>
          </content>
       </ScrollPane>
-      <HBox alignment="CENTER" layoutY="302.0" prefHeight="100.0" prefWidth="600.0">
+      <HBox alignment="CENTER" layoutY="302.0" prefHeight="100.0" prefWidth="600.0" spacing="10.0">
          <children>
-            <Button fx:id="btnCetakNota" alignment="CENTER" mnemonicParsing="false"
-               onAction="#handleCetakNota" stylesheets="@../css/nota.css" text="Cetak">
+            <Button fx:id="btnCetakNota" alignment="CENTER" mnemonicParsing="false" onAction="#handleCetakNota" stylesheets="@../css/nota.css" text="Cetak">
                <styleClass>
                   <String fx:value="btn-pdf" />
                   <String fx:value="btn-sedang" />
                </styleClass>
             </Button>
-            <Button fx:id="btnTutupCetakNota" alignment="CENTER" mnemonicParsing="false"
-               onAction="#handleTutupCetakNota" stylesheets="@../css/nota.css" text="Tutup" />
+            <Button fx:id="btnTutupCetakNota" alignment="CENTER" mnemonicParsing="false" onAction="#handleTutupCetakNota" styleClass="btn-delete" stylesheets="@../css/nota.css" text="Tutup" />
          </children>
       </HBox>
    </children>

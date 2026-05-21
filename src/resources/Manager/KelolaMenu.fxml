@@ -54,17 +54,14 @@
    <right>
       <VBox alignment="TOP_CENTER" prefWidth="160.0" spacing="12.0" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Aksi Kontrol" textFill="#460000">
-               <font>
-                  <Font name="System Bold" size="14.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="5.0" />
-               </VBox.margin>
-            </Label>
             <Button fx:id="btnTambahMenu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleTambahMenu" styleClass="btn-save" text="Tambah Menu" />
             <Button fx:id="btnEditMenu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleEditMenu" styleClass="btn-edit" text="Edit Menu" />
-            <Button fx:id="btnHapusMenu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleHapusMenu" styleClass="btn-cancel" text="Hapus Menu" />
+            <Button fx:id="btnHapusMenu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleHapusMenu" styleClass="btn-delete" text="Hapus Menu" />
+            <Button fx:id="btnKembaliMenu" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleKembaliMenu" styleClass="btn-close" text="Kembali">
+               <VBox.margin>
+                  <Insets top="185.0" />
+               </VBox.margin>
+            </Button>
          </children>
          <BorderPane.margin>
             <Insets bottom="15.0" left="5.0" right="15.0" top="5.0" />

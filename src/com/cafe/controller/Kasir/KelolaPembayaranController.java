@@ -40,6 +40,8 @@ public class KelolaPembayaranController {
     private Button btnBayarKelolaPembayaran;
     @FXML
     private Button btnTambahKeranjang;
+    @FXML
+    private Button btnKembaliMenu;
 
     private final ObservableList<DetailTransaksi> keranjang = FXCollections.observableArrayList();
     private final TransaksiRepository transaksiRepository = new TransaksiRepository();
@@ -137,7 +139,7 @@ public class KelolaPembayaranController {
             if (existing.getMenu().getIdMenu() == detail.getMenu().getIdMenu()) {
                 int jumlahBaru = existing.getJumlah() + detail.getJumlah();
 
-                // SOLUSI UTAMA: Sesuaikan dengan konstruktor asli DetailTransaksi(idDetail,
+                // sSesuaikan dengan konstruktor asli DetailTransaksi(idDetail,
                 // menu, jumlah)
                 // Hapus parameter idTransaksi yang kaku dan ilegal tersebut
                 keranjang.set(i, new DetailTransaksi(existing.getIdDetail(), existing.getIdTransaksi(),
@@ -153,15 +155,15 @@ public class KelolaPembayaranController {
         perbaruiLabel();
     }
 
-     // Menerima parameter objek Transaksi yang valid
+    // Menerima parameter objek Transaksi yang valid
     private void bukaPopupCetakNota(Transaksi transaksi) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Kasir/CetakNota.fxml"));
             Parent root = loader.load();
-            
+
             // Mengirim objek transaksi terisi lengkap menuju CetakNotaController
             CetakNotaController notaCtrl = loader.getController();
-            notaCtrl.setDataTransaksi(transaksi); 
+            notaCtrl.setDataTransaksi(transaksi);
 
             Stage stage = new Stage();
             stage.setTitle("Cetak Nota Pembayaran - Brew Society");
@@ -183,7 +185,7 @@ public class KelolaPembayaranController {
             tampilkanAlert(Alert.AlertType.WARNING, "Keranjang Kosong", "Tambahkan pesanan terlebih dahulu.");
             return;
         }
-        
+
         String inputNominal = txtNominalBayarKelolaPembayaran.getText().trim();
         if (inputNominal.isEmpty()) {
             tampilkanAlert(Alert.AlertType.WARNING, "Nominal Kosong", "Masukkan nominal bayar terlebih dahulu.");
@@ -201,12 +203,13 @@ public class KelolaPembayaranController {
         double total = hitungTotal();
 
         if (nominalBayar < total) {
-            tampilkanAlert(Alert.AlertType.ERROR, "Uang Tidak Cukup", String.format("Kekurangan: %s", rupiahFmt.format(total - nominalBayar)));
+            tampilkanAlert(Alert.AlertType.ERROR, "Uang Tidak Cukup",
+                    String.format("Kekurangan: %s", rupiahFmt.format(total - nominalBayar)));
             return;
         }
 
         double kembalian = nominalBayar - total;
-        
+
         // Mempersiapkan cetakan objek Transaksi berdasarkan sesi Kasir Aktif
         Transaksi transaksi = new Transaksi(idKasirAktif);
         for (DetailTransaksi d : keranjang) {
@@ -218,7 +221,8 @@ public class KelolaPembayaranController {
 
         if (berhasil) {
             lblKembalianKelolaPembayaran.setText(rupiahFmt.format(kembalian));
-            tampilkanAlert(Alert.AlertType.INFORMATION, "Pembayaran Berhasil", "Kembalian: " + rupiahFmt.format(kembalian));
+            tampilkanAlert(Alert.AlertType.INFORMATION, "Pembayaran Berhasil",
+                    "Kembalian: " + rupiahFmt.format(kembalian));
             bukaPopupCetakNota(transaksi);
             resetSesi(); // Clear data belanja kassa setelah proses pencetakan struk selesai
         } else {
@@ -263,5 +267,11 @@ public class KelolaPembayaranController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleKembaliMenu() {
+        // Memanggil fungsi utilitas statis tanpa instansiasi objek baru
+        com.cafe.utils.KembaliMenu.kembaliKe(btnKembaliMenu, "/resources/MainMenu.fxml", "Cafe System - Main Menu");
     }
 }

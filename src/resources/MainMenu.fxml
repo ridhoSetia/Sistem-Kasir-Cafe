@@ -68,6 +68,9 @@
                 <Button fx:id="btnRiwayatPenjualan" text="Riwayat Penjualan" mnemonicParsing="false"
                     onAction="#handleBukaRiwayat" styleClass="menu-card-btn" prefHeight="100.0"
                     prefWidth="148.0" />
+                <Button fx:id="btnKelolaMenu" text="Kelola Menu" mnemonicParsing="false"
+                    onAction="#handleBukaKelolaMenu" styleClass="menu-card-btn" prefHeight="100.0"
+                    prefWidth="148.0" />
             </children>
         </HBox>
     </children>

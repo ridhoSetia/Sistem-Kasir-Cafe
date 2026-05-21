@@ -45,27 +45,7 @@ public class MainMenuController {
 
     @FXML
     private void handleBukaKasir() {
-        try {
-            // Membuka muatan berkas secara manual agar bisa mengakses Controllernya
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Kasir/KelolaPembayaran.fxml"));
-            Parent root = loader.load();
-
-            // Mengirim data id_user milik kasir aktif saat ini (misal bernilai 1) ke
-            // controller kasir
-            KelolaPembayaranController kasirCtrl = loader.getController();
-            kasirCtrl.setIdKasirAktif(1); // Sementara di-hardcode 1 atau kembangkan sistem User Session terpusat
-
-            Stage stage = (Stage) btnLogout.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.setTitle("Menu Kasir - Kelola Pembayaran");
-            stage.centerOnScreen();
-            stage.show();
-
-        } catch (IOException e) {
-            System.err.println("Infrastruktur Error: Gagal memuat fitur pembayaran.");
-            e.printStackTrace();
-        }
+        pindahHalaman("/resources/Kasir/KelolaPembayaran.fxml", "Menu Kasir - Kelola Pembayaran");
     }
 
     @FXML
@@ -80,6 +60,11 @@ public class MainMenuController {
 
     @FXML
     private void handleBukaLaporan() {
+        pindahHalaman("/resources/Manager/LaporanPenjualan.fxml", "Menu Manager - Laporan Penjualan");
+    }
+
+    @FXML
+    private void handleBukaKelolaMenu() {
         pindahHalaman("/resources/Manager/LaporanPenjualan.fxml", "Menu Manager - Laporan Penjualan");
     }
 

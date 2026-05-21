@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="LaporanPenjualan" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="bg-riwayat" stylesheets="@../css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="LaporanPenjualan" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="650.0" styleClass="bg-riwayat" stylesheets="@../css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cafe.controller.Manager.LaporanPenjualanController">
    <top>
       <VBox prefHeight="113.0" prefWidth="570.0" BorderPane.alignment="CENTER">
          <children>
@@ -35,16 +35,16 @@
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Label prefHeight="19.0" prefWidth="45.0" styleClass="label-muted" stylesheets="@../css/brew-society-pos.css" text="Periode">
+                  <Label prefHeight="19.0" prefWidth="62.0" styleClass="label-muted" stylesheets="@../css/brew-society-pos.css" text="Periode">
                      <HBox.margin>
                         <Insets top="18.0" />
                      </HBox.margin></Label>
-                  <DatePicker fx:id="dtPeriodeSebelumLaporanPenjualan" onAction="#handlePeriodeSebelumLaporanPenjualan" prefHeight="55.0" prefWidth="154.0" />
+                  <DatePicker fx:id="dtPeriodeSebelumLaporanPenjualan" prefHeight="55.0" prefWidth="185.0" />
                   <Label styleClass="label-muted" stylesheets="@../css/brew-society-pos.css" text=" s/d ">
                      <HBox.margin>
                         <Insets top="18.0" />
                      </HBox.margin></Label>
-                  <DatePicker fx:id="dtPeriodeSesudah" onAction="#dtPeriodeSesudah" prefHeight="55.0" prefWidth="167.0" />
+                  <DatePicker fx:id="dtPeriodeSesudah" onAction="#dtPeriodeSesudah" prefHeight="55.0" prefWidth="182.0" />
                   <Button fx:id="btnTampilkanDataLaporanPenjualan" mnemonicParsing="false" onAction="#handleTampilkanDataLaporanPenjualan" styleClass="btn-info" stylesheets="@../css/brew-society-pos.css" text="Tampilkan Data">
                      <HBox.margin>
                         <Insets left="10.0" top="7.0" />

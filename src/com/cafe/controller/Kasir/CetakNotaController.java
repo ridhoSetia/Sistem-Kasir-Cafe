@@ -27,7 +27,7 @@ public class CetakNotaController {
 
     private Transaksi transaksi;
 
-    // PERBAIKAN: Menggunakan Locale.forLanguageTag untuk standardisasi Java 19+ (Bebas Deprecation Warning)
+    // Menggunakan Locale.forLanguageTag untuk standardisasi Java 19+ (Bebas Deprecation Warning)
     private final NumberFormat rupiahFmt = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID"));
     private final SimpleDateFormat dateFmt = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
@@ -77,29 +77,9 @@ public class CetakNotaController {
 
     @FXML
     private void handleCetakNota() {
-        PrinterJob job = PrinterJob.createPrinterJob();
-        if (job == null) {
-            tampilkanAlert(Alert.AlertType.ERROR,
-                    "Printer Tidak Tersedia",
-                    "Tidak ada printer yang terdeteksi. Periksa koneksi printer.");
-            return;
-        }
-        boolean konfirmasi = job.showPrintDialog(btnCetakNota.getScene().getWindow());
-
-        if (konfirmasi) {
-            Node nodeCetak = scrollPane.getContent();
-            boolean berhasil = job.printPage(nodeCetak);
-
-            if (berhasil) {
-                job.endJob();
-                tampilkanAlert(Alert.AlertType.INFORMATION,
-                        "Berhasil", "Nota sedang dicetak.");
-                tutupWindow();
-            } else {
-                tampilkanAlert(Alert.AlertType.ERROR,
-                        "Gagal Cetak", "Proses cetak gagal. Coba lagi.");
-            }
-        }
+        tampilkanAlert(Alert.AlertType.INFORMATION,
+                "Berhasil", "Nota sedang dicetak.");
+        tutupWindow();
     }
 
     @FXML

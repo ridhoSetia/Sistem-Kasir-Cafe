@@ -21,11 +21,18 @@ import java.util.Optional;
 
 public class KelolaAkunKasirController implements FormTambahKasirController.ParentRefreshable {
 
-    @FXML private TableView<User> tbAkunKasir;
-    @FXML private TableColumn<User, Integer> tbCIDAkunKasir;
-    @FXML private TableColumn<User, String> tbCNamaAkunKasir;
-    @FXML private TableColumn<User, String> tbCUsernameAkunKasir;
-    @FXML private Button btnTambahAkunKasir;
+    @FXML
+    private TableView<User> tbAkunKasir;
+    @FXML
+    private TableColumn<User, Integer> tbCIDAkunKasir;
+    @FXML
+    private TableColumn<User, String> tbCNamaAkunKasir;
+    @FXML
+    private TableColumn<User, String> tbCUsernameAkunKasir;
+    @FXML
+    private Button btnTambahAkunKasir;
+    @FXML
+    private Button btnKembaliMenu;
 
     private final UserRepository userRepository = new UserRepository();
 
@@ -91,9 +98,10 @@ public class KelolaAkunKasirController implements FormTambahKasirController.Pare
             return;
         }
 
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Hapus akun " + selectedUser.getNamaLengkap() + "?", ButtonType.YES, ButtonType.NO);
+        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Hapus akun " + selectedUser.getNamaLengkap() + "?",
+                ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> response = confirm.showAndWait();
-        
+
         if (response.isPresent() && response.get() == ButtonType.YES) {
             if (userRepository.hapusAkunKasir(selectedUser.getIdUser())) {
                 tampilkanAlert(Alert.AlertType.INFORMATION, "Sukses", "Akun berhasil dihapus!");
@@ -120,5 +128,13 @@ public class KelolaAkunKasirController implements FormTambahKasirController.Pare
         alert.showAndWait();
     }
 
-    @FXML private void handleCari(ActionEvent event) {}
+    @FXML
+    private void handleCari(ActionEvent event) {
+    }
+
+    @FXML
+    private void handleKembaliMenu() {
+        // Memanggil fungsi utilitas statis tanpa instansiasi objek baru
+        com.cafe.utils.KembaliMenu.kembaliKe(btnKembaliMenu, "/resources/MainMenu.fxml", "Cafe System - Main Menu");
+    }
 }

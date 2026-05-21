@@ -8,7 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class FormTambahMenuController {
-
     @FXML private TextField txtNamaMenu;
     @FXML private TextField txtHarga;
     @FXML private TextField txtStok;

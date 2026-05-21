@@ -8,7 +8,7 @@ import java.util.List;
 
 public class MenuRepository {
 
-    // 1. Ambil semua data menu dari database (Milik Manager)
+    // Ambil semua data menu dari database (Milik Manager)
     public List<Menu> getAllMenu() {
         List<Menu> listMenu = new ArrayList<>();
         String sql = "SELECT * FROM menu";
@@ -33,7 +33,7 @@ public class MenuRepository {
         return listMenu;
     }
 
-    // 2. Tambah data menu baru (Milik Manager)
+    // Tambah data menu baru (Milik Manager)
     public boolean addMenu(String nama, double harga, String kategori, int stok) {
         String sql = "INSERT INTO menu (nama_menu, harga, kategori, stok) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
@@ -51,7 +51,7 @@ public class MenuRepository {
         }
     }
 
-    // 3. Hapus data menu (Milik Manager)
+    // Hapus data menu (Milik Manager)
     public boolean deleteMenu(int idMenu) {
         String sql = "DELETE FROM menu WHERE id_menu = ?";
         try (Connection conn = DBConnection.getConnection();
@@ -65,13 +65,7 @@ public class MenuRepository {
         }
     }
 
-    // =========================================================================
-    // TAMBAHAN UNTUK FIX ERROR BAGIAN KASIR (TambahItemKeranjangController)
-    // =========================================================================
-
-    /**
-     * Mengambil data menu yang stoknya masih di atas 0 (Tersedia)
-     */
+    // Mengambil data menu yang stoknya masih di atas 0 (Tersedia)
     public List<Menu> getMenuTersedia() {
         List<Menu> listMenu = new ArrayList<>();
         String sql = "SELECT * FROM menu WHERE stok > 0";
@@ -96,9 +90,7 @@ public class MenuRepository {
         return listMenu;
     }
 
-    /**
-     * Mencari menu berdasarkan kemiripan nama (Fitur Search Kasir)
-     */
+    // Mencari menu berdasarkan kemiripan nama (Fitur Search Kasir)
     public List<Menu> cariMenuByNama(String namaCari) {
         List<Menu> listMenu = new ArrayList<>();
         String sql = "SELECT * FROM menu WHERE nama_menu LIKE ? AND stok > 0";

@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -18,12 +19,20 @@ import java.io.IOException;
 
 public class KelolaMenuController {
 
-    @FXML private TableView<Menu> tableMenu;
-    @FXML private TableColumn<Menu, Integer> colId;
-    @FXML private TableColumn<Menu, String> colNama;
-    @FXML private TableColumn<Menu, Double> colHarga;
-    @FXML private TableColumn<Menu, String> colKategori;
-    @FXML private TableColumn<Menu, Integer> colStok;
+    @FXML
+    private TableView<Menu> tableMenu;
+    @FXML
+    private TableColumn<Menu, Integer> colId;
+    @FXML
+    private TableColumn<Menu, String> colNama;
+    @FXML
+    private TableColumn<Menu, Double> colHarga;
+    @FXML
+    private TableColumn<Menu, String> colKategori;
+    @FXML
+    private TableColumn<Menu, Integer> colStok;
+    @FXML
+    private Button btnKembaliMenu;
 
     private final MenuRepository menuRepository = new MenuRepository();
     private ObservableList<Menu> masterData = FXCollections.observableArrayList();
@@ -88,5 +97,11 @@ public class KelolaMenuController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleKembaliMenu() {
+        // Memanggil fungsi utilitas statis tanpa instansiasi objek baru
+        com.cafe.utils.KembaliMenu.kembaliKe(btnKembaliMenu, "/resources/MainMenu.fxml", "Cafe System - Main Menu");
     }
 }

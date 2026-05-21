@@ -38,7 +38,7 @@ public class TambahItemKeranjangController {
 
     @FXML
     public void initialize() {
-        // Setup Spinner: nilai awal 1, minimum 1, maksimum 99
+        // nilai awal 1, minimum 1, maksimum 99
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 99, 1);
         spJumlahTambahItem.setValueFactory(valueFactory);
 
@@ -109,9 +109,7 @@ public class TambahItemKeranjangController {
         spJumlahTambahItem.getValueFactory().setValue(1);
     }
 
-    @FXML
-    private void handleEditTambahItemKeKeranjang() {
-        menuTerpilih = null;
+    private void bersihkanKeranjang() {
         lblNamaMenuTambahItem.setText("-");
         lblHargaSatuanTambahItem.setText("-");
         spJumlahTambahItem.getValueFactory().setValue(1);
@@ -121,7 +119,7 @@ public class TambahItemKeranjangController {
 
     @FXML
     private void handleTambahItemKeKeranjang() {
-        // Validasi: harus ada menu yang dipilih
+        // harus ada menu yang dipilih
         if (menuTerpilih == null) {
             tampilkanAlert(Alert.AlertType.WARNING,
                     "Belum Pilih Menu", "Pilih menu dari daftar terlebih dahulu.");
@@ -141,10 +139,7 @@ public class TambahItemKeranjangController {
         // Buat DetailTransaksi dan kirim ke parent controller
         DetailTransaksi detail = new DetailTransaksi(0, 0, menuTerpilih, jumlah);
         parentController.tambahItemKeKeranjang(detail);
-
-        // Tutup popup
-        Stage stage = (Stage) btnTambahItemKeKeranjang.getScene().getWindow();
-        stage.close();
+        bersihkanKeranjang();
     }
 
     private void tampilkanAlert(Alert.AlertType type, String title, String content) {
@@ -153,5 +148,13 @@ public class TambahItemKeranjangController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+
+    @FXML
+    private void handleTutupForm() {
+        // Tutup popup
+        Stage stage = (Stage) btnTambahItemKeKeranjang.getScene().getWindow();
+        stage.close();
     }
 }

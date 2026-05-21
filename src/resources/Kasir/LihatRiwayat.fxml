@@ -97,6 +97,7 @@
             </HBox>
          </children>
       </VBox>
+      <Button fx:id="btnKembaliMenu" mnemonicParsing="false" onAction="#handleKembaliMenu" styleClass="btn-close" text="Kembali" />
       
    </children>
 </VBox>

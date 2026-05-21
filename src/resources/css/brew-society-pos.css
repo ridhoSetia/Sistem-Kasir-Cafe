@@ -42,7 +42,7 @@ Tutup   = abu netral / espresso untuk aksi utama
 
     -fx-background-color: -surface-soft;
     -fx-font-family: "Segoe UI", "Inter", "Arial";
-    -fx-font-size: 13px;
+    -fx-font-size: 12px;
     -fx-text-fill: -text-main;
     -fx-padding: 16;
 }
@@ -93,20 +93,20 @@ Tutup   = abu netral / espresso untuk aksi utama
 }
 
 .app-title {
-    -fx-font-size: 28px;
+    -fx-font-size: 24px;
     -fx-font-weight: 800;
     -fx-text-fill: -espresso;
 }
 
 .page-title {
-    -fx-font-size: 26px;
+    -fx-font-size: 24px;
     -fx-font-weight: 800;
     -fx-text-fill: -espresso;
     -fx-padding: 6 0 10 0;
 }
 
 .section-title {
-    -fx-font-size: 17px;
+    -fx-font-size: 14px;
     -fx-font-weight: 700;
     -fx-text-fill: -espresso;
 }
@@ -170,7 +170,7 @@ Tutup   = abu netral / espresso untuk aksi utama
     -fx-border-color: -border;
     -fx-border-radius: 10;
     -fx-border-width: 1.2;
-    -fx-font-size: 13px;
+    -fx-font-size: 12px;
     -fx-text-fill: -text-main;
 }
 
@@ -182,7 +182,7 @@ Tutup   = abu netral / espresso untuk aksi utama
     -fx-cursor: hand;
     -fx-background-radius: 12;
     -fx-border-radius: 12;
-    -fx-font-size: 14px;
+    -fx-font-size: 12px;
     -fx-font-weight: 700;
     -fx-padding: 9 18 9 18;
     -fx-min-height: 40;
@@ -253,10 +253,10 @@ Tutup   = abu netral / espresso untuk aksi utama
 
 .btn-cancel,
 .btn-close {
-    -fx-background-color: -neutral;
+    -fx-background-color: -danger;
     -fx-border-color: #BDB7AF;
     -fx-border-width: 1.1;
-    -fx-text-fill: #1F2933;
+    -fx-text-fill: #fff;
 }
 
 .btn-cancel:hover,
@@ -265,6 +265,11 @@ Tutup   = abu netral / espresso untuk aksi utama
 }
 
 .btn-print {
+    -fx-background-color: -caramel;
+    -fx-text-fill: white;
+}
+
+.btn-pdf {
     -fx-background-color: -caramel;
     -fx-text-fill: white;
 }
@@ -287,7 +292,7 @@ Tutup   = abu netral / espresso untuk aksi utama
 }
 
 .btn-lg {
-    -fx-font-size: 15px;
+    -fx-font-size: 14px;
     -fx-padding: 10 24 10 24;
     -fx-min-height: 44;
 }
@@ -327,7 +332,7 @@ Tutup   = abu netral / espresso untuk aksi utama
 
 .table-view .table-cell {
     -fx-text-fill: -text-main;
-    -fx-font-size: 13px;
+    -fx-font-size: 12px;
     -fx-padding: 9 10 9 10;
     -fx-border-color: transparent transparent #EFE1D4 transparent;
 }

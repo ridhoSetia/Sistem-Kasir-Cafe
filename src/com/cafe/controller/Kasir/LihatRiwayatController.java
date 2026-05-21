@@ -47,6 +47,8 @@ public class LihatRiwayatController {
     private TableColumn<DetailTransaksi, Double> tbCSubTotalRiwayatTransaksi;
     @FXML
     private Button btnTutupRincianRiwayatTransaksi;
+    @FXML
+    private Button btnKembaliMenu;
 
     // Variabel penampung VBox utama dari panel rincian bawah
     @FXML
@@ -65,8 +67,7 @@ public class LihatRiwayatController {
         sembunyikanPanelDetail(); // Sembunyikan secara total saat awal
         muatSemuaRiwayat();
 
-        // Jembatan Event: saat baris di tabel atas diklik → tampilkan detail secara
-        // dinamis
+        // Jembatan Event: saat baris di tabel atas diklik akan tampilkan detail secara dinamis
         tbDetailRiwayatTransaksi.getSelectionModel()
                 .selectedItemProperty()
                 .addListener((obs, oldVal, newVal) -> {
@@ -167,8 +168,6 @@ public class LihatRiwayatController {
         lblInformasiWaktuRiwayatTransaksi.setText("Waktu: " + dateFmt.format(transaksi.getTanggal()));
         lblTotalAkhirRiwayatTransaksi.setText("Total Akhir : " + rupiahFmt.format(transaksi.getTotalHarga()));
 
-        // PERBAIKAN FATAL: Mengubah dari getlistDetail() menjadi getItems() sesuai
-        // model asli Transaksi.java
         ObservableList<DetailTransaksi> detailItems = FXCollections.observableArrayList(transaksi.getlistDetail());
         tbTransaksiMenuRiwayatTransaksi.setItems(detailItems);
 
@@ -182,15 +181,13 @@ public class LihatRiwayatController {
     }
 
     private void tampilkanPanelDetail() {
-        // Memaksa kontainer layout VBox bawah muncul dan memakan porsi ruang di scene
-        // JavaFX
+        // Memaksa kontainer layout VBox bawah muncul dan memakan porsi ruang di scene JavaFX
         panelDetailBox.setVisible(true);
         panelDetailBox.setManaged(true);
     }
 
     private void sembunyikanPanelDetail() {
         // Melakukan penutupan total struktural layout agar halaman terlihat bersih
-        // bersahaja
         panelDetailBox.setVisible(false);
         panelDetailBox.setManaged(false);
 
@@ -206,5 +203,11 @@ public class LihatRiwayatController {
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void handleKembaliMenu() {
+        // Memanggil fungsi utilitas statis tanpa instansiasi objek baru
+        com.cafe.utils.KembaliMenu.kembaliKe(btnKembaliMenu, "/resources/MainMenu.fxml", "Cafe System - Main Menu");
     }
 }
