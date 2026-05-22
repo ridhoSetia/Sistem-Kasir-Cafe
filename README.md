@@ -1,55 +1,64 @@
-# Sistem Kasir Cafe - JavaFX Arsitektur MVC
+# ☕ Brew Society POS (Point of Sales)
 
-Proyek ini adalah aplikasi manajemen kasir cafe yang dibangun menggunakan **JavaFX** sebagai antarmuka grafis dan **MySQL** sebagai sistem penyimpanan data permanen. Aplikasi ini dirancang dengan prinsip **Separation of Concerns** untuk memastikan kode mudah dikelola, diuji, dan dikembangkan secara tim.
+Sistem Manajemen Kasir Cafe berbasis Desktop yang dirancang menggunakan **JavaFX** dan **MySQL**. Proyek ini secara ketat memisahkan antarmuka pengguna dari logika akses data menggunakan arsitektur **Model-View-Controller (MVC)**.
 
-## 📂 Struktur Folder dan Fungsi
+## Fitur Utama
 
-Berdasarkan struktur proyek, aplikasi ini dibagi menjadi beberapa paket utama:
+### 🛒 Modul Kasir (Penjualan)
+- Antarmuka keranjang belanja interaktif dengan *Live Calculation* (kembalian otomatis).
+- Validasi ketersediaan stok *real-time* berbasis Java Stream.
+- Pencetakan Struk / Nota Transaksi secara dinamis.
+### 👥 Modul Manajer (Back-Office)
+- **Manajemen Menu**: Operasi CRUD penuh untuk item makanan/minuman dengan penyesuaian harga dan visibilitas stok.
+- **Manajemen Akun Kasir**: Pengaturan akses dan kredensial penugasan dengan sistem *Role-Based Access Control* (RBAC) pada *User Session*.
+## 🛠️ Tech Stack & Requirements
 
-### 1. `com.cafe.config`
-* **Fungsi:** Menyimpan konfigurasi infrastruktur aplikasi.
-* **Isi Utama:** Kelas koneksi database (`DBConnection`).
-* **Peran:** Menjadi jembatan antara aplikasi Java dan server database (MySQL/Docker). Segala pengaturan alamat IP, port, dan kredensial database dipusatkan di sini.
+- **Language:** Java (JDK 17 atau lebih baru disarankan)
+- **GUI Framework:** JavaFX (CSS Styled)
+- **Database:** MySQL (Direkomendasikan berjalan di atas kontainer Docker)
+- **Driver:** MySQL Connector/J (JDBC)
 
-### 2. `com.cafe.model`
-* **Fungsi:** Representasi data (Entity).
-* **Peran:** Folder ini berisi Objek Java (POJO) yang mencerminkan struktur tabel di database. Folder ini hanya fokus pada definisi atribut data dan enkapsulasi (getter/setter).
+## ⚙️ Cara Instalasi & Menjalankan
 
-### 3. `com.cafe.repository`
-* **Fungsi:** Data Access Layer (DAO).
-* **Peran:** Bertanggung jawab penuh atas komunikasi dengan database. Semua perintah SQL (`INSERT`, `SELECT`, `UPDATE`) diisolasi di dalam folder ini agar logika bisnis tidak tercampur dengan logika database.
+1. **Kloning Repositori:**
+   ```
+   git clone [https://github.com/UsernameAnda/sistem-kasir-cafe.git](https://github.com/UsernameAnda/sistem-kasir-cafe.git)
+   cd sistem-kasir-cafe
+    ```
 
-### 4. `com.cafe.controller`
-* **Fungsi:** Bridge (Jembatan) antara View dan Model.
-* **Peran:** Menangani input pengguna dari antarmuka (klik tombol, input teks) dan memutuskan apa yang harus dilakukan oleh sistem. Controller memanggil *Repository* untuk mengolah data dan memperbarui tampilan *View*.
+2. **Konfigurasi Database:**
+* Nyalakan server MySQL Anda.
+* Buat database baru bernama `db_cafe`.
+* Jalankan (*import*) berkas `src/init.sql` untuk membangun skema tabel relasional dan prosedur sistem.
+* (Opsional) Jalankan berkas `src/dummy.sql` jika Anda membutuhkan data uji coba awal.
 
-### 5. `resource`
-* **Fungsi:** Antarmuka Grafis (View).
-* **Isi Utama:** File `.fxml`.
-* **Peran:** Menyimpan definisi tata letak UI yang dibuat melalui Scene Builder. Memisahkan desain visual dari logika pemrograman Java.
 
-### 6. `init.sql`
-* **Fungsi:** Skema Database.
-* **Peran:** Berisi perintah SQL untuk membangun struktur tabel yang dibutuhkan aplikasi agar database siap digunakan saat pertama kali dijalankan.
+3. **Koneksi Kredensial:**
+* Salin file konfigurasi koneksi: `cp src/com/cafe/config/DBConnection.java.example src/com/cafe/config/DBConnection.java`
+* Sesuaikan `USER` dan `PASSWORD` di dalam `DBConnection.java` dengan konfigurasi MySQL lokal/Docker Anda.
 
----
 
-## ⚙️ Konsep yang Digunakan
+4. **Kompilasi & Jalankan:**
+* Buka proyek menggunakan IDE (VS Code / IntelliJ / Eclipse).
+* Pastikan *library* JavaFX dan MySQL Connector telah terhubung pada *Build Path* atau modul konfigurasi Anda.
+* Eksekusi berkas `src/Main.java`.
 
-Aplikasi ini menerapkan beberapa konsep fundamental pengembangan perangkat lunak:
 
-### 1. Model-View-Controller (MVC)
-Arsitektur ini memisahkan aplikasi menjadi tiga komponen utama:
-* **Model:** Data.
-* **View:** Tampilan UI.
-* **Controller:** Logika penghubung.
-* *Manfaat:* Memungkinkan tim bekerja secara paralel (satu orang fokus di UI, satu orang di database).
 
-### 2. Data Access Object (DAO) / Repository Pattern
-Konsep ini digunakan untuk memisahkan logika akses data dari logika bisnis. Dengan *Repository*, aplikasi tidak peduli apakah data datang dari MySQL lokal atau Docker; aplikasi hanya memanggil fungsi yang tersedia di kelas Repository.
+## 📸 Screenshots
 
-### 3. Encapsulation (OOP)
-Penerapan hak akses `private` pada atribut dalam kelas Model untuk memastikan integritas data. Data hanya bisa dimodifikasi melalui metode yang valid (Setter/Getter).
-
-### 4. Singleton / Static Factory (Database Connection)
-Pengelolaan koneksi database dipusatkan pada satu pintu untuk memastikan efisiensi penggunaan sumber daya sistem dan mencegah kebocoran memori (*memory leak*) akibat terlalu banyak koneksi yang terbuka.
+* **Halaman Login & Autentikasi** <br> 
+![Halaman login](/images-readme/login.png)
+* **Halaman Menu Utama Manajer** <br>
+![Halaman menu utama role manager](/images-readme/main-menu-manager.png)
+* **Halaman Menu Utama Kasir** <br>
+![Halaman menu utama role kasir](/images-readme/main-menu-kasir.png)
+* **Halaman Kelola Pembayaran** <br>
+![Halaman untuk pembayaran di kasir](/images-readme/kelola-pembayaran.png)
+* **Halaman Kelola Menu** <br>
+![Halaman kelola menu cafe (CRUD)](/images-readme/kelola-menu.png)
+* **Halaman Kelola Akun Kasir** <br>
+![Halaman kelola akun kasir (CRUD)](/images-readme/kelola-akun-kasir.png)
+* **Halaman Riwayat Penjualan** <br>
+![Halaman riwayat penjualan](/images-readme/riwayat-penjualan.png)
+```

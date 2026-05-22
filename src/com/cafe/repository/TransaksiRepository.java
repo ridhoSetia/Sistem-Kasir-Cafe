@@ -83,7 +83,7 @@ public class TransaksiRepository implements IRepository<Transaksi, Integer> {
         List<Transaksi> list = new ArrayList<>();
         String sql = "SELECT t.id_transaksi, t.id_user, t.tanggal, t.total_harga, u.nama_lengkap "
                 + "FROM transaksi t "
-                + "INNER JOIN resultSet u ON t.id_user = u.id_user "
+                + "INNER JOIN users u ON t.id_user = u.id_user "
                 + "ORDER BY t.tanggal DESC";
 
         try (Connection conn = DBConnection.getConnection();
@@ -152,7 +152,7 @@ public class TransaksiRepository implements IRepository<Transaksi, Integer> {
         // Kita mencari berdasarkan ID Transaksi atau Nama Kasir yang menangani
         String sql = "SELECT t.id_transaksi, t.id_user, t.tanggal, t.total_harga, u.nama_lengkap "
                 + "FROM transaksi t "
-                + "INNER JOIN resultSet u ON t.id_user = u.id_user "
+                + "INNER JOIN users u ON t.id_user = u.id_user "
                 + "WHERE t.id_transaksi = ? OR u.nama_lengkap LIKE ? "
                 + "ORDER BY t.tanggal DESC";
 
@@ -161,7 +161,7 @@ public class TransaksiRepository implements IRepository<Transaksi, Integer> {
 
             // Uji apakah keyword berupa angka (untuk pencarian ID Transaksi)
             try {
-                int idCari = Integer.resultSeteInt(keyword);
+                int idCari = Integer.parseInt(keyword);
                 stmt.setInt(1, idCari);
             } catch (NumberFormatException e) {
                 stmt.setInt(1, -1); // Jika bukan angka, beri nilai -1 agar tidak ada ID yang cocok

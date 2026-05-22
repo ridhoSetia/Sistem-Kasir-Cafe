@@ -127,7 +127,7 @@ public class LihatRiwayatController {
         if (transaksi.getNamaKasir() != null && !transaksi.getNamaKasir().trim().isEmpty()) {
             lblKasirTransaksi.setText("Kasir yang bertugas: " + transaksi.getNamaKasir());
         } else {
-            lblKasirTransaksi.setText("Kasir yang bertugas: Tidak Terdeteksi");
+            lblKasirTransaksi.setText("Transaksi ini di handle Manager");
         }
 
         ObservableList<DetailTransaksi> detailItems = FXCollections.observableArrayList(transaksi.getlistDetail());

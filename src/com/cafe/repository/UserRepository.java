@@ -14,7 +14,7 @@ public class UserRepository implements IRepository<User, Integer> {
 
     // Autentikasi Login
     public User login(String username, String password) {
-        String sql = "SELECT * FROM useresultSet WHERE username = ? AND password = ?";
+        String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
         try (Connection conn = DBConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
@@ -41,7 +41,7 @@ public class UserRepository implements IRepository<User, Integer> {
 
     @Override
     public boolean simpan(User entitas) {
-        String sql = "INSERT INTO useresultSet (nama_lengkap, username, password, role) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users (nama_lengkap, username, password, role) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, entitas.getNamaLengkap());
@@ -58,7 +58,7 @@ public class UserRepository implements IRepository<User, Integer> {
     @Override
     public ObservableList<User> ambilSemua() {
         ObservableList<User> listKasir = FXCollections.observableArrayList();
-        String sql = "SELECT * FROM useresultSet WHERE role = 'Kasir'";
+        String sql = "SELECT * FROM users WHERE role = 'Kasir'";
         try (Connection conn = DBConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 ResultSet resultSet = stmt.executeQuery()) {
@@ -77,7 +77,7 @@ public class UserRepository implements IRepository<User, Integer> {
 
     @Override
     public boolean perbarui(User entitas) {
-        String sql = "UPDATE useresultSet SET nama_lengkap = ?, username = ?, password = ? WHERE id_user = ?";
+        String sql = "UPDATE users SET nama_lengkap = ?, username = ?, password = ? WHERE id_user = ?";
         try (Connection conn = DBConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, entitas.getNamaLengkap());
@@ -93,7 +93,7 @@ public class UserRepository implements IRepository<User, Integer> {
 
     @Override
     public boolean hapus(Integer id) {
-        String sql = "DELETE FROM useresultSet WHERE id_user = ?";
+        String sql = "DELETE FROM users WHERE id_user = ?";
         try (Connection conn = DBConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -109,7 +109,7 @@ public class UserRepository implements IRepository<User, Integer> {
         javafx.collections.ObservableList<User> listKasir = javafx.collections.FXCollections.observableArrayList();
 
         // Pastikan hanya mencari akun yang memiliki role 'Kasir'
-        String sql = "SELECT * FROM useresultSet WHERE (nama_lengkap LIKE ? OR username LIKE ?) AND role = 'Kasir'";
+        String sql = "SELECT * FROM users WHERE (nama_lengkap LIKE ? OR username LIKE ?) AND role = 'Kasir'";
 
         try (Connection conn = DBConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
