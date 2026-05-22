@@ -46,7 +46,7 @@
                </HBox.margin>
             </Button>
             <Button fx:id="btnSimpanFormTambahKasir" alignment="CENTER" contentDisplay="CENTER"
-               mnemonicParsing="false" onAction="#handleSimpanFormTambahKasir" styleClass="btn-save"
+               mnemonicParsing="false" onAction="#handleTambahKasir" styleClass="btn-save"
                stylesheets="@../css/brew-society-pos.css" text="Simpan">
                <HBox.margin>
                   <Insets left="25.0" />

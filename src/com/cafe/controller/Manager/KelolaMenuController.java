@@ -2,22 +2,20 @@ package com.cafe.controller.Manager;
 
 import com.cafe.model.Menu;
 import com.cafe.repository.MenuRepository;
-import com.cafe.utils.PindahHalaman;
 import com.cafe.utils.Alerts;
+import com.cafe.utils.PindahHalaman;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -36,107 +34,125 @@ public class KelolaMenuController {
     private TableColumn<Menu, String> colKategoriMenu;
     @FXML
     private TableColumn<Menu, Integer> colStokMenu;
+
     @FXML
-    private Button btnKembaliMenu;
+    private TextField txtCariMenu;
+    @FXML
+    private Button btnCariMenu;
     @FXML
     private Button btnTambahMenu;
     @FXML
-    private TextField txtCariMenu;
+    private Button btnEditMenu;
+    @FXML
+    private Button btnHapusMenu;
+    @FXML
+    private Button btnKembaliMenu;
 
     private final MenuRepository menuRepository = new MenuRepository();
     private final ObservableList<Menu> masterData = FXCollections.observableArrayList();
-
     private final NumberFormat rupiahFmt = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID"));
 
     @FXML
     public void initialize() {
-        // Sinkronisasi properti kolom dengan atribut yang ada pada model Menu.java
-        colIdMenu.setCellValueFactory(new PropertyValueFactory<>("idMenu"));
-        colNamaMenu.setCellValueFactory(new PropertyValueFactory<>("namaMenu"));
-        colHargaMenu.setCellValueFactory(new PropertyValueFactory<>("harga"));
-        colKategoriMenu.setCellValueFactory(new PropertyValueFactory<>("kategori"));
-        colStokMenu.setCellValueFactory(new PropertyValueFactory<>("stok"));
-
-        // Mengubah deretan angka harga mentah menjadi format mata uang Rupiah di tabel
-        colHargaMenu.setCellFactory(col -> new TableCell<>() {
-            @Override
-            protected void updateItem(Double val, boolean empty) {
-                super.updateItem(val, empty);
-                setText(empty || val == null ? null : rupiahFmt.format(val));
-            }
-        });
-
+        setupTabel();
         loadMenuData();
     }
 
+    private void setupTabel() {
+        colIdMenu.setCellValueFactory(new PropertyValueFactory<>("idMenu"));
+        colNamaMenu.setCellValueFactory(new PropertyValueFactory<>("namaMenu"));
+        colKategoriMenu.setCellValueFactory(new PropertyValueFactory<>("kategori"));
+        colStokMenu.setCellValueFactory(new PropertyValueFactory<>("stok"));
+
+        colHargaMenu.setCellValueFactory(new PropertyValueFactory<>("harga"));
+        colHargaMenu.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(Double harga, boolean empty) {
+                super.updateItem(harga, empty);
+                if (empty || harga == null) {
+                    setText(null);
+                } else {
+                    setText(rupiahFmt.format(harga));
+                }
+            }
+        });
+    }
+
+    // IMPLEMENTASI KONTRAK IRepository READ
     public void loadMenuData() {
         masterData.clear();
-        masterData.addAll(menuRepository.getAllMenu());
+        masterData.addAll(menuRepository.ambilSemua());
         tbKelolaMenu.setItems(masterData);
+    }
+
+    // IMPLEMENTASI KONTRAK IRepository SEARCH
+    @FXML
+    private void handleCariMenu() {
+        String keyword = txtCariMenu.getText().trim();
+        if (keyword.isEmpty()) {
+            loadMenuData();
+            return;
+        }
+
+        // Pengecoran tipe secara dinamis
+        ObservableList<Menu> hasilPencarian = FXCollections.observableArrayList(menuRepository.cari(keyword));
+        tbKelolaMenu.setItems(hasilPencarian);
+
+        if (hasilPencarian.isEmpty()) {
+            Alerts.tampilkanAlert("Informasi", "Menu tidak ditemukan.");
+        }
     }
 
     @FXML
     private void handleTambahMenu() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Manager/FormTambahMenu.fxml"));
-            Parent root = loader.load();
-
-            // Hubungkan relasi callback antar sesama kontroler Manager
-            FormTambahMenuController popupController = loader.getController();
-            popupController.setMenuController(this);
-
-            Stage stage = new Stage();
-            stage.setTitle("Tambah Menu Baru - Brew Society");
-            stage.initModality(Modality.APPLICATION_MODAL); // Mengunci halaman utama di belakangnya
-            stage.initOwner(btnTambahMenu.getScene().getWindow());
-            stage.setScene(new Scene(root));
-            stage.setResizable(false);
-            stage.showAndWait(); // Menggunakan showAndWait agar sinkron saat pop-up ditutup
-
-        } catch (IOException e) {
-            System.err.println("[KelolaMenuController] Gagal memuat FormTambahMenu FXML: " + e.getMessage());
-            e.printStackTrace();
-            Alerts.tampilkanModal("Error System", "Gagal memuat komponen form.");
-        }
-    }
-
-    @FXML
-    private void handleHapusMenu() {
-        Menu selectedMenu = tbKelolaMenu.getSelectionModel().getSelectedItem();
-        if (selectedMenu != null) {
-            if (menuRepository.deleteMenu(selectedMenu.getIdMenu())) {
-                Alerts.tampilkanModal("Sukses", "Menu berhasil dihapus!");
-                loadMenuData(); // Otomatis refresh data tabel setelah menghapus
-            } else {
-                Alerts.tampilkanModal("Gagal", "Gagal menghapus menu dari database.");
-            }
-        } else {
-            Alerts.tampilkanModal("Peringatan", "Pilih baris menu di tabel terlebih dahulu!");
-        }
+        bukaFormModal(null);
     }
 
     @FXML
     private void handleEditMenu() {
-        // 1. Ambil data menu yang sedang diklik di tabel
         Menu selectedMenu = tbKelolaMenu.getSelectionModel().getSelectedItem();
-
         if (selectedMenu == null) {
-            Alerts.tampilkanModal("Peringatan", "Pilih baris menu di tabel terlebih dahulu untuk diedit!");
+            Alerts.tampilkanAlert("Peringatan", "Pilih baris menu di tabel terlebih dahulu!");
             return;
         }
+        bukaFormModal(selectedMenu);
+    }
 
+    // IMPLEMENTASI KONTRAK IRepository DELETE
+    @FXML
+    private void handleHapusMenu() {
+        Menu selectedMenu = tbKelolaMenu.getSelectionModel().getSelectedItem();
+        if (selectedMenu != null) {
+
+            if (menuRepository.hapus(selectedMenu.getIdMenu())) {
+                Alerts.tampilkanAlert("Sukses", "Menu berhasil dihapus dari database!");
+                loadMenuData();
+            } else {
+                // Beri tahu manajer mengapa database menolak penghapusan
+                Alerts.tampilkanAlert("Penolakan Sistem",
+                        "Menu ini tidak bisa dihapus karena sudah tercatat di dalam Riwayat Transaksi pelanggan.\n\n" +
+                                "Solusi: Jika menu ini sudah tidak dijual, gunakan fitur 'Edit' dan ubah Stok menjadi 0.");
+            }
+
+        } else {
+            Alerts.tampilkanAlert("Peringatan", "Pilih baris menu di tabel terlebih dahulu!");
+        }
+    }
+
+    private void bukaFormModal(Menu menuEdit) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Manager/FormTambahMenu.fxml"));
             Parent root = loader.load();
+            FormTambahMenuController controller = loader.getController();
 
-            // 2. Kirim data menu terpilih ke form
-            FormTambahMenuController popupController = loader.getController();
-            // Asumsi: Anda harus membuat metode setEditData di FormTambahMenuController
-            // yang menerima (Menu data, KelolaMenuController parent)
-            popupController.setEditDataMenu(selectedMenu, this);
+            if (menuEdit != null) {
+                controller.setEditData(menuEdit, this);
+            } else {
+                controller.setMenuController(this);
+            }
 
             Stage stage = new Stage();
-            stage.setTitle("Ubah Data Menu - Brew Society");
+            stage.setTitle(menuEdit == null ? "Tambah Menu - Brew Society" : "Edit Menu - Brew Society");
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(tbKelolaMenu.getScene().getWindow());
             stage.setScene(new Scene(root));
@@ -144,38 +160,13 @@ public class KelolaMenuController {
             stage.showAndWait();
 
         } catch (IOException e) {
-            System.err.println("[KelolaMenuController] Gagal memuat form edit: " + e.getMessage());
+            System.err.println("[KelolaMenuController] Gagal memuat form: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void handleCariMenu() {
-        // Ambil teks dari kolom pencarian dan ubah ke huruf kecil untuk pencocokan yang fleksibel
-        String keyword = txtCariMenu.getText().toLowerCase().trim();
-
-        // Jika inputan kosong, kembalikan tabel ke kondisi data utuh
-        if (keyword.isEmpty()) {
-            tbKelolaMenu.setItems(masterData);
-            return;
-        }
-
-        // Lakukan penyaringan (filtering) secara dinamis menggunakan Streams Java modern
-        ObservableList<Menu> filteredData = FXCollections.observableArrayList();
-        for (Menu menu : masterData) {
-            // Cocokkan berdasarkan nama menu atau kategorinya
-            if (menu.getNamaMenu().toLowerCase().contains(keyword) ||
-                    menu.getKategori().toLowerCase().contains(keyword)) {
-                filteredData.add(menu);
-            }
-        }
-
-        // Tampilkan hasil pencarian ke dalam tabel
-        tbKelolaMenu.setItems(filteredData);
-    }
-
-    @FXML
     private void handleKembaliMenu() {
-        PindahHalaman.pindah(btnKembaliMenu, "/resources/MainMenu.fxml", "Cafe System - Main Menu");
+        PindahHalaman.pindah(btnKembaliMenu, "/resources/MainMenu.fxml", "Brew Society - Main Menu");
     }
 }

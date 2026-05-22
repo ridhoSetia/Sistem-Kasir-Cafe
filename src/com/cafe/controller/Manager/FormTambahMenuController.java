@@ -19,7 +19,7 @@ public class FormTambahMenuController {
     private KelolaMenuController mainController;
     private final MenuRepository menuRepository = new MenuRepository();
 
-    // VARIABEL KONTROL STATE: Untuk membedakan apakah form sedang menambah atau mengedit
+    // VARIABEL KONTROL STATE Untuk membedakan apakah form sedang menambah atau mengedit
     private boolean isEditMode = false;
     private int idMenuEdit = 0;
 
@@ -28,19 +28,15 @@ public class FormTambahMenuController {
         cmbKategoriMenuForm.getItems().addAll("Makanan", "Minuman");
     }
 
-    /**
-     * MODE 1: Dipanggil saat menekan tombol "Tambah Menu"
-     */
+    // Dipanggil saat menekan tombol "Tambah Menu"
     public void setMenuController(KelolaMenuController controller) {
         this.mainController = controller;
         this.isEditMode = false; // Pastikan status edit dimatikan
     }
 
-    /**
-     * MODE 2: Dipanggil saat menekan tombol "Edit Menu" 
-     * Berfungsi menyuntikkan data menu lama ke dalam Text Field
-     */
-    public void setEditDataMenu(Menu menu, KelolaMenuController controller) {
+    // Dipanggil saat menekan tombol "Edit Menu" 
+    // Berfungsi menyuntikkan data menu lama ke dalam Text Field
+    public void setEditData(Menu menu, KelolaMenuController controller) {
         this.mainController = controller;
         this.isEditMode = true; // Aktifkan status edit
         this.idMenuEdit = menu.getIdMenu(); // Simpan ID untuk query UPDATE nanti
@@ -49,7 +45,7 @@ public class FormTambahMenuController {
         txtNamaMenuForm.setText(menu.getNamaMenu());
         cmbKategoriMenuForm.setValue(menu.getKategori());
         
-        // Pengecoran Tipe (Type Casting): Mengubah angka menjadi teks
+        // Pengecoran Tipe (Type Casting), Mengubah angka menjadi teks
         txtHargaMenuForm.setText(String.valueOf(menu.getHarga()));
         txtStokMenuForm.setText(String.valueOf(menu.getStok()));
     }
@@ -61,9 +57,9 @@ public class FormTambahMenuController {
         String hargaStr = txtHargaMenuForm.getText().trim();
         String stokStr = txtStokMenuForm.getText().trim();
 
-        // Validasi input kosong (Keamanan Data)
+        // Validasi input kosong
         if (nama.isEmpty() || hargaStr.isEmpty() || stokStr.isEmpty() || kategori == null) {
-            Alerts.tampilkanModal("Peringatan", "Semua kolom data harus diisi!");
+            Alerts.tampilkanAlert("Peringatan", "Semua kolom data harus diisi!");
             return;
         }
 
@@ -76,27 +72,29 @@ public class FormTambahMenuController {
                 // Eksekusi Logika EDIT (Update Data)
                 Menu menuUpdate = new Menu(idMenuEdit, nama, harga, kategori, stok);
                 
-                // PENTING: Pastikan Anda memiliki metode updateMenu(Menu menu) di MenuRepository.java
-                if (menuRepository.updateMenu(menuUpdate)) {
-                    Alerts.tampilkanModal("Sukses", "Data menu berhasil diperbarui!");
+                if (menuRepository.perbarui(menuUpdate)) {
+                    Alerts.tampilkanAlert("Sukses", "Data menu berhasil diperbarui!");
                     refreshTabelUtama();
                     tutupForm();
                 } else {
-                    Alerts.tampilkanModal("Gagal", "Gagal memperbarui data menu di database.");
+                    Alerts.tampilkanAlert("Gagal", "Gagal memperbarui data menu di database.");
                 }
-            } else {
-                // Eksekusi Logika TAMBAH (Insert Data Baru)
-                if (menuRepository.addMenu(nama, harga, kategori, stok)) {
-                    Alerts.tampilkanModal("Sukses", "Menu baru berhasil ditambahkan!");
+                } else {
+                // Merakit objek menuBaru di memori RAM
+                Menu menuBaru = new Menu(0, nama, harga, kategori, stok);
+                
+                // MENGIRIM OBJEK menuBaru TERSEBUT
+                if (menuRepository.simpan(menuBaru)) {
+                    Alerts.tampilkanAlert("Sukses", "Menu baru berhasil ditambahkan!");
                     refreshTabelUtama();
                     tutupForm();
                 } else {
-                    Alerts.tampilkanModal("Gagal", "Gagal menyimpan menu ke database.");
+                    Alerts.tampilkanAlert("Gagal", "Gagal menyimpan menu ke database.");
                 }
             }
 
         } catch (NumberFormatException e) {
-            Alerts.tampilkanModal("Error Input", "Harga dan Stok harus berisi angka murni!");
+            Alerts.tampilkanAlert("Error Input", "Harga dan Stok harus berisi angka murni!");
         }
     }
 

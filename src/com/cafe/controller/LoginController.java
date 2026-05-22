@@ -30,7 +30,7 @@ public class LoginController {
 
         // filter UI
         if (username.isEmpty() || password.isEmpty()) {
-            Alerts.tampilkanModal("Input Kosong", "Username dan Password wajib diisi!");
+            Alerts.tampilkanAlert("Input Kosong", "Username dan Password wajib diisi!");
             return;
         }
 
@@ -42,14 +42,14 @@ public class LoginController {
 
             // Pengkondisian Navigasi Dinamis Berdasarkan Cetakan Role
             if (userLogOn.getRole().equalsIgnoreCase("Manager")) {
-                Alerts.tampilkanModal("Login Sukses", "Selamat datang Manager: " + userLogOn.getNamaLengkap());
+                Alerts.tampilkanAlert("Login Sukses", "Selamat datang Manager: " + userLogOn.getNamaLengkap());
             } else {
-                Alerts.tampilkanModal("Login Sukses", "Selamat datang Kasir: " + userLogOn.getNamaLengkap());
+                Alerts.tampilkanAlert("Login Sukses", "Selamat datang Kasir: " + userLogOn.getNamaLengkap());
             }
             PindahHalaman.pindah(btnLogin, "/resources/MainMenu.fxml", "Brew Society - Menu Manager");
 
         } else {
-            Alerts.tampilkanModal("Gagal Autentikasi", "Kredensial salah atau tidak terdaftar di server.");
+            Alerts.tampilkanAlert("Gagal Autentikasi", "Kredensial salah atau tidak terdaftar di server.");
         }
     }
 }

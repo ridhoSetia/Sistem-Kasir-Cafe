@@ -46,7 +46,7 @@ public class CetakNotaController {
                 buatTeks("=================================="),
                 buatTeks("        BREW SOCIETY CAFE        "),
                 buatTeks("=================================="),
-                buatTeks("Nota ID : #TRX-" + transaksi.getIdTransaksi()), // Sekarang menampilkan ID Riil DB
+                buatTeks("Nota ID : #TRX-" + transaksi.getIdTransaksi()), // menampilkan ID Riil DB
                 buatTeks("Tanggal : " + dateFmt.format(transaksi.getTanggal())),
                 buatTeks("----------------------------------"));
 

@@ -2,14 +2,17 @@ package com.cafe.repository;
 
 import com.cafe.config.DBConnection;
 import com.cafe.model.DetailTransaksi;
+import com.cafe.model.Menu;
 import com.cafe.model.Transaksi;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransaksiRepository {
+// sinkronisasi mengikat TransaksiRepository ke IRepository dengan tipe Transaksi
+public class TransaksiRepository implements IRepository<Transaksi, Integer> {
 
-    public boolean simpanTransaksi(Transaksi transaksi) {
+    @Override
+    public boolean simpan(Transaksi transaksi) {
         String sqlHeader = "INSERT INTO transaksi (id_user, tanggal, total_harga) VALUES (?, ?, ?)";
         String sqlDetail = "INSERT INTO detail_transaksi (id_transaksi, id_menu, jumlah, subtotal) VALUES (?, ?, ?, ?)";
         String sqlUpdateStok = "UPDATE menu SET stok = stok - ? WHERE id_menu = ?";
@@ -20,50 +23,42 @@ public class TransaksiRepository {
             if (conn == null)
                 return false;
 
-            conn.setAutoCommit(false); // Mengaktifkan Unit Transaksi ACID
+            conn.setAutoCommit(false);
 
-            // 1. Eksekusi Penyimpanan Header Transaksi dengan membawa flags Generated Keys
             PreparedStatement stmtH = conn.prepareStatement(sqlHeader, Statement.RETURN_GENERATED_KEYS);
             stmtH.setInt(1, transaksi.getIdUser());
-            stmtH.setTimestamp(2, new Timestamp(transaksi.getTanggal().getTime()));
-            stmtH.setDouble(3, transaksi.getTotalHarga()); // Mengambil kalkulasi dinamis model
+            stmtH.setTimestamp(2, new java.sql.Timestamp(transaksi.getTanggal().getTime()));
+            stmtH.setDouble(3, transaksi.getTotalHarga());
             stmtH.executeUpdate();
 
-            // AMBIL ID TERBARU DARI DATABASE MYSQL AUTO INCREMENT
             int idGenerated = -1;
             ResultSet keys = stmtH.getGeneratedKeys();
             if (keys.next()) {
                 idGenerated = keys.getInt(1);
-                transaksi.setIdTransaksi(idGenerated); // SUNTIKKAN ID ASLI DARI DB KE OBJEK MODEL
+                transaksi.setIdTransaksi(idGenerated);
             }
 
-            // 2. Eksekusi Batch Simpan Detail Rincian dan Batch Pengurangan Stok
             try (PreparedStatement stmtD = conn.prepareStatement(sqlDetail);
                     PreparedStatement stmtS = conn.prepareStatement(sqlUpdateStok)) {
 
                 for (DetailTransaksi d : transaksi.getlistDetail()) {
-                    // Ikat data detail ke ID Transaksi induk asli yang baru saja terbit
                     stmtD.setInt(1, idGenerated);
                     stmtD.setInt(2, d.getMenu().getIdMenu());
                     stmtD.setInt(3, d.getJumlah());
                     stmtD.setDouble(4, d.getSubtotal());
                     stmtD.addBatch();
 
-                    // Pengurangan stok menu operasional cafe
                     stmtS.setInt(1, d.getJumlah());
                     stmtS.setInt(2, d.getMenu().getIdMenu());
                     stmtS.addBatch();
                 }
-
                 stmtD.executeBatch();
                 stmtS.executeBatch();
             }
-
-            conn.commit(); // Eksekusi berhasil total, simpan permanen ke MySQL disk
+            conn.commit();
             return true;
-
         } catch (SQLException e) {
-            System.err.println("[TransaksiRepository] Rollback system aktif akibat error: " + e.getMessage());
+            System.err.println("[TransaksiRepository] Rollback sistem aktif: " + e.getMessage());
             if (conn != null) {
                 try {
                     conn.rollback();
@@ -83,30 +78,28 @@ public class TransaksiRepository {
         }
     }
 
-    public List<Transaksi> getSemuaTransaksi() {
+    @Override
+    public List<Transaksi> ambilSemua() {
         List<Transaksi> list = new ArrayList<>();
-        // Menggunakan INNER JOIN untuk menarik kolom nama_lengkap milik kasir
-        String sql = "SELECT t.*, u.nama_lengkap FROM transaksi t "
-                + "INNER JOIN users u ON t.id_user = u.id_user "
+        String sql = "SELECT t.id_transaksi, t.id_user, t.tanggal, t.total_harga, u.nama_lengkap "
+                + "FROM transaksi t "
+                + "INNER JOIN resultSet u ON t.id_user = u.id_user "
                 + "ORDER BY t.tanggal DESC";
 
         try (Connection conn = DBConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery()) {
+                ResultSet resultSet = stmt.executeQuery()) {
 
-            while (rs.next()) {
-                int idTransaksi = rs.getInt("id_transaksi");
-                int idUser = rs.getInt("id_user");
-                String namaLengkapKasir = rs.getString("nama_lengkap"); // Mengambil hasil JOIN
+            while (resultSet.next()) {
+                int idTransaksi = resultSet.getInt("id_transaksi");
+                int idUser = resultSet.getInt("id_user");
+                String namaLengkapKasir = resultSet.getString("nama_lengkap");
 
                 Transaksi transaksi = new Transaksi(idUser);
                 transaksi.setIdTransaksi(idTransaksi);
-
-                // Masukkan data nama kasir ke dalam model objek Transaksi
                 transaksi.setNamaKasir(namaLengkapKasir);
 
-                // Pertahankan presisi data tanggal historis database
-                java.sql.Timestamp databaseTimestamp = rs.getTimestamp("tanggal");
+                java.sql.Timestamp databaseTimestamp = resultSet.getTimestamp("tanggal");
                 if (databaseTimestamp != null) {
                     transaksi.setTanggal(new java.util.Date(databaseTimestamp.getTime()));
                 }
@@ -115,7 +108,7 @@ public class TransaksiRepository {
                 list.add(transaksi);
             }
         } catch (SQLException e) {
-            System.err.println("[TransaksiRepository] getSemuaTransaksi Error: " + e.getMessage());
+            System.err.println("[TransaksiRepository] Error ambilSemua: " + e.getMessage());
         }
         return list;
     }
@@ -128,16 +121,73 @@ public class TransaksiRepository {
                 + "WHERE dt.id_transaksi = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, transaksi.getIdTransaksi());
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                com.cafe.model.Menu menu = new com.cafe.model.Menu(
-                        rs.getInt("id_menu"), rs.getString("nama_menu"),
-                        rs.getDouble("harga"), rs.getString("kategori"),
-                        rs.getInt("stok"));
-                DetailTransaksi detail = new DetailTransaksi(rs.getInt("id_detail"), rs.getInt("id_transaksi"), menu,
-                        rs.getInt("jumlah"));
-                transaksi.tambahItem(detail);
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                while (resultSet.next()) {
+                    Menu menu = new Menu(
+                            resultSet.getInt("id_menu"), resultSet.getString("nama_menu"),
+                            resultSet.getDouble("harga"), resultSet.getString("kategori"),
+                            resultSet.getInt("stok"));
+                    DetailTransaksi detail = new DetailTransaksi(resultSet.getInt("id_detail"), resultSet.getInt("id_transaksi"),
+                            menu, resultSet.getInt("jumlah"));
+                    transaksi.tambahItem(detail);
+                }
             }
         }
+    }
+
+    @Override
+    public boolean perbarui(Transaksi entitas) {
+        throw new UnsupportedOperationException("Keamanan Bisnis: Data transaksi historis dilarang diedit!");
+    }
+
+    @Override
+    public boolean hapus(Integer id) {
+        throw new UnsupportedOperationException("Keamanan Bisnis: Data transaksi historis dilarang dihapus!");
+    }
+
+    @Override
+    public List<Transaksi> cari(String keyword) {
+        List<Transaksi> list = new ArrayList<>();
+
+        // Kita mencari berdasarkan ID Transaksi atau Nama Kasir yang menangani
+        String sql = "SELECT t.id_transaksi, t.id_user, t.tanggal, t.total_harga, u.nama_lengkap "
+                + "FROM transaksi t "
+                + "INNER JOIN resultSet u ON t.id_user = u.id_user "
+                + "WHERE t.id_transaksi = ? OR u.nama_lengkap LIKE ? "
+                + "ORDER BY t.tanggal DESC";
+
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Uji apakah keyword berupa angka (untuk pencarian ID Transaksi)
+            try {
+                int idCari = Integer.resultSeteInt(keyword);
+                stmt.setInt(1, idCari);
+            } catch (NumberFormatException e) {
+                stmt.setInt(1, -1); // Jika bukan angka, beri nilai -1 agar tidak ada ID yang cocok
+            }
+
+            // Parameter kedua untuk pencarian nama kasir
+            stmt.setString(2, "%" + keyword + "%");
+
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                while (resultSet.next()) {
+                    Transaksi transaksi = new Transaksi(resultSet.getInt("id_user"));
+                    transaksi.setIdTransaksi(resultSet.getInt("id_transaksi"));
+                    transaksi.setNamaKasir(resultSet.getString("nama_lengkap"));
+
+                    java.sql.Timestamp databaseTimestamp = resultSet.getTimestamp("tanggal");
+                    if (databaseTimestamp != null) {
+                        transaksi.setTanggal(new java.util.Date(databaseTimestamp.getTime()));
+                    }
+
+                    isiDetailTransaksi(transaksi, conn);
+                    list.add(transaksi);
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("[TransaksiRepository] Error cari: " + e.getMessage());
+        }
+        return list;
     }
 }

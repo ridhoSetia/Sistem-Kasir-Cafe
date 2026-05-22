@@ -1,118 +1,136 @@
-// Berisi method login(String username, String password) 
-// yang mengembalikan nilai boolean atau objek User.
-
 package com.cafe.repository;
 
 import com.cafe.config.DBConnection;
+import com.cafe.model.User;
 import com.cafe.model.Kasir;
 import com.cafe.model.Manager;
-import com.cafe.model.User;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.sql.*;
+import java.util.List;
 
-public class UserRepository {
+// SINKRONISASI KONTRAK Mengikat UserRepository ke IRepository dengan tipe User
+public class UserRepository implements IRepository<User, Integer> {
 
-    public User login(String inputUsername, String inputPassword) {
-        String query = "SELECT id_user, username, password, nama_lengkap, role FROM users WHERE username = ? AND password = ?";
-
+    // Autentikasi Login
+    public User login(String username, String password) {
+        String sql = "SELECT * FROM useresultSet WHERE username = ? AND password = ?";
         try (Connection conn = DBConnection.getConnection();
-                PreparedStatement ps = conn.prepareStatement(query)) {
-
-            ps.setString(1, inputUsername);
-            ps.setString(2, inputPassword);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                int idUser = rs.getInt("id_user");
-                String username = rs.getString("username");
-                String password = rs.getString("password");
-                String nama = rs.getString("nama_lengkap");
-                String role = rs.getString("role");
-
-                // Polimorfisme: Mengembalikan objek konkret ke dalam tipe data abstract User
-                if (role.equalsIgnoreCase("Kasir")) {
-                    return new Kasir(idUser, username, password, nama);
-                } else if (role.equalsIgnoreCase("Manager")) {
-                    return new Manager(idUser, username, password, nama);
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                if (resultSet.next()) {
+                    String role = resultSet.getString("role");
+                    if (role.equalsIgnoreCase("Kasir")) {
+                        return new Kasir(resultSet.getInt("id_user"), resultSet.getString("username"), resultSet.getString("password"),
+                                resultSet.getString("nama_lengkap"));
+                    } else if (role.equalsIgnoreCase("Manager")) {
+                        return new Manager(resultSet.getInt("id_user"), resultSet.getString("username"), resultSet.getString("password"),
+                                resultSet.getString("nama_lengkap"));
+                    }
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.err.println("[UserRepository] Error login: " + e.getMessage());
         }
-        return null; // Login gagal
+        return null;
     }
 
-    public ObservableList<User> readDataAkunKasir() {
-        ObservableList<User> listKasir = FXCollections.observableArrayList();
-        String query = "SELECT * FROM users WHERE role = 'Kasir'";
+    // IMPLEMENTASI KONTRAK DASAR CRUD
 
+    @Override
+    public boolean simpan(User entitas) {
+        String sql = "INSERT INTO useresultSet (nama_lengkap, username, password, role) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(query);
-                ResultSet rs = stmt.executeQuery()) {
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, entitas.getNamaLengkap());
+            stmt.setString(2, entitas.getUsername());
+            stmt.setString(3, entitas.getPassword()); // Meyimpan sandi yang diinput dari form
+            stmt.setString(4, entitas.getRole());
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("[UserRepository] Gagal simpan: " + e.getMessage());
+            return false;
+        }
+    }
 
-            while (rs.next()) {
-                User kasir = new Kasir(
-                        rs.getInt("id_user"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getString("nama_lengkap") // Ambil dari database
-                );
-                listKasir.add(kasir);
+    @Override
+    public ObservableList<User> ambilSemua() {
+        ObservableList<User> listKasir = FXCollections.observableArrayList();
+        String sql = "SELECT * FROM useresultSet WHERE role = 'Kasir'";
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet resultSet = stmt.executeQuery()) {
+            while (resultSet.next()) {
+                listKasir.add(new Kasir(
+                        resultSet.getInt("id_user"),
+                        resultSet.getString("username"),
+                        resultSet.getString("password"),
+                        resultSet.getString("nama_lengkap")));
             }
         } catch (SQLException e) {
-            System.err.println("Database Error (Read): " + e.getMessage());
+            System.err.println("[UserRepository] Gagal ambilSemua: " + e.getMessage());
         }
         return listKasir;
     }
 
-    public boolean tambahAkunKasir(String username, String password, String namaLengkap) {
-        String query = "INSERT INTO users (username, password, role, nama_lengkap) VALUES (?, ?, 'Kasir', ?)";
+    @Override
+    public boolean perbarui(User entitas) {
+        String sql = "UPDATE useresultSet SET nama_lengkap = ?, username = ?, password = ? WHERE id_user = ?";
         try (Connection conn = DBConnection.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(query)) {
-
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-            stmt.setString(3, namaLengkap);
-
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, entitas.getNamaLengkap());
+            stmt.setString(2, entitas.getUsername());
+            stmt.setString(3, entitas.getPassword());
+            stmt.setInt(4, entitas.getIdUser());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Database Error (Insert): " + " Username mungkin sudah digunakan.");
+            System.err.println("[UserRepository] Gagal perbarui: " + e.getMessage());
             return false;
         }
     }
 
-    // Memperbarui data kasir berdasarkan id_user
-    public boolean updateAkunKasir(int idUser, String username, String password, String namaLengkap) {
-        String query = "UPDATE users SET username = ?, password = ?, nama_lengkap = ? WHERE id_user = ?";
+    @Override
+    public boolean hapus(Integer id) {
+        String sql = "DELETE FROM useresultSet WHERE id_user = ?";
         try (Connection conn = DBConnection.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(query)) {
-
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-            stmt.setString(3, namaLengkap);
-            stmt.setInt(4, idUser);
-
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Database Error (Update): " + e.getMessage());
+            System.err.println("[UserRepository] Gagal hapus: " + e.getMessage());
             return false;
         }
     }
 
-    // Menghapus data kasir berdasarkan id_user
-    public boolean hapusAkunKasir(int idUser) {
-        String query = "DELETE FROM users WHERE id_user = ? AND role = 'Kasir'";
-        try (Connection conn = DBConnection.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(query)) {
+    @Override
+    public List<User> cari(String keyword) {
+        javafx.collections.ObservableList<User> listKasir = javafx.collections.FXCollections.observableArrayList();
 
-            stmt.setInt(1, idUser);
-            return stmt.executeUpdate() > 0;
+        // Pastikan hanya mencari akun yang memiliki role 'Kasir'
+        String sql = "SELECT * FROM useresultSet WHERE (nama_lengkap LIKE ? OR username LIKE ?) AND role = 'Kasir'";
+
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            String polaPencarian = "%" + keyword + "%";
+            stmt.setString(1, polaPencarian);
+            stmt.setString(2, polaPencarian);
+
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                while (resultSet.next()) {
+                    listKasir.add(new Kasir(
+                            resultSet.getInt("id_user"),
+                            resultSet.getString("username"),
+                            resultSet.getString("password"),
+                            resultSet.getString("nama_lengkap")));
+                }
+            }
         } catch (SQLException e) {
-            System.err.println("Database Error (Delete): " + e.getMessage());
-            return false;
+            System.err.println("[UserRepository] Gagal mencari user: " + e.getMessage());
         }
+
+        return listKasir;
     }
 }

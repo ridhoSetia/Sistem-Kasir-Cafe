@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.Region?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
@@ -10,37 +9,30 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="RiwayatTransaksiKasir" spacing="12.0" styleClass="page"
-   stylesheets="@../css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26"
-   xmlns:fx="http://javafx.com/fxml/1"
-   fx:controller="com.cafe.controller.Kasir.LihatRiwayatController">
+<VBox fx:id="RiwayatTransaksiKasir" spacing="12.0" styleClass="page" stylesheets="@../css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cafe.controller.Kasir.LihatRiwayatController">
    <children>
       <BorderPane styleClass="header-box">
          <left>
             <VBox spacing="4.0" BorderPane.alignment="CENTER">
                <children>
                   <Label styleClass="page-title" text="Riwayat Transaksi Kasir" />
-                  <Label styleClass="label-muted"
-                     text="Pantau dan cari data transaksi operasional kasir" />
+                  <Label styleClass="label-muted" text="Pantau dan cari data transaksi operasional kasir" />
                </children>
             </VBox>
          </left>
       </BorderPane>
       <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="compact-card">
          <children>
-            <TextField fx:id="txtCariIDRiwayatTransaksi" onAction="#handleCariID" prefHeight="38.0"
-               prefWidth="180.0" promptText="Cari ID Transaksi..." styleClass="text-field" />
+            <TextField fx:id="txtCariIDRiwayatTransaksi" onAction="#handleCariID" prefHeight="38.0" prefWidth="180.0" promptText="Cari ID Transaksi..." styleClass="text-field" />
             <Label styleClass="label-muted" text="Tanggal:" />
-            <DatePicker fx:id="dtTanggalRiwayatTransaksi" onAction="#handleTanggalTransaksi"
-               prefHeight="38.0" prefWidth="180.0" promptText="Pilih Tanggal" />
-            <Button fx:id="btnCariDataRiwayatTransaksi" mnemonicParsing="false"
-               onAction="#handleCariData" prefHeight="38.0" styleClass="btn-save" text="Cari Data" />
+            <DatePicker fx:id="dtTanggalRiwayatTransaksi" onAction="#handleTanggalTransaksi" prefHeight="38.0" prefWidth="180.0" promptText="Pilih Tanggal" />
+            <Button fx:id="btnCariDataRiwayatTransaksi" mnemonicParsing="false" onAction="#handleCariData" prefHeight="38.0" styleClass="btn-save" text="Cari Data" />
             <Region HBox.hgrow="ALWAYS" />
-            <Button fx:id="btnKembaliMenu" contentDisplay="CENTER" mnemonicParsing="false"
-               onAction="#handleKembaliMenu" styleClass="btn-close" text="Kembali" />
+            <Button fx:id="btnKembaliMenu" contentDisplay="CENTER" mnemonicParsing="false" onAction="#handleKembaliMenu" styleClass="btn-close" text="Kembali" />
          </children>
          <padding>
             <Insets bottom="10.0" top="10.0" />
@@ -56,11 +48,8 @@
             <TableView fx:id="tbDetailRiwayatTransaksi" prefHeight="160.0" VBox.vgrow="ALWAYS">
                <columns>
                   <TableColumn fx:id="tbCIDRiwayatTransaksi" prefWidth="100.0" text="ID Transaksi" />
-                  <TableColumn fx:id="tbCKasirTransaksi" prefWidth="220.0" text="Kasir Transaksi" />
-                  <TableColumn fx:id="tbCWaktuRiwayatTransaksi" prefWidth="220.0"
-                     text="Tanggal / Waktu" />
-                  <TableColumn fx:id="tbCTotalPembayaranRiwayatTransaksi" prefWidth="220.0"
-                     text="Total Pembayaran" />
+                  <TableColumn fx:id="tbCWaktuRiwayatTransaksi" prefWidth="220.0" text="Tanggal / Waktu" />
+                  <TableColumn fx:id="tbCTotalPembayaranRiwayatTransaksi" prefWidth="220.0" text="Total Pembayaran" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -70,24 +59,18 @@
       </VBox>
       <VBox fx:id="panelDetailBox" spacing="10.0" styleClass="card">
          <children>
-            <BorderPane
-               style="-fx-background-color: #FAF0E3; -fx-padding: 8 12 8 12; -fx-background-radius: 8;">
+            <BorderPane style="-fx-background-color: #FAF0E3; -fx-padding: 8 12 8 12; -fx-background-radius: 8;">
                <left>
                   <VBox spacing="4.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Label fx:id="lblDetailTransaksiRiwayatTransaksi" styleClass="label-main"
-                           text="Detail Transaksi #ID" />
-                        <Label fx:id="lblKasirTransaksi"
-                           style="-fx-font-weight: bold; -fx-text-fill: #A05135;"
-                           styleClass="label-muted" text="Kasir yang bertugas: -" />
-                        <Label fx:id="lblInformasiWaktuRiwayatTransaksi" styleClass="label-muted"
-                           text="Informasi waktu transaksi" />
+                        <Label fx:id="lblDetailTransaksiRiwayatTransaksi" styleClass="label-main" text="Detail Transaksi #ID" />
+                        <Label fx:id="lblKasirTransaksi" style="-fx-font-weight: bold; -fx-text-fill: #A05135;" styleClass="label-muted" text="Kasir yang bertugas: -" />
+                        <Label fx:id="lblInformasiWaktuRiwayatTransaksi" styleClass="label-muted" text="Informasi waktu transaksi" />
                      </children>
                   </VBox>
                </left>
                <right>
-                  <Label fx:id="lblTotalAkhirRiwayatTransaksi" styleClass="item-price"
-                     text="Total Akhir : Rp 0" BorderPane.alignment="CENTER">
+                  <Label fx:id="lblTotalAkhirRiwayatTransaksi" styleClass="item-price" text="Total Akhir : Rp 0" BorderPane.alignment="CENTER">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
@@ -96,8 +79,7 @@
             </BorderPane>
             <TableView fx:id="tbTransaksiMenuRiwayatTransaksi" prefHeight="140.0">
                <columns>
-                  <TableColumn fx:id="tbCNamaMenuRiwayatTransaksi" prefWidth="250.0"
-                     text="Nama Menu" />
+                  <TableColumn fx:id="tbCNamaMenuRiwayatTransaksi" prefWidth="250.0" text="Nama Menu" />
                   <TableColumn fx:id="tbCQTYRiwayatTransaksi" prefWidth="100.0" text="QTY (Jumlah)" />
                   <TableColumn fx:id="tbCSubTotalRiwayatTransaksi" prefWidth="180.0" text="SubTotal" />
                </columns>
@@ -107,9 +89,7 @@
             </TableView>
             <HBox alignment="CENTER_RIGHT">
                <children>
-                  <Button fx:id="btnTutupRincianRiwayatTransaksi" mnemonicParsing="false"
-                     onAction="#handleTutupRincianRiwayatTransaksi" styleClass="btn-cancel"
-                     text="Tutup Rincian" />
+                  <Button fx:id="btnTutupRincianRiwayatTransaksi" mnemonicParsing="false" onAction="#handleTutupRincianRiwayatTransaksi" styleClass="btn-cancel" text="Tutup Rincian" />
                </children>
             </HBox>
          </children>

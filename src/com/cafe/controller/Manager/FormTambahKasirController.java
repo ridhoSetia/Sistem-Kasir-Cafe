@@ -1,103 +1,84 @@
 package com.cafe.controller.Manager;
 
+import com.cafe.model.Kasir;
 import com.cafe.model.User;
 import com.cafe.repository.UserRepository;
+import com.cafe.utils.Alerts;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.PasswordField;
 import javafx.stage.Stage;
 
 public class FormTambahKasirController {
+
     @FXML private TextField txtNamaFormTambahKasir;
     @FXML private TextField txtUsernameFormTambahKasir;
     @FXML private PasswordField txtPasswordFormTambahKasir;
-    @FXML private PasswordField txtKonfirPasswordFormTambahKasir;
-    @FXML private Button btnBatalFormTambahKasir;
-    @FXML private Button btnSimpanFormTambahKasir;
 
+    private KelolaAkunKasirController parentController;
     private final UserRepository userRepository = new UserRepository();
-    
-    private int selectedIdUser = -1; 
-    private boolean isEditMode = false;
-    private FormTambahKasirController.ParentRefreshable parentController;
 
-    // Interface lokal untuk menjamin fleksibilitas refresh data antar-controller
-    public interface ParentRefreshable {
-        void tampilkanDataTabel();
+    private boolean isEditMode = false;
+    private int idUserEdit = 0;
+
+    public void setParentController(KelolaAkunKasirController controller) {
+        this.parentController = controller;
+        this.isEditMode = false;
     }
 
-    public void setEditDataKasir(User user, FormTambahKasirController.ParentRefreshable parent) {
-        this.parentController = parent;
+    public void setEditData(User user, KelolaAkunKasirController controller) {
+        this.parentController = controller;
         this.isEditMode = true;
-        this.selectedIdUser = user.getIdUser();
-        
-        // Isi form dengan data lama yang di-select dari TableView
+        this.idUserEdit = user.getIdUser();
+
         txtNamaFormTambahKasir.setText(user.getNamaLengkap());
         txtUsernameFormTambahKasir.setText(user.getUsername());
-        
-        txtPasswordFormTambahKasir.setText("");
-        txtKonfirPasswordFormTambahKasir.setText("");
-        
-        btnSimpanFormTambahKasir.setText("Perbarui");
-    }
-
-    public void setTambahMode(FormTambahKasirController.ParentRefreshable parent) {
-        this.parentController = parent;
-        this.isEditMode = false;
-        this.selectedIdUser = -1;
-        
-        txtNamaFormTambahKasir.clear();
-        txtUsernameFormTambahKasir.clear();
-        txtPasswordFormTambahKasir.clear();
-        txtKonfirPasswordFormTambahKasir.clear();
-        
-        btnSimpanFormTambahKasir.setText("Simpan");
+        txtPasswordFormTambahKasir.setText(user.getPassword()); 
     }
 
     @FXML
-    private void handleSimpanFormTambahKasir(ActionEvent event) {
-        String namaLengkap = txtNamaFormTambahKasir.getText().trim();
+    private void handleTambahKasir(ActionEvent event) {
+        String nama = txtNamaFormTambahKasir.getText().trim();
         String username = txtUsernameFormTambahKasir.getText().trim();
-        String password = txtPasswordFormTambahKasir.getText();
-        String konfirPassword = txtKonfirPasswordFormTambahKasir.getText();
+        String password = txtPasswordFormTambahKasir.getText().trim();
 
-        // Validasi Integritas Data (Defensive Logic)
-        if (namaLengkap.isEmpty() || username.isEmpty() || password.isEmpty()) {
-            System.err.println("Peringatan: Semua bidang input wajib diisi!");
+        if (nama.isEmpty() || username.isEmpty() || password.isEmpty()) {
+            Alerts.tampilkanAlert("Peringatan", "Semua kredensial wajib diisi!");
             return;
         }
 
-        if (!password.equals(konfirPassword)) {
-            System.err.println("Peringatan: Konfirmasi password tidak cocok!");
-            return;
-        }
-
-        boolean hasil;
         if (isEditMode) {
-            hasil = userRepository.updateAkunKasir(selectedIdUser, username, password, namaLengkap);
-        } else {
-            hasil = userRepository.tambahAkunKasir(username, password, namaLengkap);
-        }
-
-        if (hasil) {
-            if (parentController != null) {
-                parentController.tampilkanDataTabel(); // Segarkan TableView utama
+            // Membungkus input menjadi entitas Kasir, otomatis terbaca sebagai User di Repository
+            Kasir kasirUpdate = new Kasir(idUserEdit, username, password, nama);
+            if (userRepository.perbarui(kasirUpdate)) {
+                Alerts.tampilkanAlert("Sukses", "Data kasir berhasil diperbarui!");
+                tutupDanRefresh();
+            } else {
+                Alerts.tampilkanAlert("Gagal", "Gagal memperbarui data kasir di database.");
             }
-            tutupJendela();
         } else {
-            System.err.println("Error: Gagal memproses data ke database server.");
+            Kasir kasirBaru = new Kasir(0, username, password, nama);
+            if (userRepository.simpan(kasirBaru)) {
+                Alerts.tampilkanAlert("Sukses", "Akun kasir baru berhasil dibuat!");
+                tutupDanRefresh();
+            } else {
+                Alerts.tampilkanAlert("Gagal", "Gagal membuat akun kasir.");
+            }
         }
     }
 
     @FXML
     private void handleBatalFormTambahKasir(ActionEvent event) {
-        tutupJendela();
+        Stage stage = (Stage) txtNamaFormTambahKasir.getScene().getWindow();
+        stage.close();
     }
 
-    private void tutupJendela() {
-        Stage stage = (Stage) btnBatalFormTambahKasir.getScene().getWindow();
-        stage.close();
+    private void tutupDanRefresh() {
+        if (parentController != null) {
+            parentController.tampilkanDataTabel();
+        }
+        handleBatalFormTambahKasir(null);
     }
 }

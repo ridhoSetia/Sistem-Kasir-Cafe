@@ -20,28 +20,17 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 public class KelolaPembayaranController {
-    @FXML
-    private TableView<DetailTransaksi> tbKelolaPembayaran;
-    @FXML
-    private TableColumn<DetailTransaksi, String> tbCNamaMenuKelolaPembayaran;
-    @FXML
-    private TableColumn<DetailTransaksi, Double> tbCHargaSatuanKelolaPembayaran;
-    @FXML
-    private TableColumn<DetailTransaksi, Integer> tbCJumlahKelolaPembayaran;
-    @FXML
-    private TableColumn<DetailTransaksi, Double> tbCSubtotalKelolaPembayaran;
-    @FXML
-    private Label lblTotalKelolaPembayaran;
-    @FXML
-    private Label lblKembalianKelolaPembayaran;
-    @FXML
-    private TextField txtNominalBayarKelolaPembayaran;
-    @FXML
-    private Button btnBayarKelolaPembayaran;
-    @FXML
-    private Button btnTambahKeranjang;
-    @FXML
-    private Button btnKembaliMenu;
+    @FXML private TableView<DetailTransaksi> tbKelolaPembayaran;
+    @FXML private TableColumn<DetailTransaksi, String> tbCNamaMenuKelolaPembayaran;
+    @FXML private TableColumn<DetailTransaksi, Double> tbCHargaSatuanKelolaPembayaran;
+    @FXML private TableColumn<DetailTransaksi, Integer> tbCJumlahKelolaPembayaran;
+    @FXML private TableColumn<DetailTransaksi, Double> tbCSubtotalKelolaPembayaran;
+    @FXML private Label lblTotalKelolaPembayaran;
+    @FXML private Label lblKembalianKelolaPembayaran;
+    @FXML private TextField txtNominalBayarKelolaPembayaran;
+    @FXML private Button btnBayarKelolaPembayaran;
+    @FXML private Button btnTambahKeranjang;
+    @FXML private Button btnKembaliMenu;
 
     private final ObservableList<DetailTransaksi> keranjang = FXCollections.observableArrayList();
     private final TransaksiRepository transaksiRepository = new TransaksiRepository();
@@ -51,19 +40,15 @@ public class KelolaPembayaranController {
 
     @FXML
     public void initialize() {
-        // Mengambil data user secara dinamis dari sesi aktif terpusat
         User user = UserSession.getInstance().getUserAktif();
 
         if (user != null) {
             this.idKasirAktif = user.getIdUser();
-            System.out.println("Kasir yang sedang bertugas: " + user.getNamaLengkap() + " (ID: " + idKasirAktif + ")");
         } else {
             System.err.println("Peringatan: Sesi tidak ditemukan! Menggunakan default ID.");
             this.idKasirAktif = 1;
         }
 
-        // Mapping Kolom Menggunakan Lambda Expression (Sangat Bagus & Kebal Bug
-        // Refleksi)
         tbCNamaMenuKelolaPembayaran.setCellValueFactory(
                 data -> new javafx.beans.property.SimpleStringProperty(
                         data.getValue().getMenu().getNamaMenu()));
@@ -71,13 +56,10 @@ public class KelolaPembayaranController {
                 data -> new javafx.beans.property.SimpleObjectProperty<>(
                         data.getValue().getMenu().getHarga()));
 
-        // Menggunakan PropertyValueFactory untuk mencocokkan method getJumlah() dan
-        // getSubtotal()
         tbCJumlahKelolaPembayaran.setCellValueFactory(new PropertyValueFactory<>("jumlah"));
         tbCSubtotalKelolaPembayaran.setCellValueFactory(new PropertyValueFactory<>("subtotal"));
         tbKelolaPembayaran.setItems(keranjang);
 
-        // Format Tampilan Sel Tabel Menjadi Nilai Mata Uang Rupiah
         tbCHargaSatuanKelolaPembayaran.setCellFactory(col -> new TableCell<>() {
             @Override
             protected void updateItem(Double val, boolean empty) {
@@ -93,10 +75,7 @@ public class KelolaPembayaranController {
             }
         });
 
-        // Listener Dinamis: Setiap kali kasir mengetik angka baru, nominal kembalian
-        // langsung dihitung otomatis
         txtNominalBayarKelolaPembayaran.textProperty().addListener((observable, oldValue, newValue) -> perbaruiLabel());
-
         perbaruiLabel();
     }
 
@@ -110,7 +89,6 @@ public class KelolaPembayaranController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Kasir/TambahItemKeranjang.fxml"));
             Parent root = loader.load();
 
-            // SINKRONISASI KONTROLER JENDELA ANAK (POPUP)
             TambahItemKeranjangController popupCtrl = loader.getController();
             popupCtrl.setParentController(this);
 
@@ -128,43 +106,27 @@ public class KelolaPembayaranController {
         }
     }
 
-    // Menambahkan item menu atau mengakumulasi jumlahnya jika produk sejenis sudah
-    // tertera di tabel
     public void tambahItemKeKeranjang(DetailTransaksi detail) {
         for (int i = 0; i < keranjang.size(); i++) {
             DetailTransaksi existing = keranjang.get(i);
-
-            // Periksa apakah ID Menu yang dimasukkan sama dengan yang sudah ada di
-            // keranjang
             if (existing.getMenu().getIdMenu() == detail.getMenu().getIdMenu()) {
                 int jumlahBaru = existing.getJumlah() + detail.getJumlah();
-
-                // sSesuaikan dengan konstruktor asli DetailTransaksi(idDetail,
-                // menu, jumlah)
-                // Hapus parameter idTransaksi yang kaku dan ilegal tersebut
                 keranjang.set(i, new DetailTransaksi(existing.getIdDetail(), existing.getIdTransaksi(),
                         existing.getMenu(), jumlahBaru));
-
                 perbaruiLabel();
-                return; // Keluar dari fungsi setelah data berhasil di-update
+                return;
             }
         }
-        // Jika belum ada produk sejenis, tambahkan sebagai baris baru di keranjang
-        // belanja
         keranjang.add(detail);
         perbaruiLabel();
     }
 
-    // Menerima parameter objek Transaksi yang valid
     private void bukaPopupCetakNota(Transaksi transaksi) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Kasir/CetakNota.fxml"));
             Parent root = loader.load();
-
-            // Mengirim objek transaksi terisi lengkap menuju CetakNotaController
             CetakNotaController notaCtrl = loader.getController();
             notaCtrl.setDataTransaksi(transaksi);
-
             Stage stage = new Stage();
             stage.setTitle("Cetak Nota Pembayaran - Brew Society");
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -172,7 +134,6 @@ public class KelolaPembayaranController {
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.showAndWait();
-
         } catch (IOException e) {
             System.err.println("Infrastruktur Error: Gagal memuat CetakNota.fxml: " + e.getMessage());
             e.printStackTrace();
@@ -201,30 +162,26 @@ public class KelolaPembayaranController {
         }
 
         double total = hitungTotal();
-
         if (nominalBayar < total) {
-            tampilkanAlert(Alert.AlertType.ERROR, "Uang Tidak Cukup",
-                    String.format("Kekurangan: %s", rupiahFmt.format(total - nominalBayar)));
+            tampilkanAlert(Alert.AlertType.ERROR, "Uang Tidak Cukup", String.format("Kekurangan: %s", rupiahFmt.format(total - nominalBayar)));
             return;
         }
 
         double kembalian = nominalBayar - total;
 
-        // Mempersiapkan cetakan objek Transaksi berdasarkan sesi Kasir Aktif
         Transaksi transaksi = new Transaksi(idKasirAktif);
         for (DetailTransaksi d : keranjang) {
             transaksi.tambahItem(d);
         }
 
-        // Jalankan mutasi repositori ke database server MySQL Docker
-        boolean berhasil = transaksiRepository.simpanTransaksi(transaksi);
+        // SINTAKS KONTRAK Menggunakan metod simpan() dari IRepository
+        boolean berhasil = transaksiRepository.simpan(transaksi);
 
         if (berhasil) {
             lblKembalianKelolaPembayaran.setText(rupiahFmt.format(kembalian));
-            tampilkanAlert(Alert.AlertType.INFORMATION, "Pembayaran Berhasil",
-                    "Kembalian: " + rupiahFmt.format(kembalian));
+            tampilkanAlert(Alert.AlertType.INFORMATION, "Pembayaran Berhasil", "Kembalian: " + rupiahFmt.format(kembalian));
             bukaPopupCetakNota(transaksi);
-            resetSesi(); // Clear data belanja kassa setelah proses pencetakan struk selesai
+            resetSesi(); 
         } else {
             tampilkanAlert(Alert.AlertType.ERROR, "Gagal", "Transaksi gagal disimpan ke database server. Coba lagi.");
         }
@@ -248,8 +205,7 @@ public class KelolaPembayaranController {
                 double nominal = Double.parseDouble(inputNominal);
                 double kembalian = nominal - total;
                 lblKembalianKelolaPembayaran.setText(kembalian >= 0 ? rupiahFmt.format(kembalian) : "Uang tidak cukup");
-            } catch (NumberFormatException ignored) {
-            }
+            } catch (NumberFormatException ignored) {}
         } else {
             lblKembalianKelolaPembayaran.setText("Rp. -");
         }
@@ -271,7 +227,6 @@ public class KelolaPembayaranController {
 
     @FXML
     private void handleKembaliMenu() {
-        // Memanggil fungsi utilitas statis tanpa instansiasi objek baru
         com.cafe.utils.PindahHalaman.pindah(btnKembaliMenu, "/resources/MainMenu.fxml", "Cafe System - Main Menu");
     }
 }

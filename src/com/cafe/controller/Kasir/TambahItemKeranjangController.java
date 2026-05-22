@@ -1,11 +1,8 @@
-// Menangani logika "Kelola Pembayaran", "Input Menu", dan "Cetak Nota".
-
 package com.cafe.controller.Kasir;
 
 import com.cafe.model.DetailTransaksi;
 import com.cafe.model.Menu;
 import com.cafe.repository.MenuRepository;
-
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -13,24 +10,16 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TambahItemKeranjangController {
-    @FXML
-    private TextField txtCariMenuTambahItem;
-    @FXML
-    private AnchorPane txtHasilPencarianTambahItem; // panel kiri: list hasil
-    @FXML
-    private AnchorPane txtPreviewMenuTambahItem; // panel kanan: preview
-    @FXML
-    private Label lblNamaMenuTambahItem;
-    @FXML
-    private Label lblHargaSatuanTambahItem;
-    @FXML
-    private Spinner<Integer> spJumlahTambahItem;
-    @FXML
-    private Button btnTambahItemKeKeranjang;
-    @FXML
-    private Button btnEditTambahItemKeKeranjang;
+    @FXML private TextField txtCariMenuTambahItem;
+    @FXML private AnchorPane txtHasilPencarianTambahItem; 
+    @FXML private AnchorPane txtPreviewMenuTambahItem; 
+    @FXML private Label lblNamaMenuTambahItem;
+    @FXML private Label lblHargaSatuanTambahItem;
+    @FXML private Spinner<Integer> spJumlahTambahItem;
+    @FXML private Button btnTambahItemKeKeranjang;
 
     private final MenuRepository menuRepository = new MenuRepository();
     private KelolaPembayaranController parentController;
@@ -38,16 +27,22 @@ public class TambahItemKeranjangController {
 
     @FXML
     public void initialize() {
-        // nilai awal 1, minimum 1, maksimum 99
         SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 99, 1);
         spJumlahTambahItem.setValueFactory(valueFactory);
 
-        // Tampilkan semua menu tersedia saat popup dibuka
-        tampilkanHasilPencarian(menuRepository.getMenuTersedia());
+        muatMenuTersedia();
     }
 
     public void setParentController(KelolaPembayaranController parent) {
         this.parentController = parent;
+    }
+
+    // Memuat data dan membuang menu yang stoknya habis (0)
+    private void muatMenuTersedia() {
+        List<Menu> menuTersedia = menuRepository.ambilSemua().stream()
+                .filter(m -> m.getStok() > 0)
+                .collect(Collectors.toList());
+        tampilkanHasilPencarian(menuTersedia);
     }
 
     @FXML
@@ -55,16 +50,17 @@ public class TambahItemKeranjangController {
         String keyword = txtCariMenuTambahItem.getText().trim().toLowerCase();
 
         if (keyword.isEmpty()) {
-            // Kosong → tampilkan semua menu
-            tampilkanHasilPencarian(menuRepository.getMenuTersedia());
+            muatMenuTersedia();
         } else {
-            // Ada keyword → filter dari repository
-            tampilkanHasilPencarian(menuRepository.cariMenuByNama(keyword));
+            // SINTAKS KONTRAK & STREAM: Mencari ke database, lalu pastikan stoknya tersedia
+            List<Menu> hasilCari = menuRepository.cari(keyword).stream()
+                    .filter(m -> m.getStok() > 0)
+                    .collect(Collectors.toList());
+            tampilkanHasilPencarian(hasilCari);
         }
     }
 
     private void tampilkanHasilPencarian(List<Menu> hasilMenu) {
-        // Bersihkan panel kiri dulu, lalu isi ulang
         VBox listContainer = new VBox(8);
         listContainer.setLayoutX(10);
         listContainer.setLayoutY(40);
@@ -75,21 +71,15 @@ public class TambahItemKeranjangController {
             listContainer.getChildren().add(lblKosong);
         } else {
             for (Menu menu : hasilMenu) {
-                Label lblMenu = new Label(menu.getNamaMenu()
-                        + "  (Stok: " + menu.getStok() + ")");
+                Label lblMenu = new Label(menu.getNamaMenu() + "  (Stok: " + menu.getStok() + ")");
                 lblMenu.getStyleClass().add("label-muted");
                 lblMenu.setStyle("-fx-cursor: hand;");
-
-                // Klik item → tampilkan preview di panel kanan
                 lblMenu.setOnMouseClicked(e -> pilihMenu(menu));
-
                 listContainer.getChildren().add(lblMenu);
             }
         }
 
         txtHasilPencarianTambahItem.getChildren().clear();
-
-        // Pertahankan label judul "List Hasil Pencarian"
         Label lblJudul = new Label("List Hasil Pencarian");
         lblJudul.getStyleClass().add("label-muted");
         lblJudul.setLayoutX(93);
@@ -99,13 +89,8 @@ public class TambahItemKeranjangController {
 
     private void pilihMenu(Menu menu) {
         this.menuTerpilih = menu;
-
-        // Update label preview
         lblNamaMenuTambahItem.setText(menu.getNamaMenu());
-        lblHargaSatuanTambahItem.setText(
-                String.format("Rp %,.0f", menu.getHarga()));
-
-        // Reset spinner ke 1
+        lblHargaSatuanTambahItem.setText(String.format("Rp %,.0f", menu.getHarga()));
         spJumlahTambahItem.getValueFactory().setValue(1);
     }
 
@@ -114,46 +99,32 @@ public class TambahItemKeranjangController {
         lblHargaSatuanTambahItem.setText("-");
         spJumlahTambahItem.getValueFactory().setValue(1);
         txtCariMenuTambahItem.clear();
-        tampilkanHasilPencarian(menuRepository.getMenuTersedia());
+        muatMenuTersedia();
     }
 
     @FXML
     private void handleTambahItemKeKeranjang() {
-        // harus ada menu yang dipilih
         if (menuTerpilih == null) {
-            tampilkanAlert(Alert.AlertType.WARNING,
-                    "Belum Pilih Menu", "Pilih menu dari daftar terlebih dahulu.");
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Pilih menu dari daftar terlebih dahulu.");
+            alert.showAndWait();
             return;
         }
 
         int jumlah = spJumlahTambahItem.getValue();
 
-        // Validasi: stok harus cukup
         if (menuTerpilih.getStok() < jumlah) {
-            tampilkanAlert(Alert.AlertType.ERROR,
-                    "Stok Tidak Cukup",
-                    "Stok " + menuTerpilih.getNamaMenu()
-                            + " hanya tersisa " + menuTerpilih.getStok() + ".");
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Stok " + menuTerpilih.getNamaMenu() + " hanya tersisa " + menuTerpilih.getStok() + ".");
+            alert.showAndWait();
             return;
         }
-        // Buat DetailTransaksi dan kirim ke parent controller
+        
         DetailTransaksi detail = new DetailTransaksi(0, 0, menuTerpilih, jumlah);
         parentController.tambahItemKeKeranjang(detail);
         bersihkanKeranjang();
     }
 
-    private void tampilkanAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-
     @FXML
     private void handleTutupForm() {
-        // Tutup popup
         Stage stage = (Stage) btnTambahItemKeKeranjang.getScene().getWindow();
         stage.close();
     }

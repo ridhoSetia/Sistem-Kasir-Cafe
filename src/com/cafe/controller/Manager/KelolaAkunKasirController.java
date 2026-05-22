@@ -2,6 +2,7 @@ package com.cafe.controller.Manager;
 
 import com.cafe.model.User;
 import com.cafe.repository.UserRepository;
+import com.cafe.utils.Alerts;
 import com.cafe.utils.PindahHalaman;
 
 import javafx.collections.FXCollections;
@@ -11,157 +12,117 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.util.Optional;
 
-public class KelolaAkunKasirController implements FormTambahKasirController.ParentRefreshable {
+public class KelolaAkunKasirController {
 
-    @FXML
-    private TableView<User> tbAkunKasir;
-    @FXML
-    private TableColumn<User, Integer> tbCIDAkunKasir;
-    @FXML
-    private TableColumn<User, String> tbCNamaAkunKasir;
-    @FXML
-    private TableColumn<User, String> tbCUsernameAkunKasir;
-    @FXML
-    private Button btnTambahAkunKasir;
-    @FXML
-    private Button btnKembaliMenu;
-    @FXML
-    private TextField txtCariNamaAkunKasir;
+    @FXML private TableView<User> tbAkunKasir;
+    @FXML private TableColumn<User, Integer> tbCIDAkunKasir;
+    @FXML private TableColumn<User, String> tbCNamaAkunKasir;
+    @FXML private TableColumn<User, String> tbCUsernameAkunKasir;
+    
+    @FXML private TextField txtCariNamaAkunKasir;
+    @FXML private Button btnCariAkunKasir;
+    @FXML private Button btnTambahAkunKasir;
+    @FXML private Button btnEditAkunKasir;
+    @FXML private Button btnHapusAkunKasir;
+    @FXML private Button btnKembaliMenu;
 
     private final UserRepository userRepository = new UserRepository();
 
     @FXML
     public void initialize() {
-        // Pemetaan data model dengan kolom FXML secara presisi
-        tbCIDAkunKasir.setCellValueFactory(new PropertyValueFactory<>("idUser"));
-        tbCNamaAkunKasir.setCellValueFactory(new PropertyValueFactory<>("namaLengkap"));
-        tbCUsernameAkunKasir.setCellValueFactory(new PropertyValueFactory<>("username"));
-
+        setupTabel();
         tampilkanDataTabel();
     }
 
-    @Override
+    private void setupTabel() {
+        tbCIDAkunKasir.setCellValueFactory(new PropertyValueFactory<>("idUser"));
+        tbCNamaAkunKasir.setCellValueFactory(new PropertyValueFactory<>("namaLengkap"));
+        tbCUsernameAkunKasir.setCellValueFactory(new PropertyValueFactory<>("username"));
+    }
+
     public void tampilkanDataTabel() {
-        ObservableList<User> dataKasir = userRepository.readDataAkunKasir();
-        tbAkunKasir.setItems(dataKasir);
+        tbAkunKasir.setItems(userRepository.ambilSemua());
+    }
+
+    @FXML
+    private void handleCariKasir(ActionEvent event) {
+        String keyword = txtCariNamaAkunKasir.getText().trim();
+        if (keyword.isEmpty()) {
+            tampilkanDataTabel();
+            return;
+        }
+        
+        ObservableList<User> hasil = FXCollections.observableArrayList(userRepository.cari(keyword));
+        tbAkunKasir.setItems(hasil);
+        
+        if (hasil.isEmpty()) {
+            Alerts.tampilkanAlert("Informasi", "Akun kasir tidak ditemukan.");
+        }
     }
 
     @FXML
     private void handleTambahAkunKasir(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Manager/FormTambahKasir.fxml"));
-            Parent root = loader.load();
-
-            FormTambahKasirController formController = loader.getController();
-            formController.setTambahMode(this);
-
-            bukaModalWindow("Tambah Akun Kasir Baru", root);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        bukaFormModal(null);
     }
 
     @FXML
     private void handleEditAkunKasir(ActionEvent event) {
         User selectedUser = tbAkunKasir.getSelectionModel().getSelectedItem();
-
         if (selectedUser == null) {
-            tampilkanAlert(Alert.AlertType.WARNING, "Peringatan", "Pilih data kasir yang ingin diedit!");
+            Alerts.tampilkanAlert("Peringatan", "Pilih akun kasir yang ingin diedit.");
             return;
         }
-
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Manager/FormTambahKasir.fxml"));
-            Parent root = loader.load();
-
-            FormTambahKasirController formController = loader.getController();
-            formController.setEditDataKasir(selectedUser, this);
-
-            bukaModalWindow("Ubah Data Akun Kasir", root);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        bukaFormModal(selectedUser);
     }
 
     @FXML
     private void handleHapusAkunKasir(ActionEvent event) {
         User selectedUser = tbAkunKasir.getSelectionModel().getSelectedItem();
-
-        if (selectedUser == null) {
-            tampilkanAlert(Alert.AlertType.WARNING, "Peringatan", "Pilih data kasir yang ingin dihapus!");
-            return;
-        }
-
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION, "Hapus akun " + selectedUser.getNamaLengkap() + "?",
-                ButtonType.YES, ButtonType.NO);
-        Optional<ButtonType> response = confirm.showAndWait();
-
-        if (response.isPresent() && response.get() == ButtonType.YES) {
-            if (userRepository.hapusAkunKasir(selectedUser.getIdUser())) {
-                tampilkanAlert(Alert.AlertType.INFORMATION, "Sukses", "Akun berhasil dihapus!");
+        if (selectedUser != null) {
+            if (userRepository.hapus(selectedUser.getIdUser())) {
+                Alerts.tampilkanAlert("Sukses", "Akun kasir berhasil dihapus!");
                 tampilkanDataTabel();
+            } else {
+                Alerts.tampilkanAlert("Gagal", "Gagal menghapus akun kasir dari sistem.");
             }
+        } else {
+            Alerts.tampilkanAlert("Peringatan", "Pilih akun kasir yang ingin dihapus.");
         }
     }
 
-    private void bukaModalWindow(String title, Parent root) {
-        Stage stage = new Stage();
-        stage.setTitle(title);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(btnTambahAkunKasir.getScene().getWindow());
-        stage.setScene(new Scene(root));
-        stage.setResizable(false);
-        stage.showAndWait();
-    }
+    private void bukaFormModal(User userEdit) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Manager/FormTambahKasir.fxml"));
+            Parent root = loader.load();
+            FormTambahKasirController controller = loader.getController();
 
-    private void tampilkanAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+            if (userEdit != null) {
+                controller.setEditData(userEdit, this);
+            } else {
+                controller.setParentController(this);
+            }
+
+            Stage stage = new Stage();
+            stage.setTitle(userEdit == null ? "Tambah Akun Kasir" : "Edit Akun Kasir");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(tbAkunKasir.getScene().getWindow());
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            System.err.println("[KelolaAkunKasirController] Gagal membuka form: " + e.getMessage());
+        }
     }
 
     @FXML
-    private void handleCariKasir(ActionEvent event) {
-        String keyword = txtCariNamaAkunKasir.getText().toLowerCase().trim();
-
-        // Tarik ulang seluruh data murni
-        ObservableList<User> semuaData = userRepository.readDataAkunKasir();
-
-        if (keyword.isEmpty()) {
-            tbAkunKasir.setItems(semuaData);
-            return;
-        }
-
-        ObservableList<User> filteredData = FXCollections.observableArrayList();
-        for (User user : semuaData) {
-            // Pencarian mencocokkan Nama Lengkap atau Username kasir
-            if (user.getNamaLengkap().toLowerCase().contains(keyword) ||
-                    user.getUsername().toLowerCase().contains(keyword)) {
-                filteredData.add(user);
-            }
-        }
-
-        // Tampilkan hasil filter ke tabel Akun Kasir
-        tbAkunKasir.setItems(filteredData);
-    }
-
-    @FXML
-    private void handleKembaliMenu() {
-        // Memanggil fungsi utilitas statis tanpa instansiasi objek baru
-        PindahHalaman.pindah(btnKembaliMenu, "/resources/MainMenu.fxml", "Cafe System - Main Menu");
+    private void handleKembaliMenu(ActionEvent event) {
+        PindahHalaman.pindah(btnKembaliMenu, "/resources/MainMenu.fxml", "Brew Society - Main Menu");
     }
 }

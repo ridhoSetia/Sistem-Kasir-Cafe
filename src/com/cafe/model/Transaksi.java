@@ -1,6 +1,7 @@
 package com.cafe.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -8,11 +9,11 @@ public class Transaksi {
     private int idTransaksi;
     private int idUser;
     private Date tanggal;
-    private List<DetailTransaksi> listDetail; // Bersihkan nama variabel agar seragam
+    private List<DetailTransaksi> listDetail;
 
     private String namaKasir;
 
-    // Konstruktor utama kassa kasir aktif
+    // Konstruktor utama kasir aktif
     public Transaksi(int idUser) {
         this.idTransaksi = 0;
         this.idUser = idUser;
@@ -34,8 +35,10 @@ public class Transaksi {
         return total;
     }
 
-    public List<DetailTransaksi> getlistDetail() {
-        return listDetail;
+    public List<DetailTransaksi> getlistDetail() { 
+        // Mengunci referensi list menggunakan Unmodifiable
+        // Jika ada kelas luar yang mencoba menambah/menghapus isi list ini, Java akan melempar Exception
+        return Collections.unmodifiableList(listDetail); 
     }
 
     public int getIdTransaksi() {
