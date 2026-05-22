@@ -261,7 +261,7 @@ Tutup   = abu netral / espresso untuk aksi utama
 
 .btn-cancel:hover,
 .btn-close:hover {
-    -fx-background-color: -neutral-hover;
+    -fx-background-color: -danger-hover;
 }
 
 .btn-print {
@@ -401,7 +401,7 @@ Tutup   = abu netral / espresso untuk aksi utama
 }
 
 .login-title {
-    -fx-font-size: 24px;
+    -fx-font-size: 18px;
     -fx-font-weight: 900;
     -fx-text-fill: -espresso;
 }
@@ -499,4 +499,89 @@ Tutup   = abu netral / espresso untuk aksi utama
 .scroll-bar .track {
     -fx-background-color: #EFE3D8;
     -fx-background-radius: 10;
+}
+
+/* =========================
+   MAIN MENU
+========================= */
+
+.header-bar {
+    -fx-background-color: -espresso;
+    -fx-effect: dropshadow(gaussian, rgba(66, 39, 24, 0.28), 12, 0.18, 0, 4);
+    -fx-border-radius: 10px;
+}
+
+.header-bar .page-title {
+    -fx-text-fill: -cream;
+    -fx-font-size: 20px;
+    -fx-font-weight: 900;
+}
+
+.subtitle-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: -tan-light;
+}
+
+.bg-kasir {
+    -fx-background-color: -surface-soft;
+}
+
+.welcome-title {
+    -fx-font-size: 26px;
+    -fx-font-weight: 900;
+    -fx-text-fill: -espresso;
+}
+
+.welcome-sub {
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-muted;
+}
+
+/* Menu card button — tiap fitur utama */
+.menu-card-btn {
+    -fx-background-color: -surface;
+    -fx-background-radius: 16;
+    -fx-border-color: -border;
+    -fx-border-radius: 16;
+    -fx-border-width: 1.4;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(66, 39, 24, 0.11), 10, 0.14, 0, 3);
+    -fx-padding: 0;
+}
+
+.menu-card-btn:hover {
+    -fx-background-color: #FFF3E6;
+    -fx-border-color: -caramel;
+    -fx-translate-y: -2;
+    -fx-effect: dropshadow(gaussian, rgba(165, 103, 52, 0.22), 14, 0.18, 0, 5);
+}
+
+.menu-card-btn:pressed {
+    -fx-background-color: -tan-light;
+    -fx-translate-y: 0;
+}
+
+/* Label di dalam graphic menu-card-btn */
+.menu-card-btn .label {
+    -fx-text-fill: -text-main;
+}
+
+/* Logout button */
+.btn-logout {
+    -fx-background-color: transparent;
+    -fx-border-color: -tan-light;
+    -fx-border-width: 1.4;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-text-fill: -cream;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+    -fx-cursor: hand;
+    -fx-padding: 6 14 6 14;
+}
+
+.btn-logout:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.12);
+    -fx-border-color: white;
+    -fx-text-fill: white;
 }

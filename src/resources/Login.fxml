@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="login" alignment="CENTER" prefHeight="309.0" prefWidth="249.0" spacing="15.0" styleClass="login-card" stylesheets="@css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cafe.controller.LoginController">
+<VBox fx:id="login" alignment="CENTER" maxHeight="310.0" maxWidth="230.0" prefHeight="310.0" prefWidth="230.0" spacing="15.0" styleClass="login-card" stylesheets="@css/brew-society-pos.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cafe.controller.LoginController">
     <children>
       <ImageView fitHeight="72.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -28,10 +28,10 @@
          </VBox.margin>
         </Label>
 
-        <TextField fx:id="txtUsernameLogin" promptText="Username" styleClass="text-field" />
-        <PasswordField fx:id="txtPasswordLogin" promptText="Password" styleClass="text-field" />
+        <TextField fx:id="txtUsernameLogin" maxHeight="-Infinity" maxWidth="-Infinity" promptText="Username" styleClass="text-field" />
+        <PasswordField fx:id="txtPasswordLogin" maxHeight="-Infinity" maxWidth="-Infinity" promptText="Password" styleClass="text-field" />
 
-        <Button fx:id="btnLogin" maxWidth="Infinity" onAction="#handleLogin" stylesheets="@css/brew-society-pos.css" text="Login">
+        <Button fx:id="btnLogin" maxHeight="-Infinity" maxWidth="-Infinity" onAction="#handleLogin" prefHeight="44.0" prefWidth="190.0" stylesheets="@css/brew-society-pos.css" text="Login">
          <styleClass>
             <String fx:value="btn-primary" />
             <String fx:value="btn-lg" />

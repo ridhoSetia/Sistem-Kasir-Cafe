@@ -1,5 +1,7 @@
 package com.cafe.controller;
 
+import com.cafe.config.UserSession;
+import com.cafe.model.User;
 import com.cafe.utils.*;
 
 import javafx.fxml.FXML;
@@ -8,31 +10,28 @@ import javafx.scene.control.Label;
 
 public class MainMenuController {
 
-    @FXML
-    private Label lblWelcome;
-    @FXML
-    private Button btnMenuKasir;
-    @FXML
-    private Button btnRiwayatPenjualan;
-    @FXML
-    private Button btnKelolaKasir;
-    @FXML
-    private Button btnKelolaMenu;
-    @FXML
-    private Button btnLogout;
+    @FXML private Label lblWelcome;
+    @FXML private Button btnMenuKasir;
+    @FXML private Button btnRiwayatPenjualan;
+    @FXML private Button btnKelolaKasir;
+    @FXML private Button btnKelolaMenu;
+    @FXML private Button btnLogout;
 
-    private String currentRole;
+    // initialize() bawaan JavaFX.
+    // Metode ini otomatis dieksekusi oleh sistem sesaat setelah MainMenu.fxml berhasil dimuat.
+    @FXML
+    public void initialize() {
+        // Ambil objek user aktif yang sesungguhnya dari memori RAM (Singleton)
+        User userAktif = UserSession.getInstance().getUserAktif();
 
-    // Menerima payload data dari LoginController
-    public void setSessionData(String username, String role) {
-        this.currentRole = role;
-        lblWelcome.setText("User: " + username + " (Role: " + role + ")");
-
-        // Mengambil objek user aktif yang sesungguhnya dari memori RAM (bisa berupa Kasir / Manager)
-        com.cafe.model.User userAktif = com.cafe.config.UserSession.getInstance().getUserAktif();
         if (userAktif != null) {
-            // Jika objeknya adalah Kasir, tombol otomatis sembunyi. Jika Manager, tombol tetap muncul.
+            // Set teks label sapaan secara dinamis
+            lblWelcome.setText("User: " + userAktif.getUsername() + " (Role: " + userAktif.getRole() + ")");
+
+            // Tombol otomatis diatur berdasarkan peran yang login
             userAktif.konfigurasiHakAkses(btnKelolaKasir, btnKelolaMenu);
+        } else {
+            lblWelcome.setText("User: Tidak Terdeteksi");
         }
     }
 
@@ -58,6 +57,8 @@ public class MainMenuController {
 
     @FXML
     private void handleLogout() {
+        // Membersihkan sesi RAM saat logout
+        UserSession.getInstance().logout(); 
         PindahHalaman.pindah(btnLogout, "/resources/Login.fxml", "Aplikasi Kasir - Login");
     }
 }
