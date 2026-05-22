@@ -24,7 +24,7 @@
             </VBox>
             <HBox alignment="CENTER_LEFT" spacing="12.0" styleClass="compact-card">
                <children>
-                  <TextField fx:id="txtCariMenu" onAction="#handleCariMenu" prefHeight="38.0" prefWidth="280.0" promptText="Cari nama menu atau kategori..." styleClass="text-field" />
+                  <TextField fx:id="txtCariMenu" prefHeight="38.0" prefWidth="280.0" promptText="Cari nama menu atau kategori..." styleClass="text-field" />
                   <Button fx:id="btnCariMenu" mnemonicParsing="false" onAction="#handleCariMenu" prefHeight="38.0" styleClass="btn-save" text="Cari Menu" />
                </children>
             </HBox>

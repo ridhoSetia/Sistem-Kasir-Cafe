@@ -4,6 +4,7 @@ import com.cafe.model.User;
 import com.cafe.repository.UserRepository;
 import com.cafe.utils.PindahHalaman;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -35,6 +37,8 @@ public class KelolaAkunKasirController implements FormTambahKasirController.Pare
     private Button btnTambahAkunKasir;
     @FXML
     private Button btnKembaliMenu;
+    @FXML
+    private TextField txtCariNamaAkunKasir;
 
     private final UserRepository userRepository = new UserRepository();
 
@@ -131,7 +135,28 @@ public class KelolaAkunKasirController implements FormTambahKasirController.Pare
     }
 
     @FXML
-    private void handleCari(ActionEvent event) {
+    private void handleCariKasir(ActionEvent event) {
+        String keyword = txtCariNamaAkunKasir.getText().toLowerCase().trim();
+
+        // Tarik ulang seluruh data murni
+        ObservableList<User> semuaData = userRepository.readDataAkunKasir();
+
+        if (keyword.isEmpty()) {
+            tbAkunKasir.setItems(semuaData);
+            return;
+        }
+
+        ObservableList<User> filteredData = FXCollections.observableArrayList();
+        for (User user : semuaData) {
+            // Pencarian mencocokkan Nama Lengkap atau Username kasir
+            if (user.getNamaLengkap().toLowerCase().contains(keyword) ||
+                    user.getUsername().toLowerCase().contains(keyword)) {
+                filteredData.add(user);
+            }
+        }
+
+        // Tampilkan hasil filter ke tabel Akun Kasir
+        tbAkunKasir.setItems(filteredData);
     }
 
     @FXML

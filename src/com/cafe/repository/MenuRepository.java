@@ -14,8 +14,8 @@ public class MenuRepository {
         String sql = "SELECT * FROM menu";
 
         try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Menu menu = new Menu(
@@ -23,8 +23,7 @@ public class MenuRepository {
                         rs.getString("nama_menu"),
                         rs.getDouble("harga"),
                         rs.getString("kategori"),
-                        rs.getInt("stok")
-                );
+                        rs.getInt("stok"));
                 listMenu.add(menu);
             }
         } catch (SQLException e) {
@@ -37,7 +36,7 @@ public class MenuRepository {
     public boolean addMenu(String nama, double harga, String kategori, int stok) {
         String sql = "INSERT INTO menu (nama_menu, harga, kategori, stok) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, nama);
             pstmt.setDouble(2, harga);
@@ -51,11 +50,29 @@ public class MenuRepository {
         }
     }
 
+    public boolean updateMenu(com.cafe.model.Menu menu) {
+        String sql = "UPDATE menu SET nama_menu = ?, harga = ?, kategori = ?, stok = ? WHERE id_menu = ?";
+        try (java.sql.Connection conn = com.cafe.config.DBConnection.getConnection();
+                java.sql.PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, menu.getNamaMenu());
+            stmt.setDouble(2, menu.getHarga());
+            stmt.setString(3, menu.getKategori());
+            stmt.setInt(4, menu.getStok());
+            stmt.setInt(5, menu.getIdMenu());
+
+            return stmt.executeUpdate() > 0;
+        } catch (java.sql.SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     // Hapus data menu (Milik Manager)
     public boolean deleteMenu(int idMenu) {
         String sql = "DELETE FROM menu WHERE id_menu = ?";
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setInt(1, idMenu);
             return pstmt.executeUpdate() > 0;
@@ -71,8 +88,8 @@ public class MenuRepository {
         String sql = "SELECT * FROM menu WHERE stok > 0";
 
         try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Menu menu = new Menu(
@@ -80,8 +97,7 @@ public class MenuRepository {
                         rs.getString("nama_menu"),
                         rs.getDouble("harga"),
                         rs.getString("kategori"),
-                        rs.getInt("stok")
-                );
+                        rs.getInt("stok"));
                 listMenu.add(menu);
             }
         } catch (SQLException e) {
@@ -96,7 +112,7 @@ public class MenuRepository {
         String sql = "SELECT * FROM menu WHERE nama_menu LIKE ? AND stok > 0";
 
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, "%" + namaCari + "%");
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -106,8 +122,7 @@ public class MenuRepository {
                             rs.getString("nama_menu"),
                             rs.getDouble("harga"),
                             rs.getString("kategori"),
-                            rs.getInt("stok")
-                    );
+                            rs.getInt("stok"));
                     listMenu.add(menu);
                 }
             }

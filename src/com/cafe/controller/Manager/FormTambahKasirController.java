@@ -10,7 +10,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class FormTambahKasirController {
-
     @FXML private TextField txtNamaFormTambahKasir;
     @FXML private TextField txtUsernameFormTambahKasir;
     @FXML private PasswordField txtPasswordFormTambahKasir;

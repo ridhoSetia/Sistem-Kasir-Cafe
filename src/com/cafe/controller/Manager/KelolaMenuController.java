@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -39,6 +40,8 @@ public class KelolaMenuController {
     private Button btnKembaliMenu;
     @FXML
     private Button btnTambahMenu;
+    @FXML
+    private TextField txtCariMenu;
 
     private final MenuRepository menuRepository = new MenuRepository();
     private final ObservableList<Menu> masterData = FXCollections.observableArrayList();
@@ -114,12 +117,61 @@ public class KelolaMenuController {
 
     @FXML
     private void handleEditMenu() {
-        System.out.println("Fitur Edit Menu Terpilih");
+        // 1. Ambil data menu yang sedang diklik di tabel
+        Menu selectedMenu = tbKelolaMenu.getSelectionModel().getSelectedItem();
+
+        if (selectedMenu == null) {
+            Alerts.tampilkanModal("Peringatan", "Pilih baris menu di tabel terlebih dahulu untuk diedit!");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Manager/FormTambahMenu.fxml"));
+            Parent root = loader.load();
+
+            // 2. Kirim data menu terpilih ke form
+            FormTambahMenuController popupController = loader.getController();
+            // Asumsi: Anda harus membuat metode setEditData di FormTambahMenuController
+            // yang menerima (Menu data, KelolaMenuController parent)
+            popupController.setEditDataMenu(selectedMenu, this);
+
+            Stage stage = new Stage();
+            stage.setTitle("Ubah Data Menu - Brew Society");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(tbKelolaMenu.getScene().getWindow());
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+
+        } catch (IOException e) {
+            System.err.println("[KelolaMenuController] Gagal memuat form edit: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void handleCariMenu() {
-        System.out.println("Fitur Pencarian Dinamis");
+        // Ambil teks dari kolom pencarian dan ubah ke huruf kecil untuk pencocokan yang fleksibel
+        String keyword = txtCariMenu.getText().toLowerCase().trim();
+
+        // Jika inputan kosong, kembalikan tabel ke kondisi data utuh
+        if (keyword.isEmpty()) {
+            tbKelolaMenu.setItems(masterData);
+            return;
+        }
+
+        // Lakukan penyaringan (filtering) secara dinamis menggunakan Streams Java modern
+        ObservableList<Menu> filteredData = FXCollections.observableArrayList();
+        for (Menu menu : masterData) {
+            // Cocokkan berdasarkan nama menu atau kategorinya
+            if (menu.getNamaMenu().toLowerCase().contains(keyword) ||
+                    menu.getKategori().toLowerCase().contains(keyword)) {
+                filteredData.add(menu);
+            }
+        }
+
+        // Tampilkan hasil pencarian ke dalam tabel
+        tbKelolaMenu.setItems(filteredData);
     }
 
     @FXML

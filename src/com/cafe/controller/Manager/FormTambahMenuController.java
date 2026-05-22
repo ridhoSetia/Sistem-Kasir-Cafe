@@ -1,7 +1,8 @@
 package com.cafe.controller.Manager;
 
+import com.cafe.model.Menu;
 import com.cafe.repository.MenuRepository;
-import com.cafe.utils.*;
+import com.cafe.utils.Alerts;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -14,53 +15,103 @@ public class FormTambahMenuController {
     @FXML private TextField txtStokMenuForm;
     @FXML private ComboBox<String> cmbKategoriMenuForm;
 
-    // Menghubungkan ke KelolaMenuController karena berada di package yang sama
-    protected KelolaMenuController mainController;
+    // Relasi ke halaman utama untuk memicu penyegaran tabel
+    private KelolaMenuController mainController;
     private final MenuRepository menuRepository = new MenuRepository();
+
+    // VARIABEL KONTROL STATE: Untuk membedakan apakah form sedang menambah atau mengedit
+    private boolean isEditMode = false;
+    private int idMenuEdit = 0;
 
     @FXML
     public void initialize() {
         cmbKategoriMenuForm.getItems().addAll("Makanan", "Minuman");
     }
 
+    /**
+     * MODE 1: Dipanggil saat menekan tombol "Tambah Menu"
+     */
     public void setMenuController(KelolaMenuController controller) {
         this.mainController = controller;
+        this.isEditMode = false; // Pastikan status edit dimatikan
+    }
+
+    /**
+     * MODE 2: Dipanggil saat menekan tombol "Edit Menu" 
+     * Berfungsi menyuntikkan data menu lama ke dalam Text Field
+     */
+    public void setEditDataMenu(Menu menu, KelolaMenuController controller) {
+        this.mainController = controller;
+        this.isEditMode = true; // Aktifkan status edit
+        this.idMenuEdit = menu.getIdMenu(); // Simpan ID untuk query UPDATE nanti
+
+        // Memasukkan data ke komponen visual
+        txtNamaMenuForm.setText(menu.getNamaMenu());
+        cmbKategoriMenuForm.setValue(menu.getKategori());
+        
+        // Pengecoran Tipe (Type Casting): Mengubah angka menjadi teks
+        txtHargaMenuForm.setText(String.valueOf(menu.getHarga()));
+        txtStokMenuForm.setText(String.valueOf(menu.getStok()));
     }
 
     @FXML
     private void handleSimpanFormMenu() {
-        String nama = txtNamaMenuForm.getText();
+        String nama = txtNamaMenuForm.getText().trim();
         String kategori = cmbKategoriMenuForm.getValue();
+        String hargaStr = txtHargaMenuForm.getText().trim();
+        String stokStr = txtStokMenuForm.getText().trim();
 
-        if (nama.isEmpty() || txtHargaMenuForm.getText().isEmpty() || txtStokMenuForm.getText().isEmpty() || kategori == null) {
+        // Validasi input kosong (Keamanan Data)
+        if (nama.isEmpty() || hargaStr.isEmpty() || stokStr.isEmpty() || kategori == null) {
             Alerts.tampilkanModal("Peringatan", "Semua kolom data harus diisi!");
             return;
         }
 
         try {
-            double harga = Double.parseDouble(txtHargaMenuForm.getText());
-            int stok = Integer.parseInt(txtStokMenuForm.getText());
+            double harga = Double.parseDouble(hargaStr);
+            int stok = Integer.parseInt(stokStr);
 
-            if (menuRepository.addMenu(nama, harga, kategori, stok)) {
-                Alerts.tampilkanModal("Sukses", "Menu baru berhasil ditambahkan!");
-
-                if (mainController != null) {
-                    mainController.loadMenuData(); // Memicu refresh tabel utama
+            // PERCABANGAN LOGIKA BERDASARKAN MODE
+            if (isEditMode) {
+                // Eksekusi Logika EDIT (Update Data)
+                Menu menuUpdate = new Menu(idMenuEdit, nama, harga, kategori, stok);
+                
+                // PENTING: Pastikan Anda memiliki metode updateMenu(Menu menu) di MenuRepository.java
+                if (menuRepository.updateMenu(menuUpdate)) {
+                    Alerts.tampilkanModal("Sukses", "Data menu berhasil diperbarui!");
+                    refreshTabelUtama();
+                    tutupForm();
+                } else {
+                    Alerts.tampilkanModal("Gagal", "Gagal memperbarui data menu di database.");
                 }
-
-                Stage stage = (Stage) txtNamaMenuForm.getScene().getWindow();
-                stage.close();
             } else {
-                Alerts.tampilkanModal("Gagal", "Gagal menyimpan menu ke database.");
+                // Eksekusi Logika TAMBAH (Insert Data Baru)
+                if (menuRepository.addMenu(nama, harga, kategori, stok)) {
+                    Alerts.tampilkanModal("Sukses", "Menu baru berhasil ditambahkan!");
+                    refreshTabelUtama();
+                    tutupForm();
+                } else {
+                    Alerts.tampilkanModal("Gagal", "Gagal menyimpan menu ke database.");
+                }
             }
 
         } catch (NumberFormatException e) {
-            Alerts.tampilkanModal("Error", "Harga dan Stok harus berupa angka valid!");
+            Alerts.tampilkanModal("Error Input", "Harga dan Stok harus berisi angka murni!");
         }
     }
 
     @FXML
     private void handleBatalFormMenu() {
+        tutupForm();
+    }
+    
+    private void refreshTabelUtama() {
+        if (mainController != null) {
+            mainController.loadMenuData(); // Memicu tabel di belakang untuk memuat ulang data
+        }
+    }
+
+    private void tutupForm() {
         Stage stage = (Stage) txtNamaMenuForm.getScene().getWindow();
         stage.close();
     }
