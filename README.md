@@ -61,4 +61,136 @@ Sistem Manajemen Kasir Cafe berbasis Desktop yang dirancang menggunakan **JavaFX
 ![Halaman kelola akun kasir (CRUD)](/images-readme/kelola-akun-kasir.png)
 * **Halaman Riwayat Penjualan** <br>
 ![Halaman riwayat penjualan](/images-readme/riwayat-penjualan.png)
+
+# Implementasi 4 Pilar OOP dalam Program Kasir Cafe
+
+## 1. Encapsulation (Enkapsulasi)
+
+Menyembunyikan data internal dan hanya mengeksposnya lewat method yang terkontrol.
+
+**`User.java`** — semua atribut bersifat `private`, hanya bisa diakses via getter:
+
+```java
+private int idUser;
+private String namaLengkap;
+private String username;
+// ...
+public int getIdUser() { return idUser; }
+public String getNamaLengkap() { return namaLengkap; }
 ```
+
+**`Transaksi.java`** — list detail dikunci agar tidak bisa dimodifikasi dari luar:
+
+```java
+public List<DetailTransaksi> getlistDetail() {
+    return Collections.unmodifiableList(listDetail); // read-only
+}
+```
+
+**`UserSession.java`** — constructor private mencegah instansiasi langsung (Singleton):
+```java
+private UserSession() {} // tidak bisa di-new dari luar
+public static UserSession getInstance() { ... }
+```
+
+---
+
+## 2. Inheritance (Pewarisan)
+
+Kelas anak mewarisi properti dan method dari kelas induk.
+
+**`Kasir.java` dan `Manager.java`** mewarisi `User.java`:
+
+```java
+public class Kasir extends User {
+    public Kasir(int idUser, String username, String password, String namaLengkap) {
+        super(idUser, username, password, "Kasir", namaLengkap); // memanggil constructor induk
+    }
+}
+```
+
+**`DatabaseAuth.java`** mewarisi `Auth.java`:
+
+```java
+public class DatabaseAuth extends Auth {
+    @Override
+    public User login(String username, String password) { ... }
+}
+```
+
+---
+
+## 3. Polymorphism (Polimorfisme)
+
+Satu interface/tipe induk, banyak bentuk implementasi yang berbeda.
+
+**`LoginController.java`** — variabel bertipe `Auth` (induk), tapi diisi `DatabaseAuth` (anak). Saat `login()` dipanggil, yang berjalan adalah versi `DatabaseAuth`:
+
+```java
+private final Auth authSystem = new DatabaseAuth(); // deklarasi induk, isi anak
+// ...
+User userLogOn = authSystem.login(username, password); // jalankan versi DatabaseAuth
+```
+
+**`DatabaseAuth.java`** — hasil login dikembalikan sebagai tipe `User`, tapi isinya bisa `Kasir` atau `Manager`:
+```java
+
+if (user.getRole().equalsIgnoreCase("Kasir")) {
+    return new Kasir(...);  // tipe child, dibungkus tipe parent
+} else if (user.getRole().equalsIgnoreCase("Manager")) {
+    return new Manager(...);
+}
+```
+
+**`MainMenuController.java`** — `konfigurasiHakAkses()` dipanggil dari tipe `User`, tapi perilakunya berbeda tergantung apakah isinya `Kasir` atau `Manager`:
+
+```java
+userAktif.konfigurasiHakAkses(btnKelolaKasir, btnKelolaMenu);
+```
+
+---
+
+## 4. Abstraction (Abstraksi)
+
+Menyembunyikan detail implementasi, hanya menampilkan "kontrak" yang wajib dipenuhi.
+
+**`User.java`** — abstract class dengan method abstract yang memaksa setiap subclass mendefinisikan aturan akses mereka sendiri:
+
+```java
+public abstract class User {
+    public abstract void konfigurasiHakAkses(Button btnKelolaKasir, Button btnKelolaMenu);
+}
+```
+
+**`Auth.java`** — abstract class yang memaksa implementasi metode login:
+
+```java
+public abstract class Auth {
+    public abstract User login(String username, String password);
+}
+```
+
+**`IRepository.java`** — interface yang menjadi kontrak CRUD untuk semua repository:
+
+```java
+public interface IRepository<T, ID> {
+    boolean simpan(T entitas);
+    List<T> ambilSemua();
+    boolean perbarui(T entitas);
+    boolean hapus(ID id);
+    List<T> cari(String keyword);
+}
+```
+
+Diimplementasikan oleh `MenuRepository`, `UserRepository`, dan `TransaksiRepository` — masing-masing dengan logika SQL yang berbeda, tapi kontrak method-nya sama persis.
+
+---
+
+## Ringkasan Lokasi
+
+| Pilar | File Utama |
+|---|---|
+| Encapsulation | `User.java`, `Transaksi.java`, `UserSession.java` |
+| Inheritance | `Kasir.java`, `Manager.java`, `DatabaseAuth.java` |
+| Polymorphism | `LoginController.java`, `DatabaseAuth.java`, `MainMenuController.java` |
+| Abstraction | `User.java`, `Auth.java`, `IRepository.java` |
