@@ -174,7 +174,6 @@ public class KelolaPembayaranController {
             transaksi.tambahItem(d);
         }
 
-        // SINTAKS KONTRAK Menggunakan metod simpan() dari IRepository
         boolean berhasil = transaksiRepository.simpan(transaksi);
 
         if (berhasil) {

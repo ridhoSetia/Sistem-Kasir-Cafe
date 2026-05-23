@@ -25,7 +25,6 @@ public class CetakNotaController {
 
     private Transaksi transaksi;
 
-    // Menggunakan Locale.forLanguageTag untuk standardisasi Java 19+ (Bebas Deprecation Warning)
     private final NumberFormat rupiahFmt = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("id-ID"));
     private final SimpleDateFormat dateFmt = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 
@@ -35,7 +34,6 @@ public class CetakNotaController {
     }
 
     private void renderNota() {
-        // Validasi defensif untuk mencegah NullPointerException
         if (transaksi == null) {
             System.err.println("Error: Objek Transaksi yang dilempar ke CetakNota bernilai NULL!");
             return;
@@ -46,11 +44,10 @@ public class CetakNotaController {
                 buatTeks("=================================="),
                 buatTeks("        BREW SOCIETY CAFE        "),
                 buatTeks("=================================="),
-                buatTeks("Nota ID : #TRX-" + transaksi.getIdTransaksi()), // menampilkan ID Riil DB
+                buatTeks("Nota ID : #TRX-" + transaksi.getIdTransaksi()),
                 buatTeks("Tanggal : " + dateFmt.format(transaksi.getTanggal())),
                 buatTeks("----------------------------------"));
 
-        // Mengiterasi list detail belanja yang tersimpan aman di memori objek
         for (DetailTransaksi d : transaksi.getlistDetail()) {
             vboxKertasStruk.getChildren().addAll(
                     buatTeks(d.getMenu().getNamaMenu() + "  x" + d.getJumlah()),

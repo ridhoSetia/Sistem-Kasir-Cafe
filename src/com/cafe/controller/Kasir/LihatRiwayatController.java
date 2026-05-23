@@ -83,7 +83,6 @@ public class LihatRiwayatController {
         });
     }
 
-    // SINTAKS KONTRAK Menggunakan ambilSemua()
     private void muatSemuaRiwayat() {
         List<Transaksi> semuaTransaksi = transaksiRepository.ambilSemua();
         tbDetailRiwayatTransaksi.setItems(FXCollections.observableArrayList(semuaTransaksi));
@@ -96,14 +95,11 @@ public class LihatRiwayatController {
 
         List<Transaksi> hasil;
 
-        // Menggunakan metod kontrak cari()
         if (!keyword.isEmpty()) {
             hasil = transaksiRepository.cari(keyword);
         } else {
             hasil = transaksiRepository.ambilSemua();
         }
-
-        // Menyaring hasil query menggunakan Java Stream untuk tanggal
         if (tanggal != null) {
             SimpleDateFormat hariSaja = new SimpleDateFormat("yyyy-MM-dd");
             String tanggalStr = tanggal.toString(); 

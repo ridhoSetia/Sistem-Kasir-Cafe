@@ -7,7 +7,6 @@ import javafx.collections.ObservableList;
 import java.sql.*;
 import java.util.List;
 
-// abstraksi, mengikat diri pada kontrak IRepository
 public class MenuRepository implements IRepository<Menu, Integer> {
 
     @Override
@@ -28,7 +27,6 @@ public class MenuRepository implements IRepository<Menu, Integer> {
 
     @Override
     public List<Menu> ambilSemua() {
-        // Menggunakan ObservableList agar langsung kompatibel dengan JavaFX TableView
         ObservableList<Menu> list = FXCollections.observableArrayList();
         String sql = "SELECT * FROM menu";
         try (Connection conn = DBConnection.getConnection();
@@ -80,7 +78,6 @@ public class MenuRepository implements IRepository<Menu, Integer> {
 
     @Override
     public List<Menu> cari(String keyword) {
-        // Menggunakan ObservableList agar langsung kompatibel dengan JavaFX TableView
         javafx.collections.ObservableList<Menu> listPencarian = javafx.collections.FXCollections.observableArrayList();
 
         String sql = "SELECT * FROM menu WHERE nama_menu LIKE ? OR kategori LIKE ?";

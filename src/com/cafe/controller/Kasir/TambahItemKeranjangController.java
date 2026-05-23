@@ -37,7 +37,6 @@ public class TambahItemKeranjangController {
         this.parentController = parent;
     }
 
-    // Memuat data dan membuang menu yang stoknya habis (0)
     private void muatMenuTersedia() {
         List<Menu> menuTersedia = menuRepository.ambilSemua().stream()
                 .filter(m -> m.getStok() > 0)
@@ -52,7 +51,6 @@ public class TambahItemKeranjangController {
         if (keyword.isEmpty()) {
             muatMenuTersedia();
         } else {
-            // SINTAKS KONTRAK & STREAM: Mencari ke database, lalu pastikan stoknya tersedia
             List<Menu> hasilCari = menuRepository.cari(keyword).stream()
                     .filter(m -> m.getStok() > 0)
                     .collect(Collectors.toList());

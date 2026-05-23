@@ -8,7 +8,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-// sinkronisasi mengikat TransaksiRepository ke IRepository dengan tipe Transaksi
 public class TransaksiRepository implements IRepository<Transaksi, Integer> {
 
     @Override
@@ -149,7 +148,6 @@ public class TransaksiRepository implements IRepository<Transaksi, Integer> {
     public List<Transaksi> cari(String keyword) {
         List<Transaksi> list = new ArrayList<>();
 
-        // Kita mencari berdasarkan ID Transaksi atau Nama Kasir yang menangani
         String sql = "SELECT t.id_transaksi, t.id_user, t.tanggal, t.total_harga, u.nama_lengkap "
                 + "FROM transaksi t "
                 + "INNER JOIN users u ON t.id_user = u.id_user "
@@ -159,15 +157,12 @@ public class TransaksiRepository implements IRepository<Transaksi, Integer> {
         try (Connection conn = DBConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            // Uji apakah keyword berupa angka (untuk pencarian ID Transaksi)
             try {
                 int idCari = Integer.parseInt(keyword);
                 stmt.setInt(1, idCari);
             } catch (NumberFormatException e) {
-                stmt.setInt(1, -1); // Jika bukan angka, beri nilai -1 agar tidak ada ID yang cocok
+                stmt.setInt(1, -1);
             }
-
-            // Parameter kedua untuk pencarian nama kasir
             stmt.setString(2, "%" + keyword + "%");
 
             try (ResultSet resultSet = stmt.executeQuery()) {
