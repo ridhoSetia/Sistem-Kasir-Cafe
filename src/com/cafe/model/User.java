@@ -18,7 +18,7 @@ public abstract class User {
         this.role = role;
     }
 
-    public abstract void konfigurasiHakAkses(Button btnKelolaKasir, Button btnKelolaMenu);
+    public abstract void konfigurasiHakAkses(Button btnKelolaKasir, Button btnKelolaMenu, Button btnKelolaPembayaran);
 
     // JavaFX TableView bakal mencari method ini otomatis (Reflection)
     public int getIdUser() { return idUser; }

@@ -7,10 +7,12 @@ public class Manager extends User {
     }
 
     @Override
-    public void konfigurasiHakAkses(Button btnKelolaKasir, Button btnKelolaMenu) {
+    public void konfigurasiHakAkses(Button btnKelolaKasir, Button btnKelolaMenu, Button btnMenuKasir) {
         btnKelolaKasir.setVisible(true);
         btnKelolaKasir.setManaged(true);
         btnKelolaMenu.setVisible(true);
         btnKelolaMenu.setManaged(true);
+        btnMenuKasir.setVisible(false);
+        btnMenuKasir.setManaged(false);
     }
 }

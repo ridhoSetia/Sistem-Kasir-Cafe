@@ -29,7 +29,7 @@ public class MainMenuController {
             lblWelcome.setText("User: " + userAktif.getUsername() + " (Role: " + userAktif.getRole() + ")");
 
             // Tombol otomatis diatur berdasarkan peran yang login
-            userAktif.konfigurasiHakAkses(btnKelolaKasir, btnKelolaMenu);
+            userAktif.konfigurasiHakAkses(btnKelolaKasir, btnKelolaMenu, btnMenuKasir);
         } else {
             lblWelcome.setText("User: Tidak Terdeteksi");
         }
